@@ -8,6 +8,7 @@ namespace Calculator
     {
         static void Main(string[] args)
         {
+            new UI().Run();
         }
     }
 }
