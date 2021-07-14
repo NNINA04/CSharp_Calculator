@@ -24,13 +24,7 @@ namespace Calculator
         {
             while (true)
             {
-                Console.WriteLine("Select an action:");
-                Console.WriteLine("1: Sum");
-                Console.WriteLine("2: Substract");
-                Console.WriteLine("3: Multiplicate");
-                Console.WriteLine("4: Divide");
-                Console.WriteLine("5: Exit");
-                Console.Write("..:");
+                ShowMenu();
 
                 int action = int.Parse(Console.ReadLine());
 
@@ -58,6 +52,20 @@ namespace Calculator
                 }
                 Console.WriteLine($"Result = {result}");
             }
+        }
+
+        /// <summary>
+        /// Выводит меню
+        /// </summary>
+        private void ShowMenu()
+        {
+            Console.WriteLine("Select an action:");
+            Console.WriteLine("1: Sum");
+            Console.WriteLine("2: Substract");
+            Console.WriteLine("3: Multiplicate");
+            Console.WriteLine("4: Divide");
+            Console.WriteLine("5: Exit");
+            Console.Write("..:");
         }
 
         /// <summary>
