@@ -61,7 +61,7 @@ namespace Calculator
         {
             Console.Write("Enter two numbers: ");
 
-            double result =  handler(InputIntNumber(), InputIntNumber());
+            double result =  handler(InputDoubleNumber(), InputDoubleNumber());
 
             if (double.IsInfinity(result))
                 Console.WriteLine("Result is infinity");
@@ -84,12 +84,23 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Запрашивает ввод числа и проводит валидация
+        /// Запрашивает ввод числа и проводит валидацию
         /// </summary>
         /// <returns>Число</returns>
-        private int InputIntNumber()
+        private static int InputIntNumber()
         {
             if (!int.TryParse(Console.ReadLine(), out int value))
+                throw new FormatException("You entered not valid value");
+            return value;
+        }
+
+        /// <summary>
+        /// Запрашивает ввод числа и проводит валидацию
+        /// </summary>
+        /// <returns>Число</returns>
+        private static double InputDoubleNumber()
+        {
+            if (!double.TryParse(Console.ReadLine(), out double value))
                 throw new FormatException("You entered not valid value");
             return value;
         }
