@@ -60,7 +60,15 @@ namespace Calculator
         private void ProcessTwoNumbers(Func<double, double, double> handler)
         {
             Console.Write("Enter two numbers: ");
-            Console.WriteLine($"Result = {handler(InputIntNumber(), InputIntNumber())}");
+
+            double result =  handler(InputIntNumber(), InputIntNumber());
+
+            if (double.IsInfinity(result))
+                Console.WriteLine("Result is infinity");
+            else if (double.IsNaN(result))
+                Console.WriteLine("Result is undefined");
+            else
+                Console.WriteLine($"Result = {result}");
             Console.WriteLine();
         }
 
