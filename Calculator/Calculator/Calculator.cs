@@ -9,7 +9,7 @@ namespace Calculator
     /// <summary>
     /// Выполняет арифметические операции
     /// </summary>
-    class Calculator : ICalculatorLogic
+    public class Calculator : ICalculatorLogic
     {
         /// <summary>
         /// Делит первое число на второе

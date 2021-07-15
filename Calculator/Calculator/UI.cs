@@ -8,7 +8,7 @@ namespace Calculator
         /// <summary>
         /// Словарь содержащий элементы меню и действий
         /// </summary>
-        private readonly Dictionary<int, (string description, Action action)> _menuItems;
+        public Dictionary<int, (string description, Action action)> MenuItems { get; private set; }
 
         /// <summary>
         /// Конструктор
@@ -17,7 +17,7 @@ namespace Calculator
         {
             Calculator _calc = new();
 
-            _menuItems = new Dictionary<int, (string, Action)>
+            MenuItems = new Dictionary<int, (string, Action)>
             {
                 {1, ("Sum", () => ProcessTwoNumbers(_calc.Sum))},
                 {2, ("Substract", () => ProcessTwoNumbers(_calc.Substract)) },
@@ -37,7 +37,7 @@ namespace Calculator
                 ShowMenu();
                 try
                 {
-                    if (_menuItems.TryGetValue(InputIntNumber(), out var item))
+                    if (MenuItems.TryGetValue(InputIntNumber(), out var item))
                         item.action();
                     else
                     {
@@ -70,7 +70,7 @@ namespace Calculator
         private void ShowMenu()
         {
             Console.WriteLine("Select an action:");
-            foreach (var action in _menuItems)
+            foreach (var action in MenuItems)
                 Console.WriteLine($"{action.Key}: {action.Value.description}");
             Console.Write("..:");
         }
