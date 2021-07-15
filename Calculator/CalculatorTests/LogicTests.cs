@@ -1,10 +1,11 @@
+using Calculator;
 using NUnit.Framework;
 
 namespace CalculatorTests
 {
     public class LogicTests
     {
-        private Calculator.Calculator _calculator;
+        private ICalculatorLogic _calculator;
 
         [SetUp]
         public void Setup()
