@@ -17,9 +17,9 @@ namespace Calculator
         /// <param name="x">Первое число</param>
         /// <param name="y">Второе число</param>
         /// <returns>Результат деления</returns>
-        public double Divide(int x, int y)
+        public double Divide(double x, double y)
         {
-            return (double)x / y;
+            return x / y;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Calculator
         /// <param name="x">Первое число</param>
         /// <param name="y">Второе число</param>
         /// <returns>Разницу</returns>
-        public int Substract(int x, int y)
+        public double Substract(double x, double y)
         {
             return x - y;
         }
@@ -39,7 +39,7 @@ namespace Calculator
         /// <param name="x">Первое число</param>
         /// <param name="y">Второе число</param>
         /// <returns>Результат перемножения</returns>
-        public int Multiplicate(int x, int y)
+        public double Multiplicate(double x, double y)
         {
             return x * y;
         }
@@ -50,7 +50,7 @@ namespace Calculator
         /// <param name="x">Первое число</param>
         /// <param name="y">Второе число</param>
         /// <returns>Сумма</returns>
-        public int Sum(int x, int y)
+        public double Sum(double x, double y)
         {
             return x + y;
         }

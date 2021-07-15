@@ -11,7 +11,7 @@
         /// <param name="x">Первое число</param>
         /// <param name="y">Второе число</param>
         /// <returns>Сумма</returns>
-        int Sum(int x, int y);
+        double Sum(double x, double y);
 
         /// <summary>
         /// Вычитает 2 числа
@@ -19,7 +19,7 @@
         /// <param name="x">Первое число</param>
         /// <param name="y">Второе число</param>
         /// <returns>Разницу</returns>
-        int Substract(int x, int y);
+        double Substract(double x, double y);
 
         /// <summary>
         /// Перемножает 2 числа
@@ -27,7 +27,7 @@
         /// <param name="x">Первое число</param>
         /// <param name="y">Второе число</param>
         /// <returns>Результат перемножения</returns>
-        int Multiplicate(int x, int y);
+        double Multiplicate(double x, double y);
 
         /// <summary>
         /// Делит первое число на второе
@@ -35,6 +35,6 @@
         /// <param name="x">Первое число</param>
         /// <param name="y">Второе число</param>
         /// <returns>Результат деления</returns>
-        double Divide(int x, int y);
+        double Divide(double x, double y);
     }
 }

@@ -1,57 +1,67 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Calculator
 {
     public class UI
     {
         /// <summary>
-        /// Объект класса Calculator
+        /// Словарь содержащий элементы меню и действий
         /// </summary>
-        private Calculator _calc;
+        private readonly Dictionary<int, (string description, Action action)> _menuItems;
 
         /// <summary>
         /// Конструктор
         /// </summary>
         public UI()
         {
-            _calc = new Calculator();
+            Calculator _calc = new();
+
+            _menuItems = new Dictionary<int, (string, Action)>
+            {
+                {1, ("Sum", () => ProcessTwoNumbers(_calc.Sum))},
+                {2, ("Substract", () => ProcessTwoNumbers(_calc.Substract)) },
+                {3, ("Multiplicate", () => ProcessTwoNumbers(_calc.Multiplicate)) },
+                {4, ("Divide", () => ProcessTwoNumbers(_calc.Divide)) },
+                {5, ("Exit" , () => Environment.Exit(0))}
+            };
         }
 
         /// <summary>
-        /// Выполняет действие в зависимости от ввода пользователя
+        /// Отображения интерфейса
         /// </summary>
         public void Run()
         {
             while (true)
             {
                 ShowMenu();
-
-                int action = int.Parse(Console.ReadLine());
-
-                double result = 0;
-
-                switch (action)
+                try
                 {
-                    case 1:
-                        result = Sum();
-                        break;
-                    case 2:
-                        result = Substract();
-                        break;
-                    case 3:
-                        result = Multiplicate();
-                        break;
-                    case 4:
-                        result = Divide();
-                        break;
-                    case 5:
-                        return;
-                    default:
+                    if (_menuItems.TryGetValue(InputIntNumber(), out var item))
+                        item.action();
+                    else
+                    {
                         Console.WriteLine("You entered wrong value !");
                         continue;
+                    }
                 }
-                Console.WriteLine($"Result = {result}");
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    continue;
+                }
             }
+        }
+
+        /// <summary>
+        /// Обрабатывает 2 запрашиваемых числа
+        /// </summary>
+        /// <param name="handler">Функция обработчик</param>
+        private void ProcessTwoNumbers(Func<double, double, double> handler)
+        {
+            Console.Write("Enter two numbers: ");
+            Console.WriteLine($"Result = {handler(InputIntNumber(), InputIntNumber())}");
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -60,61 +70,20 @@ namespace Calculator
         private void ShowMenu()
         {
             Console.WriteLine("Select an action:");
-            Console.WriteLine("1: Sum");
-            Console.WriteLine("2: Substract");
-            Console.WriteLine("3: Multiplicate");
-            Console.WriteLine("4: Divide");
-            Console.WriteLine("5: Exit");
+            foreach (var action in _menuItems)
+                Console.WriteLine($"{action.Key}: {action.Value.description}");
             Console.Write("..:");
         }
 
         /// <summary>
-        /// Выполнение сложения
+        /// Запрашивает ввод числа и проводит валидация
         /// </summary>
-        /// <returns>Сумма</returns>
-        private int Sum()
+        /// <returns>Число</returns>
+        private int InputIntNumber()
         {
-            Console.Write("Enter two numbers: ");
-            int x = int.Parse(Console.ReadLine());
-            int y = int.Parse(Console.ReadLine());
-
-            return _calc.Sum(x, y);
-        }
-
-        /// <summary>
-        /// Выполнение вычитания
-        /// </summary>
-        /// <returns>Разница</returns>
-        private int Substract()
-        {
-            Console.Write("Enter two numbers: ");
-            int x = int.Parse(Console.ReadLine());
-            int y = int.Parse(Console.ReadLine());
-            return _calc.Substract(x, y);
-        }
-
-        /// <summary>
-        /// Выполнение умножения
-        /// </summary>
-        /// <returns>Результат перемножения</returns>
-        private int Multiplicate()
-        {
-            Console.Write("Enter two numbers: ");
-            int x = int.Parse(Console.ReadLine());
-            int y = int.Parse(Console.ReadLine());
-            return _calc.Multiplicate(x, y);
-        }
-
-        /// <summary>
-        /// Выполнение деления
-        /// </summary>
-        /// <returns>Результат деления</returns>
-        private double Divide()
-        {
-            Console.Write("Enter two numbers: ");
-            int x = int.Parse(Console.ReadLine());
-            int y = int.Parse(Console.ReadLine());
-            return _calc.Divide(x, y);
+            if (!int.TryParse(Console.ReadLine(), out int value))
+                throw new FormatException("You entered not valid value");
+            return value;
         }
     }
 }
