@@ -45,7 +45,8 @@ namespace CalculatorTests
         {
             Assert.AreEqual(1, _calculator.Divide(12, 12));
             Assert.AreEqual(2.5, _calculator.Divide(5, 2));
-            Assert.AreEqual(double.NaN, _calculator.Divide(0, 0));
+            Assert.IsNaN(_calculator.Divide(0, 0));
+            Assert.IsTrue(double.IsInfinity(_calculator.Divide(5, 0)));
             Assert.AreEqual(-2.5, _calculator.Divide(5, -2));
         }
     }
