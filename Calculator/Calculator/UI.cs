@@ -60,7 +60,7 @@ namespace Calculator
         private void ProcessTwoNumbers(Func<double, double, double> handler)
         {
             Console.Write("Enter two numbers: ");
-            Console.WriteLine($"Result = {handler(InputIntNumber(), InputIntNumber())}");
+            Console.WriteLine($"Result = {handler(InputDoubleNumber(), InputDoubleNumber())}");
             Console.WriteLine();
         }
 
@@ -76,12 +76,23 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Запрашивает ввод числа и проводит валидация
+        /// Запрашивает ввод числа и проводит валидацию
         /// </summary>
         /// <returns>Число</returns>
-        private int InputIntNumber()
+        private static int InputIntNumber()
         {
             if (!int.TryParse(Console.ReadLine(), out int value))
+                throw new FormatException("You entered not valid value");
+            return value;
+        }
+
+        /// <summary>
+        /// Запрашивает ввод числа и проводит валидацию
+        /// </summary>
+        /// <returns>Число</returns>
+        private static double InputDoubleNumber()
+        {
+            if (!double.TryParse(Console.ReadLine(), out double value))
                 throw new FormatException("You entered not valid value");
             return value;
         }
