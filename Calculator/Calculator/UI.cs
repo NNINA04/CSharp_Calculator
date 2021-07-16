@@ -16,14 +16,17 @@ namespace Calculator
         public UI()
         {
             Calculator _calc = new();
-
+            
             MenuItems = new Dictionary<int, (string, Action)>
             {
-                {1, ("Sum", () => ProcessTwoNumbers(_calc.Sum))},
-                {2, ("Substract", () => ProcessTwoNumbers(_calc.Substract)) },
-                {3, ("Multiplicate", () => ProcessTwoNumbers(_calc.Multiplicate)) },
-                {4, ("Divide", () => ProcessTwoNumbers(_calc.Divide)) },
-                {5, ("Exit" , () => Environment.Exit(0))}
+                {1, ("Exit" , () => Environment.Exit(0))},
+                {2, ("Sum", () => ProcessOperation(_calc.Sum, InputDoubleNumber, InputDoubleNumber))},
+                {3, ("Substract", () => ProcessOperation(_calc.Substract, InputDoubleNumber, InputDoubleNumber))},
+                {4, ("Multiplicate", () => ProcessOperation(_calc.Multiplicate, InputDoubleNumber, InputDoubleNumber))},
+                {5, ("Divide", () => ProcessOperation(_calc.Divide, InputDoubleNumber, InputDoubleNumber))},
+                {6, ("Sqrt", () => ProcessOperation(_calc.Sqrt, InputDoubleNumber))},
+                {7, ("Cbrt", () => ProcessOperation(_calc.Cbrt, InputDoubleNumber))},
+                {8, ("Exp", () => ProcessOperation(_calc.Exp, InputDoubleNumber))}
             };
         }
 
@@ -54,22 +57,57 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Обрабатывает 2 запрашиваемых числа
+        /// Запрашивает ввод двух значений, проводит валидацию и выдаёт результат
         /// </summary>
-        /// <param name="handler">Функция обработчик</param>
-        private void ProcessTwoNumbers(Func<double, double, double> handler)
+        /// <typeparam name="TArg1">Тип первой переменной, которою необходимо ввести</typeparam>
+        /// <typeparam name="TArg2">Тип второй переменной, которою необходимо ввести</typeparam>
+        /// <typeparam name="TResult">Тип возвращаемого значения передаваемой функции</typeparam>
+        /// <param name="handler">Функция обработки</param>
+        /// <param name="inputHandler1">Функция ввода значения первой переменной</param>
+        /// <param name="inputHandler2">Функция ввода значения второй переменной</param>
+        /// <param name="validator">Валидатор результата</param>
+        private void ProcessOperation<TArg1, TArg2, TResult>(Func<TArg1, TArg2, TResult> handler,
+        Func<TArg1> inputHandler1, Func<TArg2> inputHandler2,
+        IValidator<TResult> validator = null)
         {
-            Console.Write("Enter two numbers: ");
+            Console.Write("Enter two values: ");
+            TResult result = handler(inputHandler1(), inputHandler2());
+            ShowAndValidateValue(result, validator);
+        }
 
-            double result =  handler(InputDoubleNumber(), InputDoubleNumber());
+        /// <summary>
+        /// Запрашивает ввод значения, проводит валидацию и выдаёт результат
+        /// </summary>
+        /// <typeparam name="TArg1">Тип переменной, которою необходимо ввести</typeparam>
+        /// <typeparam name="TResult">Тип возвращаемого значения передаваемой функции</typeparam>
+        /// <param name="handler">Функция обработки</param>
+        /// <param name="inputHandler">Функция ввода значения переменной</param>
+        /// <param name="validator">Валидатор результата</param>
+        private void ProcessOperation<TArg1, TResult>(Func<TArg1, TResult> handler, Func<TArg1> inputHandler, IValidator<TResult> validator = null)
+        {
+            Console.Write("Enter a value: ");
+            TResult result = handler(inputHandler());
+            ShowAndValidateValue(result, validator);
+        }
 
-            if (double.IsInfinity(result))
-                Console.WriteLine("Result is infinity");
-            else if (double.IsNaN(result))
-                Console.WriteLine("Result is undefined");
-            else
-                Console.WriteLine($"Result = {result}");
-            Console.WriteLine();
+        /// <summary>
+        /// Отображает значение переменной и проводит её валидацию
+        /// </summary>
+        /// <typeparam name="TResult">Тип переменной</typeparam>
+        /// <param name="value">Проверяеммая и выводимая переменная</param>
+        /// <param name="validator">Валидатор переменной</param>
+        private void ShowAndValidateValue<TResult>(TResult value, IValidator<TResult> validator)
+        {
+            if (validator != null)
+            {
+                var resultOfValidation = validator.Validate(value);
+                if (!resultOfValidation.isCorrect)
+                {
+                    Console.WriteLine(resultOfValidation.errorMessage + Environment.NewLine);
+                    return;
+                }
+            }
+            Console.WriteLine($"Result = {value}" + Environment.NewLine);
         }
 
         /// <summary>

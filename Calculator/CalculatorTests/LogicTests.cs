@@ -50,5 +50,34 @@ namespace CalculatorTests
             Assert.IsTrue(double.IsInfinity(_calculator.Divide(5, 0)));
             Assert.AreEqual(-2.5, _calculator.Divide(5, -2));
         }
+
+        [Test]
+        public void Sqrt()
+        {
+            Assert.AreEqual(3, _calculator.Sqrt(9));
+            Assert.IsNaN(_calculator.Sqrt(-25));
+            Assert.AreEqual(0, _calculator.Sqrt(0));
+            Assert.AreEqual(1, _calculator.Sqrt(1));
+        }
+
+        [Test]
+        public void Cbrt()
+        {
+            Assert.AreEqual(5, _calculator.Cbrt(125));
+            Assert.AreEqual(3, _calculator.Cbrt(27));
+            Assert.AreEqual(0, _calculator.Cbrt(0));
+            Assert.AreEqual(1, _calculator.Cbrt(1));
+        }
+
+        [Test]
+        public void Exp()
+        {
+            Assert.AreEqual("1e-1", _calculator.Exp(0.1));
+            Assert.AreEqual("1e+0", _calculator.Exp(1));
+            Assert.AreEqual("-1e-1", _calculator.Exp(-0.1));
+            Assert.AreEqual("-1e+0", _calculator.Exp(-1));
+
+            Assert.AreEqual("-9.9999999567e+7", _calculator.Exp(-99999999.567));
+        }
     }
 }

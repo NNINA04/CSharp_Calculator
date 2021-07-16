@@ -54,5 +54,47 @@ namespace Calculator
         {
             return x + y;
         }
+
+        /// <summary>
+        /// Вычисляет квадратный корень
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns>Квадратный корень числа</returns>
+        public double Sqrt(double x)
+        {
+            return Math.Sqrt(x);
+        }
+
+        /// <summary>
+        /// Вычисляет кубический корень
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns>Кубический корень числа</returns>
+        public double Cbrt(double x)
+        {
+            return Math.Cbrt(x);
+        }
+
+        /// <summary>
+        /// Преобразует число в экспоненциальную запись
+        /// </summary>
+        /// <param name="x">Число</param>
+        /// <returns>Экспоненцаильную запись числа</returns>
+        public string Exp(double x)
+        {
+            double temp = Math.Abs(x);
+            int sign = x < 0 ? -1 : 1;
+            bool moreThenOne = temp >= 1;
+
+            uint order = 0;
+
+            while (!(temp >= 1 && temp < 10))
+            {
+                temp = moreThenOne ? temp / 10 : temp * 10;
+                order++;
+            }
+
+            return  $"{temp * sign}e{(moreThenOne ? "+" : "-")}{order}";
+        }
     }
 }

@@ -36,5 +36,26 @@
         /// <param name="y">Второе число</param>
         /// <returns>Результат деления</returns>
         double Divide(double x, double y);
+
+        /// <summary>
+        /// Вычисляет квадратный корень
+        /// </summary>
+        /// <param name="x">Число</param>
+        /// <returns>Квадратный корень числа</returns>
+        double Sqrt(double x);
+
+        /// <summary>
+        /// Вычисляет кубический корень
+        /// </summary>
+        /// <param name="x">Число</param>
+        /// <returns>Кубический корень числа</returns>
+        double Cbrt(double x);
+
+        /// <summary>
+        /// Представляет число в экспоненциальном виде
+        /// </summary>
+        /// <param name="x">Число</param>
+        /// <returns>Число в экспоненциальном виде</returns>
+        string Exp(double x);
     }
 }
