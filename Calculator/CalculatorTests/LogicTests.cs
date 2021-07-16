@@ -1,5 +1,6 @@
 using Calculator;
 using NUnit.Framework;
+using System;
 
 namespace CalculatorTests
 {
@@ -79,5 +80,15 @@ namespace CalculatorTests
 
             Assert.AreEqual("-9.9999999567e+7", _calculator.Exp(-99999999.567));
         }
+
+        [Test]
+        public void Factorial()
+        {
+            Assert.AreEqual(720, _calculator.Fact(6));
+            Assert.AreEqual(1, _calculator.Fact(0));
+            Assert.Catch<ArithmeticException>(() => _calculator.Fact(-1));
+        }
+
+
     }
 }

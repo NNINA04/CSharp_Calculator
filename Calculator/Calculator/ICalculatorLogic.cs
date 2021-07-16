@@ -57,5 +57,12 @@
         /// <param name="x">Число</param>
         /// <returns>Число в экспоненциальном виде</returns>
         string Exp(double x);
+
+        /// <summary>
+        /// Вычисляет факториал числа
+        /// </summary>
+        /// <param name="x">Число</param>
+        /// <returns>Факториал</returns>
+        int Fact(int x); 
     }
 }

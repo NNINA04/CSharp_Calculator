@@ -15,15 +15,6 @@ namespace CalculatorTests
         }
 
         /// <summary>
-        /// Проверка на количество элементов
-        /// </summary>
-        [Test]
-        public void TestMenuItemsCount()
-        {
-            Assert.AreEqual(8, _ui.MenuItems.Count);
-        }
-
-        /// <summary>
         /// Проверка первого значения
         /// </summary>
         [Test]

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calculator
 {
@@ -79,7 +75,7 @@ namespace Calculator
         /// Преобразует число в экспоненциальную запись
         /// </summary>
         /// <param name="x">Число</param>
-        /// <returns>Экспоненцаильную запись числа</returns>
+        /// <returns>Экспоненцаильная запись числа</returns>
         public string Exp(double x)
         {
             double temp = Math.Abs(x);
@@ -93,8 +89,19 @@ namespace Calculator
                 temp = moreThenOne ? temp / 10 : temp * 10;
                 order++;
             }
+            return $"{temp * sign}e{(moreThenOne ? "+" : "-")}{order}";
+        }
 
-            return  $"{temp * sign}e{(moreThenOne ? "+" : "-")}{order}";
+        /// <summary>
+        /// Вычисляет факториал числа
+        /// </summary>
+        /// <param name="x">Число</param>
+        /// <returns>Факториал</returns>
+        /// <exception cref="ArithmeticException">Число меньше нуля</exception>
+        public int Fact(int x)
+        {
+            if (x < 0) throw new ArithmeticException("Число меньше нуля");
+            return x <= 1 ? 1 : x * Fact(x - 1);
         }
     }
 }
