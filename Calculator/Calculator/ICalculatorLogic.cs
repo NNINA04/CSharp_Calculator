@@ -63,6 +63,14 @@
         /// </summary>
         /// <param name="x">Число</param>
         /// <returns>Факториал</returns>
-        int Fact(int x); 
+        int Fact(int x);
+
+        /// <summary>
+        /// Конвертирует число в hex
+        /// </summary>
+        /// <param name="hexCalculator">Экземпляр класса расчёта hex значения</param>
+        /// <param name="x">Число</param>
+        /// <returns>Hex в строковом представлении</returns>
+        string ToHex(IHexCalculator hexCalculator, int x);
     }
 }

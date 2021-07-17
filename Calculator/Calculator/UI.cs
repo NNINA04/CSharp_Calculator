@@ -11,6 +11,11 @@ namespace Calculator
         public Dictionary<int, (string description, Action action)> MenuItems { get; private set; }
 
         /// <summary>
+        /// Словарь содержащий элементы меню и действий для Hex
+        /// </summary>
+        public Dictionary<int, (string description, Action action)> HexMenu { get; private set; }
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         public UI()
@@ -19,6 +24,12 @@ namespace Calculator
             FactorialProcessAdapter fa = new(calc);
             DoubleValidator doubleValidator = new();
             FactorialFormatter factorialFormatter = new();
+            BitConverterHexCalculator bitConverterHexCalculator = new();
+            HexMenu = new Dictionary<int, (string description, Action action)>
+            {
+                {1, ("BitConverterCalculation", ()=>ProcessOperation(calc.ToHex, () => bitConverterHexCalculator,  InputIntNumber)) }, // Решить проблему с "Enter two values: " 
+                {2, ("...", ()=>ProcessOperation(calc.Divide, InputDoubleNumber, InputDoubleNumber, doubleValidator)) }
+            };
 
             MenuItems = new Dictionary<int, (string, Action)>
             {
@@ -30,34 +41,43 @@ namespace Calculator
                 {6, ("Sqrt", () => ProcessOperation(calc.Sqrt, InputDoubleNumber))},
                 {7, ("Cbrt", () => ProcessOperation(calc.Cbrt, InputDoubleNumber))},
                 {8, ("Exp", () => ProcessOperation(calc.Exp, InputDoubleNumber))},
-                {9, ("Fact", () => ProcessOperation(fa.Factorial, InputIntNumber, formatter:factorialFormatter))}
+                {9, ("Fact", () => ProcessOperation(fa.Factorial, InputIntNumber, formatter:factorialFormatter))},
+                {10, ("Hex", () =>  SelectAction(HexMenu))}
             };
         }
 
         /// <summary>
-        /// Отображения интерфейса
+        /// Отображения основной интерфейса
         /// </summary>
         public void Run()
         {
             while (true)
-            {
-                ShowMenu();
-                try
-                {
-                    if (MenuItems.TryGetValue(InputIntNumber(), out var item))
-                        item.action();
-                    else
-                        Console.WriteLine("You entered wrong value !");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                finally
-                {
-                    Console.WriteLine();
-                }
+                SelectAction(MenuItems, nested: true);
+        }
 
+        /// <summary>
+        /// Выводит меню и позволяет пользователю выбрать из него действие
+        /// </summary>
+        /// <param name="menu">Словарь с элементами меню</param>
+        /// <param name="nested">Вложенное ли меню</param>
+        private void SelectAction(IDictionary<int, (string description, Action action)> menu, bool nested = false)
+        {
+            try
+            {
+                ShowMenu(menu);
+                if (menu.TryGetValue(InputIntNumber(), out var item))
+                    item.action();
+                else
+                    Console.WriteLine("You entered a wrong value !");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                if (nested)
+                    Console.WriteLine();
             }
         }
 
@@ -126,10 +146,10 @@ namespace Calculator
         /// <summary>
         /// Выводит меню
         /// </summary>
-        private void ShowMenu()
+        private void ShowMenu(IDictionary<int, (string description, Action action)> menu)
         {
             Console.WriteLine("Select an action:");
-            foreach (var action in MenuItems)
+            foreach (var action in menu)
                 Console.WriteLine($"{action.Key}: {action.Value.description}");
             Console.Write("..:");
         }

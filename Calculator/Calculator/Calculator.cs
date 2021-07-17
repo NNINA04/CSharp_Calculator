@@ -103,5 +103,21 @@ namespace Calculator
             if (x < 0) throw new ArithmeticException("Число меньше нуля");
             return x <= 1 ? 1 : x * Fact(x - 1);
         }
+
+        /// <summary>
+        /// Конвертирует число в hex
+        /// </summary>
+        /// <param name="hexCalculator">Экземпляр класса расчёта hex значения</param>
+        /// <param name="x">Число</param>
+        /// <returns>Hex в строковом представлении</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Объект типа <see cref="IHexCalculator"/> является <see cref="null"/>
+        /// </exception>
+        public string ToHex(IHexCalculator hexCalculator, int x)
+        {
+            if (hexCalculator == null) 
+                throw new ArgumentNullException(nameof(hexCalculator));
+            return hexCalculator.ToHex(x);
+        }
     }
 }
