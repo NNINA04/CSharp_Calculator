@@ -9,6 +9,9 @@ namespace Calculator
     /// </summary>
     public class MatchingTypeToHex : IHexCalculator
     {
+        /// <summary>
+        /// Hex словарь, с соотношением байта и его hex представлением
+        /// </summary>
         private static readonly Dictionary<byte, string> _hexMatchings;
 
         /// <summary>

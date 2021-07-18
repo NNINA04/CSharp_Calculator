@@ -14,7 +14,7 @@ namespace Calculator
         public Dictionary<int, (string description, Action action)> MenuItems { get; private set; }
 
         /// <summary>
-        /// Словарь содержащий элементы меню и действий для Hex
+        /// Словарь содержащий элементы меню и методы для работы с hex
         /// </summary>
         public Dictionary<int, (string description, Action action)> HexMenu { get; private set; }
 
@@ -51,7 +51,7 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Отображения основной интерфейса
+        /// Запускает интерфейс
         /// </summary>
         public void Run()
         {
@@ -88,15 +88,15 @@ namespace Calculator
         /// <summary>
         /// Запрашивает ввод двух значений, проводит валидацию и выдаёт результат
         /// </summary>
-        /// <typeparam name="TArg1">Тип первой переменной, которою необходимо ввести</typeparam>
-        /// <typeparam name="TArg2">Тип второй переменной, которою необходимо ввести</typeparam>
+        /// <typeparam name="TArg1">Тип первой переменной, которую необходимо ввести</typeparam>
+        /// <typeparam name="TArg2">Тип второй переменной, которую необходимо ввести</typeparam>
         /// <typeparam name="TResult">Тип возвращаемого значения передаваемой функции</typeparam>
         /// <param name="handler">Функция обработки</param>
         /// <param name="inputHandler1">Функция ввода значения первой переменной</param>
         /// <param name="inputHandler2">Функция ввода значения второй переменной</param>
         /// <param name="message">Сообщение о вводе</param>
         /// <param name="validator">Валидатор результата</param>
-        /// <param name="formatter">Модификтор форматирования</param>
+        /// <param name="formatter">Форматтер результата</param>
         private static void ProcessOperation<TArg1, TArg2, TResult>(Func<TArg1, TArg2, TResult> handler,
         Func<TArg1> inputHandler1, Func<TArg2> inputHandler2, string message,
         IValidator<TResult> validator = null,
@@ -110,12 +110,12 @@ namespace Calculator
         /// <summary>
         /// Запрашивает ввод значения, проводит валидацию и выдаёт результат
         /// </summary>
-        /// <typeparam name="TArg1">Тип переменной, которою необходимо ввести</typeparam>
+        /// <typeparam name="TArg1">Тип переменной, которую необходимо ввести</typeparam>
         /// <typeparam name="TResult">Тип возвращаемого значения передаваемой функции</typeparam>
         /// <param name="handler">Функция обработки</param>
         /// <param name="inputHandler">Функция ввода значения переменной</param>
         /// <param name="validator">Валидатор результата</param>
-        /// <param name="formatter">Модификтор форматирования</param>
+        /// <param name="formatter">Форматтер результата</param>
         private static void ProcessOperation<TArg1, TResult>(Func<TArg1, TResult> handler,
         Func<TArg1> inputHandler,
         IValidator<TResult> validator = null,
@@ -132,7 +132,7 @@ namespace Calculator
         /// <typeparam name="TResult">Тип переменной</typeparam>
         /// <param name="value">Проверяеммая и выводимая переменная</param>
         /// <param name="validator">Валидатор переменной</param>
-        /// <param name="formatter">Модификтор форматирования</param>
+        /// <param name="formatter">Форматтер переменной</param>
         private static void ShowAndValidateValue<TResult>(TResult value, IValidator<TResult> validator, IFormatter<TResult, string> formatter)
         {
             if (validator != null)
