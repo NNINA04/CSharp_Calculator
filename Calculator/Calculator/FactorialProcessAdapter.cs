@@ -1,4 +1,4 @@
-﻿namespace Calculator
+﻿namespace CalculatorTests
 {
     /// <summary>
     /// Адаптер формата возвращаемого значения при расчёте факториала

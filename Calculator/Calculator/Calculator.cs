@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Calculator
+namespace CalculatorTests
 {
     /// <summary>
     /// Выполняет арифметические операции

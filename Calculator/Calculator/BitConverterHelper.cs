@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Calculator
+namespace CalculatorTests
 {
     /// <summary>
     /// Класс хелпер для <see cref="BitConverter"/>

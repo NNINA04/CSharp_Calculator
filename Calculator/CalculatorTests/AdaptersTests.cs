@@ -1,4 +1,4 @@
-﻿using Calculator;
+﻿using CalculatorTests;
 using NUnit.Framework;
 
 namespace CalculatorTests
@@ -10,7 +10,7 @@ namespace CalculatorTests
         [SetUp]
         public void Setup()
         {
-            _factorialProcessAdapter = new FactorialProcessAdapter(new Calculator.Calculator());
+            _factorialProcessAdapter = new FactorialProcessAdapter(new CalculatorTests.Calculator());
         }
 
         [Test]

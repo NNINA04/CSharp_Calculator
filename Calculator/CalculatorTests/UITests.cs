@@ -6,12 +6,12 @@ namespace CalculatorTests
     public class UITests
     {
         
-        private Calculator.UI _ui;
+        private CalculatorTests.UI _ui;
 
         [SetUp]
         public void Setup()
         {
-            _ui = new Calculator.UI();
+            _ui = new CalculatorTests.UI();
         }
 
         /// <summary>

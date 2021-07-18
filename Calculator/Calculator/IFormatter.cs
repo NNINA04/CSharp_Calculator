@@ -1,4 +1,4 @@
-﻿namespace Calculator
+﻿namespace CalculatorTests
 {
     /// <summary>
     /// Интерфейс форматирования

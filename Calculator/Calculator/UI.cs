@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Calculator
+namespace CalculatorTests
 {
     public class UI
     {
@@ -27,17 +27,17 @@ namespace Calculator
             BitConverterHexCalculator bitConverterHexCalculator = new();
             HexMenu = new Dictionary<int, (string description, Action action)>
             {
-                {1, ("BitConverterCalculation", ()=>ProcessOperation(calc.ToHex, () => bitConverterHexCalculator,  InputIntNumber)) }, // Решить проблему с "Enter two values: " 
-                {2, ("...", ()=>ProcessOperation(calc.Divide, InputDoubleNumber, InputDoubleNumber, doubleValidator)) }
+                {1, ("BitConverterCalculation", ()=>ProcessOperation(calc.ToHex, () => bitConverterHexCalculator,  InputIntNumber, "Enter a value: ")) },
+                {2, ("DictionaryConverter", ()=>ProcessOperation(calc.ToHex, () => bitConverterHexCalculator,  InputIntNumber, "Enter a value: ")) }
             };
 
             MenuItems = new Dictionary<int, (string, Action)>
             {
                 {1, ("Exit" , () => Environment.Exit(0))},
-                {2, ("Sum", () => ProcessOperation(calc.Sum, InputDoubleNumber, InputDoubleNumber))},
-                {3, ("Substract", () => ProcessOperation(calc.Substract, InputDoubleNumber, InputDoubleNumber))},
-                {4, ("Multiplicate", () => ProcessOperation(calc.Multiplicate, InputDoubleNumber, InputDoubleNumber))},
-                {5, ("Divide", () => ProcessOperation(calc.Divide, InputDoubleNumber, InputDoubleNumber, doubleValidator))},
+                {2, ("Sum", () => ProcessOperation(calc.Sum, InputDoubleNumber, InputDoubleNumber, "Enter two values: "))},
+                {3, ("Substract", () => ProcessOperation(calc.Substract, InputDoubleNumber, InputDoubleNumber, "Enter two values: "))},
+                {4, ("Multiplicate", () => ProcessOperation(calc.Multiplicate, InputDoubleNumber, InputDoubleNumber, "Enter two values: "))},
+                {5, ("Divide", () => ProcessOperation(calc.Divide, InputDoubleNumber, InputDoubleNumber, "Enter two values: ", doubleValidator))},
                 {6, ("Sqrt", () => ProcessOperation(calc.Sqrt, InputDoubleNumber))},
                 {7, ("Cbrt", () => ProcessOperation(calc.Cbrt, InputDoubleNumber))},
                 {8, ("Exp", () => ProcessOperation(calc.Exp, InputDoubleNumber))},
@@ -92,11 +92,11 @@ namespace Calculator
         /// <param name="inputHandler2">Функция ввода значения второй переменной</param>
         /// <param name="validator">Валидатор результата</param>
         private void ProcessOperation<TArg1, TArg2, TResult>(Func<TArg1, TArg2, TResult> handler,
-        Func<TArg1> inputHandler1, Func<TArg2> inputHandler2,
+        Func<TArg1> inputHandler1, Func<TArg2> inputHandler2, string message,
         IValidator<TResult> validator = null,
         IFormatter<TResult, string> formatter = null)
         {
-            Console.Write("Enter two values: ");
+            Console.Write(message);
             TResult result = handler(inputHandler1(), inputHandler2());
             ShowAndValidateValue(result, validator, formatter);
         }
