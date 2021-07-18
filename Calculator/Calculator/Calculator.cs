@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calculator
 {
@@ -53,6 +49,75 @@ namespace Calculator
         public double Sum(double x, double y)
         {
             return x + y;
+        }
+
+        /// <summary>
+        /// Вычисляет квадратный корень
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns>Квадратный корень числа</returns>
+        public double Sqrt(double x)
+        {
+            return Math.Sqrt(x);
+        }
+
+        /// <summary>
+        /// Вычисляет кубический корень
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns>Кубический корень числа</returns>
+        public double Cbrt(double x)
+        {
+            return Math.Cbrt(x);
+        }
+
+        /// <summary>
+        /// Преобразует число в экспоненциальную запись
+        /// </summary>
+        /// <param name="x">Число</param>
+        /// <returns>Экспоненцаильная запись числа</returns>
+        public string Exp(double x)
+        {
+            double temp = Math.Abs(x);
+            int sign = x < 0 ? -1 : 1;
+            bool moreThenOne = temp >= 1;
+
+            uint order = 0;
+
+            while (!(temp >= 1 && temp < 10))
+            {
+                temp = moreThenOne ? temp / 10 : temp * 10;
+                order++;
+            }
+            return $"{temp * sign}e{(moreThenOne ? "+" : "-")}{order}";
+        }
+
+        /// <summary>
+        /// Вычисляет факториал числа
+        /// </summary>
+        /// <param name="x">Число</param>
+        /// <returns>Факториал</returns>
+        /// <exception cref="ArithmeticException">Число меньше нуля</exception>
+        public int Fact(int x)
+        {
+            if (x < 0) throw new ArithmeticException("Число меньше нуля");
+            return x <= 1 ? 1 : x * Fact(x - 1);
+        }
+
+        /// <summary>
+        /// Конвертирует число в hex
+        /// </summary>
+        /// <param name="hexCalculator">Экземпляр класса расчёта hex значения</param>
+        /// <param name="x">Число</param>
+        /// <returns>Hex в строковом представлении</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Объект типа <see cref="IHexCalculator"/> является null/>
+        /// </exception>
+        public string ToHex(IHexCalculator hexCalculator, int x)
+        {
+            if (hexCalculator == null) 
+                throw new ArgumentNullException(nameof(hexCalculator));
+            return hexCalculator.ToHex(x);
         }
     }
 }

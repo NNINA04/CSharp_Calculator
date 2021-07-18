@@ -15,25 +15,16 @@ namespace CalculatorTests
         }
 
         /// <summary>
-        /// Проверка на количество элементов
-        /// </summary>
-        [Test]
-        public void TestMenuItemsCount()
-        {
-            Assert.AreEqual(5, _ui.MenuItems.Count);
-        }
-
-        /// <summary>
         /// Проверка первого значения
         /// </summary>
         [Test]
         public void TestMenuItemsDescription()
         {
-            Assert.AreEqual("Sum", _ui.MenuItems[1].description);
-            Assert.AreEqual("Substract", _ui.MenuItems[2].description);
-            Assert.AreEqual("Multiplicate", _ui.MenuItems[3].description);
-            Assert.AreEqual("Divide", _ui.MenuItems[4].description);
-            Assert.AreEqual("Exit", _ui.MenuItems[5].description);
+            Assert.AreEqual("Sum", _ui.MenuItems[2].description);
+            Assert.AreEqual("Substract", _ui.MenuItems[3].description);
+            Assert.AreEqual("Multiplicate", _ui.MenuItems[4].description);
+            Assert.AreEqual("Divide", _ui.MenuItems[5].description);
+            Assert.AreEqual("Exit", _ui.MenuItems[1].description);
         }
 
         /// <summary>
