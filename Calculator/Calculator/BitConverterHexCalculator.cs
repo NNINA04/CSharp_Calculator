@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CalculatorTests
+namespace Calculator
 {
     /// <summary>
     /// Класс реализующий конвертацию числа в hex с использованием <see cref="BitConverter"/>

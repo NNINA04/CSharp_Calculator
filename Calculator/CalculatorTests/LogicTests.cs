@@ -1,4 +1,4 @@
-using CalculatorTests;
+using Calculator;
 using NUnit.Framework;
 using System;
 
@@ -11,7 +11,7 @@ namespace CalculatorTests
         [SetUp]
         public void Setup()
         {
-            _calculator = new CalculatorTests.Calculator();
+            _calculator = new Calculator.Calculator();
         }
 
         [Test]

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CalculatorTests
+namespace Calculator
 {
+    /// <summary>
+    /// Класс UI для консольного приложения
+    /// </summary>
     public class UI
     {
         /// <summary>
@@ -25,10 +28,11 @@ namespace CalculatorTests
             DoubleValidator doubleValidator = new();
             FactorialFormatter factorialFormatter = new();
             BitConverterHexCalculator bitConverterHexCalculator = new();
+            MatchingTypeToHex matchingTypeToHex = new();
             HexMenu = new Dictionary<int, (string description, Action action)>
             {
                 {1, ("BitConverterCalculation", ()=>ProcessOperation(calc.ToHex, () => bitConverterHexCalculator,  InputIntNumber, "Enter a value: ")) },
-                {2, ("DictionaryConverter", ()=>ProcessOperation(calc.ToHex, () => bitConverterHexCalculator,  InputIntNumber, "Enter a value: ")) }
+                {2, ("DictionaryConverter", ()=>ProcessOperation(calc.ToHex, () => matchingTypeToHex,  InputIntNumber, "Enter a value: ")) }
             };
 
             MenuItems = new Dictionary<int, (string, Action)>
@@ -60,7 +64,7 @@ namespace CalculatorTests
         /// </summary>
         /// <param name="menu">Словарь с элементами меню</param>
         /// <param name="nested">Вложенное ли меню</param>
-        private void SelectAction(IDictionary<int, (string description, Action action)> menu, bool nested = false)
+        private static void SelectAction(IDictionary<int, (string description, Action action)> menu, bool nested = false)
         {
             try
             {
@@ -90,8 +94,10 @@ namespace CalculatorTests
         /// <param name="handler">Функция обработки</param>
         /// <param name="inputHandler1">Функция ввода значения первой переменной</param>
         /// <param name="inputHandler2">Функция ввода значения второй переменной</param>
+        /// <param name="message">Сообщение о вводе</param>
         /// <param name="validator">Валидатор результата</param>
-        private void ProcessOperation<TArg1, TArg2, TResult>(Func<TArg1, TArg2, TResult> handler,
+        /// <param name="formatter">Модификтор форматирования</param>
+        private static void ProcessOperation<TArg1, TArg2, TResult>(Func<TArg1, TArg2, TResult> handler,
         Func<TArg1> inputHandler1, Func<TArg2> inputHandler2, string message,
         IValidator<TResult> validator = null,
         IFormatter<TResult, string> formatter = null)
@@ -109,7 +115,8 @@ namespace CalculatorTests
         /// <param name="handler">Функция обработки</param>
         /// <param name="inputHandler">Функция ввода значения переменной</param>
         /// <param name="validator">Валидатор результата</param>
-        private void ProcessOperation<TArg1, TResult>(Func<TArg1, TResult> handler,
+        /// <param name="formatter">Модификтор форматирования</param>
+        private static void ProcessOperation<TArg1, TResult>(Func<TArg1, TResult> handler,
         Func<TArg1> inputHandler,
         IValidator<TResult> validator = null,
         IFormatter<TResult, string> formatter = null)
@@ -125,14 +132,15 @@ namespace CalculatorTests
         /// <typeparam name="TResult">Тип переменной</typeparam>
         /// <param name="value">Проверяеммая и выводимая переменная</param>
         /// <param name="validator">Валидатор переменной</param>
-        private void ShowAndValidateValue<TResult>(TResult value, IValidator<TResult> validator, IFormatter<TResult, string> formatter)
+        /// <param name="formatter">Модификтор форматирования</param>
+        private static void ShowAndValidateValue<TResult>(TResult value, IValidator<TResult> validator, IFormatter<TResult, string> formatter)
         {
             if (validator != null)
             {
-                var resultOfValidation = validator.Validate(value);
-                if (!resultOfValidation.isCorrect)
+                var (isCorrect, errorMessage) = validator.Validate(value);
+                if (!isCorrect)
                 {
-                    Console.WriteLine(resultOfValidation.errorMessage);
+                    Console.WriteLine(errorMessage);
                     return;
                 }
             }
@@ -146,7 +154,8 @@ namespace CalculatorTests
         /// <summary>
         /// Выводит меню
         /// </summary>
-        private void ShowMenu(IDictionary<int, (string description, Action action)> menu)
+        /// <param name="menu">Словарь с элементами меню</param>
+        private static void ShowMenu(IDictionary<int, (string description, Action action)> menu)
         {
             Console.WriteLine("Select an action:");
             foreach (var action in menu)

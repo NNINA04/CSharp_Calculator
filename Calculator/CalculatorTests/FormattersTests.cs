@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Calculator;
+using NUnit.Framework;
 
 namespace CalculatorTests
 {

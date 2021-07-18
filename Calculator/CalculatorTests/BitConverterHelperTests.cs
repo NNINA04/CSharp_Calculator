@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Calculator;
+using NUnit.Framework;
 using System;
 using System.Linq;
 
@@ -6,8 +7,6 @@ namespace CalculatorTests
 {
     public class BitConverterHexHelperTest
     {
-
-
         [Test]
         public void TestHexConverter()
         {

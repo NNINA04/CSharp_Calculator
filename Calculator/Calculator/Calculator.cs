@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CalculatorTests
+namespace Calculator
 {
     /// <summary>
     /// Выполняет арифметические операции
@@ -111,7 +111,7 @@ namespace CalculatorTests
         /// <param name="x">Число</param>
         /// <returns>Hex в строковом представлении</returns>
         /// <exception cref="ArgumentNullException">
-        /// Объект типа <see cref="IHexCalculator"/> является <see cref="null"/>
+        /// Объект типа <see cref="IHexCalculator"/> является null/>
         /// </exception>
         public string ToHex(IHexCalculator hexCalculator, int x)
         {

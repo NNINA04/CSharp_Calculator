@@ -1,4 +1,4 @@
-﻿namespace CalculatorTests
+﻿namespace Calculator
 {
     /// <summary>
     /// Интерфейс валидатора переменных
