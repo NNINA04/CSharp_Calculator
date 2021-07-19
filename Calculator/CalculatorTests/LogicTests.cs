@@ -1,6 +1,8 @@
 using Calculator;
 using NUnit.Framework;
 using System;
+using Moq;
+using NUnit.Framework.Internal;
 
 namespace CalculatorTests
 {
@@ -13,13 +15,14 @@ namespace CalculatorTests
         {
             _calculator = new Calculator.Calculator();
         }
-
+        
         [Test]
         public void TestSum()
         {
-            Assert.AreEqual(7, _calculator.Sum(2,5));
+            Assert.AreEqual(7, _calculator.Sum(2, 5));
             Assert.AreEqual(7.1, _calculator.Sum(2.1, 5));
             Assert.AreEqual(-0, _calculator.Sum(-1, 1));
+
         }
 
         [Test]
@@ -86,9 +89,26 @@ namespace CalculatorTests
         {
             Assert.AreEqual(720, _calculator.Fact(6));
             Assert.AreEqual(1, _calculator.Fact(0));
-            Assert.Catch<ArithmeticException>(() => _calculator.Fact(-1));
+            Assert.Throws(Is.TypeOf<ArithmeticException>()
+                 .And.Message.EqualTo("Число меньше нуля"), () => _calculator.Fact(-1));
         }
 
+        [Test]
+        public void ToHex()
+        {
+            //Assert.AreEqual("00 00", _calculator.ToHex(_matchingTypeToHex, 0x0));
+            Assert.Throws<ArgumentNullException>(() => _calculator.ToHex(null, 0x0));
 
+            var expected = "00 01";
+
+            var mockHexCalculator = new Mock<IHexCalculator>();
+
+            mockHexCalculator.Setup(mock => mock.ToHex(It.IsAny<int>())).Returns(expected);
+
+            var actual = _calculator.ToHex(mockHexCalculator.Object, 0);
+
+            Assert.AreEqual(expected, actual);
+            mockHexCalculator.Verify(m => m.ToHex(It.IsAny<int>()), Times.Once());
+        }
     }
 }
