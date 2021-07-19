@@ -1,8 +1,8 @@
 using Calculator;
-using NUnit.Framework;
-using System;
 using Moq;
+using NUnit.Framework;
 using NUnit.Framework.Internal;
+using System;
 
 namespace CalculatorTests
 {
@@ -15,7 +15,7 @@ namespace CalculatorTests
         {
             _calculator = new Calculator.Calculator();
         }
-        
+
         [Test]
         public void TestSum()
         {
@@ -90,7 +90,7 @@ namespace CalculatorTests
             Assert.AreEqual(720, _calculator.Fact(6));
             Assert.AreEqual(1, _calculator.Fact(0));
             Assert.Throws(Is.TypeOf<ArithmeticException>()
-                 .And.Message.EqualTo("×èñëî ìåíüøå íóëÿ"), () => _calculator.Fact(-1));
+                 .And.Message.EqualTo("Ð§Ð¸ÑÐ»Ð¾ Ð¼ÐµÐ½ÑŒÑˆÐµ Ð½ÑƒÐ»Ñ"), () => _calculator.Fact(-1));
         }
 
         [Test]
