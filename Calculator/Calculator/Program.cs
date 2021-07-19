@@ -1,4 +1,7 @@
-﻿namespace Calculator
+﻿using System;
+using System.Linq;
+
+namespace Calculator
 {
     class Program
     {
