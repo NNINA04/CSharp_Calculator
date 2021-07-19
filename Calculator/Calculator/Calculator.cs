@@ -115,7 +115,7 @@ namespace Calculator
         /// </exception>
         public string ToHex(IHexCalculator hexCalculator, int x)
         {
-            if (hexCalculator == null) 
+            if (hexCalculator == null)
                 throw new ArgumentNullException(nameof(hexCalculator));
             return hexCalculator.ToHex(x);
         }

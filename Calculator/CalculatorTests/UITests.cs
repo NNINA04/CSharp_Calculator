@@ -1,11 +1,12 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace CalculatorTests
 {
     public class UITests
     {
-        
+
         private Calculator.UI _ui;
 
         [SetUp]
@@ -48,5 +49,7 @@ namespace CalculatorTests
         {
             Assert.AreEqual(typeof(Action), _ui.MenuItems[1].action.GetType());
         }
+
+
     }
 }
