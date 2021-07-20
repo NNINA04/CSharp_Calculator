@@ -96,7 +96,6 @@ namespace CalculatorTests
         [Test]
         public void ToHex()
         {
-            //Assert.AreEqual("00 00", _calculator.ToHex(_matchingTypeToHex, 0x0));
             Assert.Throws<ArgumentNullException>(() => _calculator.ToHex(null, 0x0));
 
             var expected = "00 01";

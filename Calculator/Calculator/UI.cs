@@ -31,21 +31,21 @@ namespace Calculator
             MatchingTypeToHex matchingTypeToHex = new();
             HexMenu = new Dictionary<int, (string description, Action action)>
             {
-                {1, ("BitConverterCalculation", ()=>ProcessOperation(calc.ToHex, () => bitConverterHexCalculator,  InputIntNumber, "Enter a value: ")) },
-                {2, ("DictionaryConverter", ()=>ProcessOperation(calc.ToHex, () => matchingTypeToHex,  InputIntNumber, "Enter a value: ")) }
+                {1, ("BitConverterCalculation", ()=>ProcessOperation(calc.ToHex, () => bitConverterHexCalculator,  InputValue<int>, "Enter a value: ")) },
+                {2, ("DictionaryConverter", ()=>ProcessOperation(calc.ToHex, () => matchingTypeToHex,  InputValue<int>, "Enter a value: ")) }
             };
 
             MenuItems = new Dictionary<int, (string, Action)>
             {
                 {1, ("Exit" , () => Environment.Exit(0))},
-                {2, ("Sum", () => ProcessOperation(calc.Sum, InputDoubleNumber, InputDoubleNumber, "Enter two values: "))},
-                {3, ("Substract", () => ProcessOperation(calc.Substract, InputDoubleNumber, InputDoubleNumber, "Enter two values: "))},
-                {4, ("Multiplicate", () => ProcessOperation(calc.Multiplicate, InputDoubleNumber, InputDoubleNumber, "Enter two values: "))},
-                {5, ("Divide", () => ProcessOperation(calc.Divide, InputDoubleNumber, InputDoubleNumber, "Enter two values: ", doubleValidator))},
-                {6, ("Sqrt", () => ProcessOperation(calc.Sqrt, InputDoubleNumber))},
-                {7, ("Cbrt", () => ProcessOperation(calc.Cbrt, InputDoubleNumber))},
-                {8, ("Exp", () => ProcessOperation(calc.Exp, InputDoubleNumber))},
-                {9, ("Fact", () => ProcessOperation(fa.Factorial, InputIntNumber, formatter:factorialFormatter))},
+                {2, ("Sum", () => ProcessOperation(calc.Sum, InputValue<double>, InputValue<double>, "Enter two values: "))},
+                {3, ("Substract", () => ProcessOperation(calc.Substract, InputValue<double>, InputValue<double>, "Enter two values: "))},
+                {4, ("Multiplicate", () => ProcessOperation(calc.Multiplicate, InputValue<double>, InputValue<double>, "Enter two values: "))},
+                {5, ("Divide", () => ProcessOperation(calc.Divide, InputValue<double>, InputValue<double>, "Enter two values: ", doubleValidator))},
+                {6, ("Sqrt", () => ProcessOperation(calc.Sqrt, InputValue<double>))},
+                {7, ("Cbrt", () => ProcessOperation(calc.Cbrt, InputValue<double>))},
+                {8, ("Exp", () => ProcessOperation(calc.Exp, InputValue<double>))},
+                {9, ("Fact", () => ProcessOperation(fa.Factorial, InputValue<int>, formatter:factorialFormatter))},
                 {10, ("Hex", () =>  SelectAction(HexMenu))}
             };
         }
@@ -69,8 +69,11 @@ namespace Calculator
             try
             {
                 ShowMenu(menu);
-                if (menu.TryGetValue(InputIntNumber(), out var item))
-                    item.action();
+                if (int.TryParse(InputValue<string>(), out var item))
+                {
+                    menu.TryGetValue(item, out var a);
+                    a.action();
+                }
                 else
                     Console.WriteLine("You entered a wrong value !");
             }
@@ -164,25 +167,15 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Запрашивает ввод числа и проводит валидацию
+        /// Запрашивает ввод значения
         /// </summary>
-        /// <returns>Число</returns>
-        private static int InputIntNumber()
+        /// <typeparam name="T">Параметр должен быть <see cref="int"/> или <see cref="double"/> или <<see cref="string"/></typeparam>
+        /// <returns>Значение</returns>
+        static T InputValue<T>() where T : notnull
         {
-            if (!int.TryParse(Console.ReadLine(), out int value))
-                throw new FormatException("You entered not valid value");
-            return value;
-        }
-
-        /// <summary>
-        /// Запрашивает ввод числа и проводит валидацию
-        /// </summary>
-        /// <returns>Число</returns>
-        private static double InputDoubleNumber()
-        {
-            if (!double.TryParse(Console.ReadLine(), out double value))
-                throw new FormatException("You entered not valid value");
-            return value;
+            if (typeof(T) != typeof(int) && typeof(T) != typeof(double) && typeof(T) != typeof(string))
+                throw new ArgumentException("Данный тип не разрешён");
+            return (T)Convert.ChangeType(Console.ReadLine(), typeof(T));
         }
     }
 }
