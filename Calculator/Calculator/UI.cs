@@ -169,12 +169,12 @@ namespace Calculator
         /// Разрешенные типы:  <see cref="int"/>, <see cref="double"/> или <see cref="string"/>
         /// </typeparam>
         /// <returns>Значение</returns>
-        /// <exception cref="ArithmeticException">Неверный тип данных</exception>
+        /// <exception cref="ArgumentException">Неверный тип возвращаемого значения</exception>
         /// <exception cref="FormatException">Неверное введённое значение</exception>
         static private T InputValueAndValidate<T>()
         {
             if (typeof(T) != typeof(int) && typeof(T) != typeof(double) && typeof(T) != typeof(string))
-                throw new ArgumentException($"Тип {typeof(T).Name} не разрешён!");
+                throw new ArgumentException($"Тип {typeof(T)} не разрешён!");
             try
             {
                 return (T)Convert.ChangeType(Console.ReadLine(), typeof(T));
