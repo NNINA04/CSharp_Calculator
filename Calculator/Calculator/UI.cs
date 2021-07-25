@@ -23,7 +23,9 @@ namespace Calculator
         /// </summary>
         public UI()
         {
+
             Calculator calc = new();
+
             FactorialProcessAdapter fa = new(calc);
             DoubleValidator doubleValidator = new();
             FactorialFormatter factorialFormatter = new();
@@ -37,16 +39,16 @@ namespace Calculator
             };
             MenuItems = new Dictionary<int, (string, Action)>
             {
-                {1, ("Exit" , () => Environment.Exit(0))},
-                {2, ("Sum", () => ProcessOperation(calc.Sum, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
-                {3, ("Substract", () => ProcessOperation(calc.Substract, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
-                {4, ("Multiplicate", () => ProcessOperation(calc.Multiplicate, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
-                {5, ("Divide", () => ProcessOperation(calc.Divide, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: ", doubleValidator))},
-                {6, ("Sqrt", () => ProcessOperation(calc.Sqrt, InputValueAndValidate<double>))},
-                {7, ("Cbrt", () => ProcessOperation(calc.Cbrt, InputValueAndValidate<double>))},
-                {8, ("Exp", () => ProcessOperation(calc.Exp, InputValueAndValidate<double>))},
-                {9, ("Fact", () => ProcessOperation(fa.Factorial, InputValueAndValidate<int>, formatter:factorialFormatter))},
-                {10, ("Hex", () =>  SelectAction(HexMenu))}
+                //{1, ("Exit" , () => Environment.Exit(0))},
+                //{2, ("Sum", () => ProcessOperation(calc.Sum, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
+                //{3, ("Substract", () => ProcessOperation(calc.Substract, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
+                //{4, ("Multiplicate", () => ProcessOperation(calc.Multiplicate, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
+                //{5, ("Divide", () => ProcessOperation(calc.Divide, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: ", doubleValidator))},
+                //{6, ("Sqrt", () => ProcessOperation(calc.Sqrt, InputValueAndValidate<double>))},
+                //{7, ("Cbrt", () => ProcessOperation(calc.Cbrt, InputValueAndValidate<double>))},
+                //{8, ("Exp", () => ProcessOperation(calc.Exp, InputValueAndValidate<double>))},
+                //{9, ("Fact", () => ProcessOperation(fa.Factorial, InputValueAndValidate<int>, formatter:factorialFormatter))},
+                //{10, ("Hex", () =>  SelectAction(HexMenu))}
             };
         }
 
@@ -96,7 +98,8 @@ namespace Calculator
         /// <param name="validator">Валидатор результата</param>
         /// <param name="formatter">Форматтер результата</param>
         private static void ProcessOperation<TArg1, TArg2, TResult>(Func<TArg1, TArg2, TResult> handler,
-        Func<TArg1> inputHandler1, Func<TArg2> inputHandler2, string message,
+        Func<TArg1> inputHandler1, Func<TArg2> inputHandler2, ////////////// 
+        string message,
         IValidator<TResult> validator = null,
         IFormatter<TResult, string> formatter = null)
         {
@@ -115,13 +118,14 @@ namespace Calculator
         /// <param name="validator">Валидатор результата</param>
         /// <param name="formatter">Форматтер результата</param>
         private static void ProcessOperation<TArg1, TResult>(Func<TArg1, TResult> handler,
-        Func<TArg1> inputHandler,
+        Func<TArg1> inputHandler, //////////////
         IValidator<TResult> validator = null,
         IFormatter<TResult, string> formatter = null)
         {
+            var a = (object)handler;
             Console.Write("Enter a value: ");
-            TResult result = handler(inputHandler());
-            ShowAndValidateValue(result, validator, formatter);
+            //TResult result = handler(inputHandler());
+            //ShowAndValidateValue(result, validator, formatter);
         }
 
         /// <summary>
@@ -179,7 +183,7 @@ namespace Calculator
             {
                 return (T)Convert.ChangeType(Console.ReadLine(), typeof(T));
             }
-            catch (FormatException ex) 
+            catch (FormatException ex)
             {
                 throw new FormatException("You entered a wrong value !", ex);
             }
