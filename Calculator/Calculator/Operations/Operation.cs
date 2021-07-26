@@ -8,8 +8,8 @@ namespace Calculator.Operations
     /// <summary>
     /// Выполняет делегат передав в него результаты других делегатов
     /// </summary>
-    /// <typeparam name="THandlerResult">Возвращаемый тип основного хендлера</typeparam>
-    class ProcessOperation<THandlerResult> : IProcessOperation<THandlerResult>
+    /// <typeparam name="OperationResult">Возвращаемый тип основного хендлера</typeparam>
+    class Operation<OperationResult> : IOperation<OperationResult>
     {
         /// <summary>
         /// Основной делегат
@@ -20,17 +20,17 @@ namespace Calculator.Operations
         /// Конструктор
         /// </summary>
         /// <param name="handler">Основной делегат</param>
-        public ProcessOperation(Delegate handler)
+        public Operation(Delegate handler)
         {
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
-
+        
         /// <summary>
         /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
         /// </summary>
         /// <param name="inputHandlers">Делегаты на ввод данных</param>
         /// <returns>Результат выполнения</returns>
-        public virtual THandlerResult Run(params Delegate[] inputHandlers)
+        public virtual OperationResult Run(params Delegate[] inputHandlers)
         {
             if (inputHandlers == null)
                 inputHandlers = Array.Empty<Delegate>();
@@ -39,7 +39,7 @@ namespace Calculator.Operations
             HandlerValidate(_handler, inputHandlers);
 
             var handlerArguments = inputHandlers.Select(x => x.DynamicInvoke()).ToArray();
-            return (THandlerResult)_handler.DynamicInvoke(handlerArguments);
+            return (OperationResult)_handler.DynamicInvoke(handlerArguments);
         }
 
         /// <summary>
@@ -54,10 +54,10 @@ namespace Calculator.Operations
             var handlerReturnType = handlerType.GetMethod("Invoke").ReturnType;
 
             // Является ли возвращаемый тип handler, типом THandlerResult
-            if (handlerReturnType != typeof(THandlerResult))
+            if (handlerReturnType != typeof(OperationResult))
                 throw new ArgumentException($"Возвращаемый тип {handlerReturnType} делегата {nameof(handler)} " +
-                                            $"не соответстует типу {typeof(THandlerResult)} " +
-                                            $"принимаемого параметра {nameof(THandlerResult)} данного метода.");
+                                            $"не соответстует типу {typeof(OperationResult)} " +
+                                            $"принимаемого параметра {nameof(OperationResult)} данного метода.");
             var handlerArguments = handler.GetMethodInfo().GetParameters();
 
             // Является ли количество принимаемых параметров handler количеству объектов в inputHandlers
@@ -76,7 +76,7 @@ namespace Calculator.Operations
                 index++;
             }
         }
-
+        
         /// <summary>
         /// Проверка делегатов на ввод данных на null
         /// </summary>
@@ -94,16 +94,6 @@ namespace Calculator.Operations
                 if (item == null)
                     throw new ArgumentException($"Перечисление {nameof(inputHandlers)} содержит в себе элемент со значением null");
             }
-        }
-
-        public IProcessOperation<THandlerResult> AddValidator(IValidator<THandlerResult> validator)
-        {
-            return new ProcessOperationWithValidation<THandlerResult>(this, validator);
-        }
-
-        public IProcessOperation<TResultType> AddFormatter<TResultType>(IFormatter<THandlerResult, TResultType> formatter)
-        {
-            return new ProcessOperationWithFormatter<THandlerResult, TResultType>(this, formatter);
         }
     }
 }

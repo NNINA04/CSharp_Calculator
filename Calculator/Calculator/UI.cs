@@ -98,7 +98,7 @@ namespace Calculator
         /// <param name="validator">Валидатор результата</param>
         /// <param name="formatter">Форматтер результата</param>
         private static void ProcessOperation<TArg1, TArg2, TResult>(Func<TArg1, TArg2, TResult> handler,
-        Func<TArg1> inputHandler1, Func<TArg2> inputHandler2, ////////////// 
+        Func<TArg1> inputHandler1, Func<TArg2> inputHandler2,
         string message,
         IValidator<TResult> validator = null,
         IFormatter<TResult, string> formatter = null)
@@ -118,7 +118,7 @@ namespace Calculator
         /// <param name="validator">Валидатор результата</param>
         /// <param name="formatter">Форматтер результата</param>
         private static void ProcessOperation<TArg1, TResult>(Func<TArg1, TResult> handler,
-        Func<TArg1> inputHandler, //////////////
+        Func<TArg1> inputHandler,
         IValidator<TResult> validator = null,
         IFormatter<TResult, string> formatter = null)
         {
