@@ -9,12 +9,22 @@ namespace Calculator.Operations
     /// Выполняет делегат передав в него результаты других делегатов
     /// </summary>
     /// <typeparam name="OperationResult">Возвращаемый тип основного хендлера</typeparam>
-    class Operation<OperationResult> : IOperation<OperationResult>
+    public class Operation<OperationResult> : IOperation<OperationResult>
     {
         /// <summary>
         /// Основной делегат
         /// </summary>
         private Delegate _handler;
+
+        /// <summary>
+        /// Делегаты на ввод значения
+        /// </summary>
+        private Delegate[] _inputHandlers;
+
+        /// <summary>
+        /// Принимаемые значения основного делегата
+        /// </summary>
+        private object[] _values;
 
         /// <summary>
         /// Конструктор
@@ -24,22 +34,42 @@ namespace Calculator.Operations
         {
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
-        
+
         /// <summary>
-        /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
+        /// Конструктор
         /// </summary>
+        /// <param name="handler">Основной делегат</param>
         /// <param name="inputHandlers">Делегаты на ввод данных</param>
-        /// <returns>Результат выполнения</returns>
-        public virtual OperationResult Run(params Delegate[] inputHandlers)
+        public Operation(Delegate handler, params Delegate[] inputHandlers) : this(handler)
         {
-            if (inputHandlers == null)
-                inputHandlers = Array.Empty<Delegate>();
+            CheckArguments(_handler, inputHandlers);
+            _inputHandlers = inputHandlers;
+        }
 
-            CheckHandlersOnNull(inputHandlers);
-            HandlerValidate(_handler, inputHandlers);
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="handler">Основной делегат</param>
+        /// <param name="values">Передаваемые значения в основной делегат</param>
+        public Operation(Delegate handler, params object[] values) : this(handler)
+        {
+            if (values == null)
+                values = Array.Empty<object>();
 
-            var handlerArguments = inputHandlers.Select(x => x.DynamicInvoke()).ToArray();
-            return (OperationResult)_handler.DynamicInvoke(handlerArguments);
+            // Дописать проверку на то что: Соответвует ли принимаемый парамтр хендлера, значению из values (Вынести в отдельный метод)
+
+            _values = values;
+        }
+
+        /// <summary>
+        /// Проверяет хендлеры
+        /// </summary>
+        /// <param name="handler">Основной делегат</param>
+        /// <param name="inputHandlers">Делегаты на ввод данных</param>
+        static private void CheckArguments(Delegate handler, params Delegate[] inputHandlers)
+        {
+            CheckInputHandlers(inputHandlers);
+            ValidateHandler(handler, inputHandlers);
         }
 
         /// <summary>
@@ -47,7 +77,7 @@ namespace Calculator.Operations
         /// </summary>
         /// <param name="handler">Основной делегат вычисления</param>
         /// <param name="inputHandlers">Перечесление делегатов на ввод данных</param>
-        static private void HandlerValidate(Delegate handler, IEnumerable<Delegate> inputHandlers)
+        static private void ValidateHandler(Delegate handler, IEnumerable<Delegate> inputHandlers)
         {
             var handlerType = handler.GetType();
 
@@ -76,24 +106,90 @@ namespace Calculator.Operations
                 index++;
             }
         }
-        
+
         /// <summary>
         /// Проверка делегатов на ввод данных на null
         /// </summary>
         /// <param name="inputHandlers">Перечесление делегатов на ввод данных</param>
-        static private void CheckHandlersOnNull(IEnumerable<Delegate> inputHandlers)
+        static private void CheckInputHandlers(IEnumerable<Delegate> inputHandlers)
         {
-            // Проверяет inputHandlers на null
             if (inputHandlers == null)
-                throw new ArgumentNullException(nameof(inputHandlers));
+                inputHandlers = Array.Empty<Delegate>();
 
-            // Проверяет объекты inputHandlers на null
+            // Проверяет делегаты inputHandlers на null
             foreach (var item in inputHandlers)
             {
                 // Проверяет item на null
                 if (item == null)
                     throw new ArgumentException($"Перечисление {nameof(inputHandlers)} содержит в себе элемент со значением null");
             }
+        }
+
+        /// <summary>
+        /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
+        /// </summary>
+        /// <param name="inputHandlers">Делегаты на ввод данных</param>
+        /// <returns>Результат выполнения</returns>
+        public virtual OperationResult Run(params Delegate[] inputHandlers)
+        {
+            CheckArguments(_handler, inputHandlers);
+            var handlerArguments = inputHandlers.Select(x => x.DynamicInvoke()).ToArray();
+            return (OperationResult)_handler.DynamicInvoke(handlerArguments);
+        }
+
+        /// <summary>
+        /// Выполняет основной делегат класса и передаёт в него параметры
+        /// </summary>
+        /// <param name="values">Принимаемые параметры основного хендлера</param>
+        /// <returns>Результат выполнения</returns>
+        public virtual OperationResult Run(params object[] values)
+        {
+            if (values == null)
+                values = Array.Empty<object>();
+
+            // Дописать проверку на то что: Соответвует ли принимаемый парамтр хендлера, значению из values (Вынести в отдельный метод)
+
+            return (OperationResult)_handler.DynamicInvoke(values);
+        }
+
+        /// <summary>
+        /// Выполняет основной делегат класса и передаёт в него параметры
+        /// </summary>
+        /// <param name="values">Принимаемые параметры основного хендлера</param>
+        /// <returns>Результат выполнения</returns>
+        object IOperation.Run(params object[] values)
+        {
+            return Run(values);
+        }
+
+        /// <summary>
+        /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
+        /// </summary>
+        /// <param name="inputHandlers">Делегаты на ввод данных</param>
+        /// <returns>Результат выполнения</returns>
+        object IOperation.Run(params Delegate[] inputHandlers)
+        {
+            return Run(inputHandlers);
+        }
+
+        /// <summary>
+        /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
+        /// </summary>
+        /// <returns>Результат выполнения</returns>
+        object IOperation.Run()
+        {
+            return Run();
+        }
+
+        /// <summary>
+        /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
+        /// </summary>
+        /// <returns>Результат выполнения</returns>
+        public OperationResult Run()
+        {
+            if (_values != null)
+                return Run(_values);
+            return Run(_inputHandlers);
         }
     }
 }
