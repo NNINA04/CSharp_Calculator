@@ -32,7 +32,7 @@ namespace Calculator.Operations
         /// <param name="handler">Основной делегат</param>
         public Operation(Delegate handler)
         {
-            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
+            _handler = handler ?? throw new ArgumentNullException($"{nameof(handler)}");
 
             var handlerReturnType = handler.GetType().GetMethod("Invoke").ReturnType;
 
@@ -52,13 +52,14 @@ namespace Calculator.Operations
         {
             if (inputHandlers.Any(x => x == null))
             {
+
                 //CheckValues(handler, inputHandlers);
                 //_handlerParams = inputHandlers;
-                return;
+                //return;
             }
 
-            //CheckArguments(_handler, inputHandlers);
-            //_inputHandlers = inputHandlers;
+            CheckValues(_handler, inputHandlers);
+            _inputHandlers = inputHandlers;
         }
 
         /// <summary>
@@ -68,8 +69,8 @@ namespace Calculator.Operations
         /// <param name="handlerParams">Передаваемые значения в основной делегат</param>
         public Operation(Delegate handler, params object[] handlerParams) : this(handler)
         {
-            //CheckValues(handler, handlerParams);
-            //_handlerParams = handlerParams;
+            CheckValues(handler, handlerParams);
+            _handlerParams = handlerParams;
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace Calculator.Operations
         /// <returns>Результат выполнения</returns>
         public virtual OperationResult Run(params Delegate[] inputHandlers)
         {
-            //CheckArguments(_handler, inputHandlers);
+            CheckValues(_handler, inputHandlers);
             var handlerArguments = inputHandlers.Select(x => x.DynamicInvoke()).ToArray();
             return (OperationResult)_handler.DynamicInvoke(handlerArguments);
         }
@@ -91,7 +92,7 @@ namespace Calculator.Operations
         /// <returns>Результат выполнения</returns>
         public virtual OperationResult Run(params object[] values)
         {
-            //CheckValues(_handler, values);
+            CheckValues(_handler, values);
             return (OperationResult)_handler.DynamicInvoke(values.ToArray());
         }
 
@@ -133,6 +134,75 @@ namespace Calculator.Operations
             if (_handlerParams != null)
                 return Run(_handlerParams);
             return Run(_inputHandlers);
+        }
+
+        /// <summary>
+        /// Проверка аргументов основного делегата и делегатов на ввод данных на совместимость их друг с другом
+        /// </summary>
+        /// <param name="handler">Основной делегат вычисления</param>
+        /// <param name="inputHandlers">Перечесление делегатов на ввод данных</param>
+        static private void CheckValues(Delegate handler, Delegate[] inputHandlers)
+        {
+            // Если массив делегатов для основного делегата равняется null, то создаётся пустой массив
+            if (inputHandlers == null)
+                inputHandlers = Array.Empty<Delegate>();
+
+            // Проверяет делегаты inputHandlers на null
+            if (inputHandlers.Any(x => x == null))
+                throw new ArgumentException($"Перечисление {nameof(inputHandlers)} содержит в себе элемент со значением null");
+
+            var handlerArguments = handler.GetMethodInfo().GetParameters();
+
+            // Является ли количество принимаемых параметров handler количеству объектов в inputHandlers
+            if (handlerArguments.Length != inputHandlers.Count())
+                throw new ArgumentException($"Количество элементов {nameof(inputHandlers)} не соответствует количесту аргументов делегата {nameof(handler)}");
+
+            // Является ли тип возвращаемого параметра inputHandler в inputHandlers, типом аргументов handler
+            int index = 0;
+            foreach (var item in inputHandlers)
+            {
+                var handlerArgumentType = handlerArguments[index].ParameterType;
+                var inputReturnType = item.GetType().GetMethod("Invoke").ReturnType;
+                if (handlerArgumentType != inputReturnType)
+                    throw new ArgumentException($"Возвращаемый тип {inputReturnType} делегата в {nameof(inputHandlers)} под индексом {index} " +
+                                                $"не соответствует ожидаемому типу {handlerArgumentType} аргумента делегата {nameof(handler)}");
+                index++;
+            }
+        }
+
+        /// <summary>
+        /// Проверяет соответствуют ли типы принимаемых параметров основного хендлера на типы значений
+        /// </summary>
+        /// <param name="handler">Основной делегат</param>
+        /// <param name="inputParams">Принимаемые параметры основного делегата</param>
+        static void CheckValues(Delegate handler, object[] inputParams)
+        {
+            // Если массив входных параметров для основного делегата равняется null, то создаётся пустой массив
+            if (inputParams == null)
+                inputParams = Array.Empty<object>();
+
+            var handlerArguments = handler.GetMethodInfo().GetParameters();
+            int handlerArgumentsLength = handlerArguments.Length;
+            int handlerParamsLength = inputParams.Length;
+
+            // Проверяет количество
+            if (handlerParamsLength != handlerArgumentsLength)
+                throw new ArgumentException($"Количество элементов {nameof(inputParams)} не соответствует количесту аргументов делегата {nameof(handler)}");
+
+            // Проверяет совместимости типов
+            for (int index = 0; index < handlerParamsLength; index++)
+            {
+                try
+                {
+                    Convert.ChangeType(inputParams[index], handlerArguments[index].ParameterType);
+                }
+                catch (Exception)
+                {
+                    throw new ArgumentException($"Тип {inputParams[index].GetType()} под индексом {index} не соответствует ожидаемому типу {handlerArguments[index].ParameterType} аргумента делегата {nameof(handler)}");
+                }
+                if (inputParams[index].GetType() == typeof(string))
+                    throw new ArgumentException($"Возвращаемый тип {typeof(string)} делегата в inputHandlers под индексом {index} не соответствует ожидаемому типу {handlerArguments[index].ParameterType} аргумента делегата handler");
+            }
         }
     }
 }

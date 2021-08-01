@@ -1,13 +1,10 @@
 ﻿using NUnit.Framework;
 using System;
-
 using Calculator.Operations;
-using Calculator;
-
 namespace CalculatorTests
 {
-    public class OperationTests
-    {
+public class OperationTests
+{
         Func<double, double, double> _handlerSum = (x, y) => x + y;
 
         [Test]
@@ -21,20 +18,22 @@ namespace CalculatorTests
         [Test]
         public void HandlerNullChecking()
         {
+            string errorMessage = "Value cannot be null. (Parameter 'handler')";
+
             Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
-                                ("Основной хендлер не может быть типом null"),
+                                (errorMessage),
                                 () => new Operation<double>(null).Run(1, 2));
 
             Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
-                                ("Основной хендлер не может быть типом null"),
+                                (errorMessage),
                                 () => new Operation<double>(null, 1, 2).Run());
 
             Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
-                                ("Основной хендлер не может быть типом null"),
+                                (errorMessage),
                                 () => new Operation<double>(null).Run(() => 1, () => 2));
 
             Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
-                                ("Основной хендлер не может быть типом null"),
+                                (errorMessage),
                                 () => new Operation<double>(null, () => 1, () => 2).Run());
         }
 
@@ -50,9 +49,10 @@ namespace CalculatorTests
                    () => new Operation<double>(_handlerSum, null, null).Run());
         }
 
-        
         readonly string _incorrectReturnTypeMessage = $"Возвращаемый тип {typeof(double)} делегата handler не соответстует типу {typeof(int)} принимаемого параметра OperationResult данного метода.";
-        readonly string _incorrectCountArgumentsMessage = "Количество элементов inputHandlers не соответствует количесту аргументов делегата handler";
+
+        static string GetMessageOfincorrectCountArguments(string incorrectType) { return $"Количество элементов {incorrectType} не соответствует количесту аргументов делегата handler"; }
+
         readonly string _incorrectHandlerArgumentTypeMessage = $"Возвращаемый тип {typeof(string)} делегата в inputHandlers под индексом 0 не соответствует ожидаемому типу {typeof(double)} аргумента делегата handler";
 
         [Test]
@@ -63,7 +63,7 @@ namespace CalculatorTests
             () => new Operation<int>(_handlerSum).Run(() => 1, () => 2));
 
             Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
-            (_incorrectCountArgumentsMessage),
+            (GetMessageOfincorrectCountArguments("inputHandlers")),
             () => new Operation<double>(_handlerSum).Run(() => 1));
 
             Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
@@ -79,7 +79,7 @@ namespace CalculatorTests
                 () => new Operation<int>(_handlerSum).Run(1, 2));
 
             Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
-                (_incorrectCountArgumentsMessage),
+                (GetMessageOfincorrectCountArguments("inputParams")),
                 () => new Operation<double>(_handlerSum).Run(1));
 
             Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
