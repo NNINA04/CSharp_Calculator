@@ -47,13 +47,12 @@ namespace Calculator.Operations
         }
 
         /// <summary>
-        /// Выполняет основной делегат класса и передаёт в него параметры
+        /// Запускает выполнение операции
         /// </summary>
-        /// <param name="values">Принимаемые значения основного делегата</param>
         /// <returns>Результат выполнения операции</returns>
-        object IOperation.Run(params object[] values)
+        public TOperationResult Run()
         {
-            return Run(values);
+            return _operation.Run();
         }
 
         /// <summary>
@@ -67,12 +66,13 @@ namespace Calculator.Operations
         }
 
         /// <summary>
-        /// Запускает выполнение операции
+        /// Выполняет основной делегат класса и передаёт в него параметры
         /// </summary>
+        /// <param name="values">Принимаемые значения основного делегата</param>
         /// <returns>Результат выполнения операции</returns>
-        public TOperationResult Run()
+        object IOperation.Run(params object[] values)
         {
-            return _operation.Run();
+            return Run(values);
         }
 
         /// <summary>

@@ -1,21 +1,90 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
+
 using Calculator.Operations;
+using Calculator;
 
 namespace CalculatorTests
 {
     public class OperationTests
     {
-        [SetUp]
-        public void Setup()
+        Func<double, double, double> _handlerSum = (x, y) => x + y;
+
+        [Test]
+        public void TestOperation()
         {
+            Assert.AreEqual(3, new Operation<double>(_handlerSum).Run(1, 2));
+            Assert.AreEqual(3, new Operation<double>(_handlerSum, 1, 2).Run());
+            Assert.AreEqual(3, new Operation<double>(_handlerSum, 2, 2).Run(1, 2));
         }
 
         [Test]
-        public void TestOperation1()
+        public void HandlerNullChecking()
         {
-            
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
+                                ("Основной хендлер не может быть типом null"),
+                                () => new Operation<double>(null).Run(1, 2));
+
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
+                                ("Основной хендлер не может быть типом null"),
+                                () => new Operation<double>(null, 1, 2).Run());
+
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
+                                ("Основной хендлер не может быть типом null"),
+                                () => new Operation<double>(null).Run(() => 1, () => 2));
+
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
+                                ("Основной хендлер не может быть типом null"),
+                                () => new Operation<double>(null, () => 1, () => 2).Run());
+        }
+
+        [Test]
+        public void InputHandlersNullChecking()
+        {
+            Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
+                   ("Перечисление inputHandlers содержит в себе элемент со значением null"),
+                   () => new Operation<double>(_handlerSum).Run(null, null));
+
+            Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
+                   ("Перечисление inputHandlers содержит в себе элемент со значением null"),
+                   () => new Operation<double>(_handlerSum, null, null).Run());
+        }
+
+        
+        readonly string _incorrectReturnTypeMessage = $"Возвращаемый тип {typeof(double)} делегата handler не соответстует типу {typeof(int)} принимаемого параметра OperationResult данного метода.";
+        readonly string _incorrectCountArgumentsMessage = "Количество элементов inputHandlers не соответствует количесту аргументов делегата handler";
+        readonly string _incorrectHandlerArgumentTypeMessage = $"Возвращаемый тип {typeof(string)} делегата в inputHandlers под индексом 0 не соответствует ожидаемому типу {typeof(double)} аргумента делегата handler";
+
+        [Test]
+        public void HandlersExceptionUsingDelegates()
+        {
+            Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
+            (_incorrectReturnTypeMessage),
+            () => new Operation<int>(_handlerSum).Run(() => 1, () => 2));
+
+            Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
+            (_incorrectCountArgumentsMessage),
+            () => new Operation<double>(_handlerSum).Run(() => 1));
+
+            Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
+            (_incorrectHandlerArgumentTypeMessage),
+            () => new Operation<double>(_handlerSum).Run(() => "1", () => "2"));
+        }
+
+        [Test]
+        public void HandlersExceptionUsingValues()
+        {
+            Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
+                (_incorrectReturnTypeMessage),
+                () => new Operation<int>(_handlerSum).Run(1, 2));
+
+            Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
+                (_incorrectCountArgumentsMessage),
+                () => new Operation<double>(_handlerSum).Run(1));
+
+            Assert.Throws(Is.TypeOf<ArgumentException>().And.Message.EqualTo
+                (_incorrectHandlerArgumentTypeMessage),
+                () => new Operation<double>(_handlerSum).Run("1", "2"));
         }
     }
 }
