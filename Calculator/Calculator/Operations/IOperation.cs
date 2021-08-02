@@ -11,16 +11,16 @@ namespace Calculator.Operations
         /// <summary>
         /// Запускает выполнение операции
         /// </summary>
-        /// <param name="inputHandlers">Делегаты для ввода аргументов</param>
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Результат выполнения операции</returns>
-        new TOperationResult Run(params Delegate[] inputHandlers);
+        new TOperationResult Run(IOperationParameters operationParameters);
 
         /// <summary>
         /// Запускает выполнение операции
         /// </summary>
-        /// <param name="values">Принимаемые параметры операции</param>
+        /// <param name="handlerParams">Принимаемые параметры операции</param>
         /// <returns>Результат выполнения операции</returns>
-        new TOperationResult Run(params object[] values);
+        new TOperationResult Run(params object[] handlerParams);
 
         /// <summary>
         /// Запускает выполнение операции
@@ -32,21 +32,21 @@ namespace Calculator.Operations
     /// <summary>
     /// Не типизированный интерфейс для операций
     /// </summary>
-    public interface IOperation 
+    public interface IOperation
     {
         /// <summary>
         /// Запускает выполнение операции
         /// </summary>
-        /// <param name="values">Принимаемые параметры операции</param>
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Результат выполнения операции</returns>
-        object Run(params object[] values);
+        object Run(IOperationParameters operationParameters);
 
         /// <summary>
         /// Запускает выполнение операции
         /// </summary>
-        /// <param name="inputHandlers">Делегаты для ввода аргументов</param>
+        /// <param name="handlerParams">Принимаемые параметры операции</param>
         /// <returns>Результат выполнения операции</returns>
-        object Run(params Delegate[] inputHandlers);
+        object Run(params object[] handlerParams);
 
         /// <summary>
         /// Запускает выполнение операции

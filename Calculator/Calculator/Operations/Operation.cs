@@ -6,7 +6,7 @@ using System.Reflection;
 namespace Calculator.Operations
 {
     /// <summary>
-    /// Выполняет делегат передав в него результаты других делегатов
+    /// Выполняет делегат передав в него параметры
     /// </summary>
     /// <typeparam name="OperationResult">Возвращаемый тип основного хендлера</typeparam>
     public class Operation<OperationResult> : IOperation<OperationResult>
@@ -17,12 +17,7 @@ namespace Calculator.Operations
         private Delegate _handler;
 
         /// <summary>
-        /// Делегаты на ввод значения
-        /// </summary>
-        private Delegate[] _inputHandlers;
-
-        /// <summary>
-        /// Принимаемые значения основного делегата
+        /// Параметры основного делегата
         /// </summary>
         private object[] _handlerParams;
 
@@ -47,77 +42,78 @@ namespace Calculator.Operations
         /// Конструктор
         /// </summary>
         /// <param name="handler">Основной делегат</param>
-        /// <param name="inputHandlers">Делегаты на ввод данных</param>
-        public Operation(Delegate handler, params Delegate[] inputHandlers) : this(handler)
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
+        public Operation(Delegate handler, IOperationParameters operationParameters) : this(handler)
         {
-            if (inputHandlers.Any(x => x == null))
-            {
-
-                //CheckValues(handler, inputHandlers);
-                //_handlerParams = inputHandlers;
-                //return;
-            }
-
-            CheckValues(_handler, inputHandlers);
-            _inputHandlers = inputHandlers;
+            var handlerArguments = operationParameters.GetArguments();
+            CheckValues(_handler, handlerArguments);
+            _handlerParams = handlerArguments;
         }
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="handler">Основной делегат</param>
-        /// <param name="handlerParams">Передаваемые значения в основной делегат</param>
+        /// <param name="handlerParams">Параметры основного делегата</param>
         public Operation(Delegate handler, params object[] handlerParams) : this(handler)
         {
-            CheckValues(handler, handlerParams);
-            _handlerParams = handlerParams;
+            _handlerParams = handlerParams ?? throw new ArgumentNullException(nameof(handlerParams));
         }
 
         /// <summary>
-        /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
+        /// Выполняет основной делегат класса передавая в него параметры
         /// </summary>
-        /// <param name="inputHandlers">Делегаты на ввод данных</param>
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Результат выполнения</returns>
-        public virtual OperationResult Run(params Delegate[] inputHandlers)
+        public virtual OperationResult Run(IOperationParameters operationParameters)
         {
-            CheckValues(_handler, inputHandlers);
-            var handlerArguments = inputHandlers.Select(x => x.DynamicInvoke()).ToArray();
-            return (OperationResult)_handler.DynamicInvoke(handlerArguments);
+            return Run(operationParameters.GetArguments());
         }
 
         /// <summary>
-        /// Выполняет основной делегат класса и передаёт в него параметры
+        /// Выполняет основной делегат класса передавая в него параметры
         /// </summary>
-        /// <param name="values">Принимаемые параметры основного хендлера</param>
+        /// <param name="handlerParams">Параметры основного делегата</param>
         /// <returns>Результат выполнения</returns>
-        public virtual OperationResult Run(params object[] values)
+        public virtual OperationResult Run(params object[] handlerParams)
         {
-            CheckValues(_handler, values);
-            return (OperationResult)_handler.DynamicInvoke(values.ToArray());
+            if (handlerParams == null)
+                throw new ArgumentNullException(nameof(handlerParams));
+            CheckValues(_handler, handlerParams);
+            return (OperationResult)_handler.DynamicInvoke(handlerParams);
         }
 
         /// <summary>
-        /// Выполняет основной делегат класса и передаёт в него параметры
+        /// Выполняет основной делегат класса передавая в него параметры
         /// </summary>
-        /// <param name="values">Принимаемые параметры основного хендлера</param>
         /// <returns>Результат выполнения</returns>
-        object IOperation.Run(params object[] values)
+        public virtual OperationResult Run()
         {
-            return Run(values);
+            return Run(_handlerParams);
         }
 
         /// <summary>
-        /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
+        /// Выполняет основной делегат класса передавая в него параметры
         /// </summary>
-        /// <param name="inputHandlers">Делегаты на ввод данных</param>
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Результат выполнения</returns>
-        object IOperation.Run(params Delegate[] inputHandlers)
+        object IOperation.Run(IOperationParameters operationParameters)
         {
-            return Run(inputHandlers);
+            return Run(operationParameters);
         }
 
         /// <summary>
-        /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
+        /// Выполняет основной делегат класса передавая в него параметры
+        /// </summary>
+        /// <param name="handlerParams">Принимаемые параметры основного хендлера</param>
+        /// <returns>Результат выполнения</returns>
+        object IOperation.Run(params object[] handlerParams)
+        {
+            return Run(handlerParams);
+        }
+
+        /// <summary>
+        /// Выполняет основной делегат класса передавая в него параметры
         /// </summary>
         /// <returns>Результат выполнения</returns>
         object IOperation.Run()
@@ -126,82 +122,49 @@ namespace Calculator.Operations
         }
 
         /// <summary>
-        /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
-        /// </summary>
-        /// <returns>Результат выполнения</returns>
-        public OperationResult Run()
-        {
-            if (_handlerParams != null)
-                return Run(_handlerParams);
-            return Run(_inputHandlers);
-        }
-
-        /// <summary>
-        /// Проверка аргументов основного делегата и делегатов на ввод данных на совместимость их друг с другом
-        /// </summary>
-        /// <param name="handler">Основной делегат вычисления</param>
-        /// <param name="inputHandlers">Перечесление делегатов на ввод данных</param>
-        static private void CheckValues(Delegate handler, Delegate[] inputHandlers)
-        {
-            // Если массив делегатов для основного делегата равняется null, то создаётся пустой массив
-            if (inputHandlers == null)
-                inputHandlers = Array.Empty<Delegate>();
-
-            // Проверяет делегаты inputHandlers на null
-            if (inputHandlers.Any(x => x == null))
-                throw new ArgumentException($"Перечисление {nameof(inputHandlers)} содержит в себе элемент со значением null");
-
-            var handlerArguments = handler.GetMethodInfo().GetParameters();
-
-            // Является ли количество принимаемых параметров handler количеству объектов в inputHandlers
-            if (handlerArguments.Length != inputHandlers.Count())
-                throw new ArgumentException($"Количество элементов {nameof(inputHandlers)} не соответствует количесту аргументов делегата {nameof(handler)}");
-
-            // Является ли тип возвращаемого параметра inputHandler в inputHandlers, типом аргументов handler
-            int index = 0;
-            foreach (var item in inputHandlers)
-            {
-                var handlerArgumentType = handlerArguments[index].ParameterType;
-                var inputReturnType = item.GetType().GetMethod("Invoke").ReturnType;
-                if (handlerArgumentType != inputReturnType)
-                    throw new ArgumentException($"Возвращаемый тип {inputReturnType} делегата в {nameof(inputHandlers)} под индексом {index} " +
-                                                $"не соответствует ожидаемому типу {handlerArgumentType} аргумента делегата {nameof(handler)}");
-                index++;
-            }
-        }
-
-        /// <summary>
-        /// Проверяет соответствуют ли типы принимаемых параметров основного хендлера на типы значений
+        /// Проверяет совместимость основного хендлеа с принимаемыми параметрами
         /// </summary>
         /// <param name="handler">Основной делегат</param>
-        /// <param name="inputParams">Принимаемые параметры основного делегата</param>
-        static void CheckValues(Delegate handler, object[] inputParams)
+        /// <param name="handlerParams">Принимаемые параметры основного делегата</param>
+        static void CheckValues(Delegate handler, object[] handlerParams)
         {
             // Если массив входных параметров для основного делегата равняется null, то создаётся пустой массив
-            if (inputParams == null)
-                inputParams = Array.Empty<object>();
+            if (handlerParams == null)
+                handlerParams = Array.Empty<object>();
 
             var handlerArguments = handler.GetMethodInfo().GetParameters();
             int handlerArgumentsLength = handlerArguments.Length;
-            int handlerParamsLength = inputParams.Length;
+            int handlerParamsLength = handlerParams.Length;
 
             // Проверяет количество
             if (handlerParamsLength != handlerArgumentsLength)
-                throw new ArgumentException($"Количество элементов {nameof(inputParams)} не соответствует количесту аргументов делегата {nameof(handler)}");
+                throw new ArgumentException($"Количество введённых параметров не соответствует количесту аргументов вызываемого метода");
 
             // Проверяет совместимости типов
             for (int index = 0; index < handlerParamsLength; index++)
             {
+                if ((!handlerArguments[index].ParameterType.IsValueType || handlerArguments[index].ParameterType.IsNullable()) && handlerParams[index] == null)
+                    continue;
                 try
                 {
-                    Convert.ChangeType(inputParams[index], handlerArguments[index].ParameterType);
+                    // Является ли тип принимаемого параметра handler значимым || Является ли тип принимаемого параметра handler Nullable || Является ли объект handlerParams null
+                    if (handlerArguments[index].ParameterType.IsValueType && !handlerArguments[index].ParameterType.IsNullable() && handlerParams[index] == null)
+                        throw new ArgumentException($"Значение аргумента под индексом {index} не может быть равным null, так как ожидался тип {handlerArguments[index].ParameterType}");
+
+                    // Является ли объект handlerParams null || Является ли тип объекта handlerParams типом string
+                    if (handlerParams[index] != null && handlerParams[index].GetType() == typeof(string))
+                        throw new Exception("Ошибка соответствия типов");
+
+                    Convert.ChangeType(handlerParams[index], handlerArguments[index].ParameterType);
                 }
-                catch (Exception)
+                catch (ArgumentException)
                 {
-                    throw new ArgumentException($"Тип {inputParams[index].GetType()} под индексом {index} не соответствует ожидаемому типу {handlerArguments[index].ParameterType} аргумента делегата {nameof(handler)}");
+                    throw;
                 }
-                if (inputParams[index].GetType() == typeof(string))
-                    throw new ArgumentException($"Возвращаемый тип {typeof(string)} делегата в inputHandlers под индексом {index} не соответствует ожидаемому типу {handlerArguments[index].ParameterType} аргумента делегата handler");
+                catch (Exception ex)
+                {
+                    throw new ArgumentException($"Параметр типа {handlerParams[index].GetType().Name} под индексом {index} не соответствует ожидаемому типу {handlerArguments[index].ParameterType}", ex);
+                }
             }
         }
     }
