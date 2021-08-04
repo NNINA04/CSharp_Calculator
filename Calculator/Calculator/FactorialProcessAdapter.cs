@@ -8,7 +8,7 @@
         /// <summary>
         /// Интерфейс класса Calculator
         /// </summary>
-        private ICalculatorLogic _calculator;
+        private readonly ICalculatorLogic _calculator;
 
         /// <summary>
         /// Конструктор

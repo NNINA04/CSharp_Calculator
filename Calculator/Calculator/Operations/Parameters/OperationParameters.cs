@@ -3,19 +3,19 @@
 namespace Calculator.Operations
 {
     /// <summary>
-    /// Хранит в себе массив делегатов
+    /// Класс хранящий в себе параметры для Operation
     /// </summary>
-    public class OperationDelegate : IOperationParameters
+    public class OperationParameters : IOperationParameters
     {
-        private Delegate[] _inputHandlers;
+        private readonly object[] _values;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        /// <param name="inputHandlers">Принимаемые параметры для Operation</param>
-        public OperationDelegate(params Delegate[] inputHandlers)
+        /// <param name="inputValues">Принимаемые параметры для Operation</param>
+        public OperationParameters(params object[] inputValues)
         {
-            _inputHandlers = inputHandlers ?? throw new ArgumentNullException(nameof(inputHandlers));
+            _values = inputValues ?? throw new ArgumentNullException(nameof(inputValues));
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Calculator.Operations
         /// <returns>Принимаемые параметры для Operation</returns>
         public object[] GetArguments()
         {
-            return _inputHandlers;
+            return _values;
         }
     }
 }

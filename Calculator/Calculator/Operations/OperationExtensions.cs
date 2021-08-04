@@ -18,6 +18,12 @@
             return new OperationWithValidation<TOperationResult>(Operation, validator);
         }
 
+        //static public IOperation<TOperationResult> AddValidator<TOperationResult> // ПОЗЖЕ СДЕЛАТЬ
+        //(this IOperation<TOperationResult> Operation, Func<IValidator<TOperationResult>> validator)
+        //{
+        //    return new OperationWithValidation<TOperationResult>(Operation, );
+        //}
+
         /// <summary>
         /// Добавляет в процесс получения результата стадию форматированния
         /// </summary>

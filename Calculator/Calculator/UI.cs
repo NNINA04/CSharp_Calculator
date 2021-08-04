@@ -23,7 +23,6 @@ namespace Calculator
         /// </summary>
         public UI()
         {
-
             Calculator calc = new();
 
             FactorialProcessAdapter fa = new(calc);

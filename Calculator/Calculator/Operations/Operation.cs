@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Calculator.Operations
@@ -77,8 +75,9 @@ namespace Calculator.Operations
         /// <returns>Результат выполнения</returns>
         public virtual OperationResult Run(params object[] handlerParams)
         {
-            if (handlerParams == null)
+            if (handlerParams == null && _handler.GetMethodInfo().GetParameters().Length > 0)
                 throw new ArgumentNullException(nameof(handlerParams));
+
             CheckValues(_handler, handlerParams);
             return (OperationResult)_handler.DynamicInvoke(handlerParams);
         }
@@ -163,7 +162,7 @@ namespace Calculator.Operations
                 }
                 catch (Exception ex)
                 {
-                    throw new ArgumentException($"Параметр типа {handlerParams[index].GetType().Name} под индексом {index} не соответствует ожидаемому типу {handlerArguments[index].ParameterType}", ex);
+                    throw new ArgumentException($"Параметр типа {handlerParams[index].GetType()} под индексом {index} не соответствует ожидаемому типу {handlerArguments[index].ParameterType}", ex);
                 }
             }
         }

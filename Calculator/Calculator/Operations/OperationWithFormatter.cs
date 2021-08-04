@@ -36,11 +36,10 @@ namespace Calculator.Operations
         /// <summary>
         /// Получает значение из предыдущей операции и форматирует его с помощью форматера
         /// </summary>
-        /// <param name="inputHandlers">Делегаты на ввод данных</param>
         /// <returns>Отформатированное значение</returns>
-        public override TCurrentOperationResult Run(params Delegate[] inputHandlers)
+        public override TCurrentOperationResult Run()
         {
-            var value = _prevOperation.Run(inputHandlers);
+            var value = _prevOperation.Run();
             return _formatter.Format(value);
         }
     }

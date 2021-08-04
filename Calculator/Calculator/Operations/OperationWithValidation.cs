@@ -27,14 +27,23 @@ namespace Calculator.Operations
         /// <summary>
         /// Получает значение из базового метода Run и проводит валидацию над ним
         /// </summary>
-        /// <param name="inputHandlers">Делегаты на ввод данных</param>
+        /// <param name="values"></param>
         /// <returns>Результат выполнения базового метода Run</returns>
         /// <exception cref="ValidationException">Если isCorrect является false</exception>
-        public override TCurrentOperationResult Run(params Delegate[] inputHandlers)
+        public override TCurrentOperationResult Run(params object[] values)
         {
-            var value = base.Run(inputHandlers);
+            var value = base.Run(values);
             var (isCorrect, errorMessage) = _validator.Validate(value);
             return isCorrect ? value : throw new ValidationException(errorMessage);
+        }
+
+        /// <summary>
+        /// Проводит валидацию
+        /// </summary>
+        /// <returns>Результат выполнения базового метода Run</returns>
+        public override TCurrentOperationResult Run()
+        {
+            return Run(null);
         }
     }
 }

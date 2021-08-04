@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calculator.Operations;
+using System;
 
 namespace Calculator
 {
@@ -13,7 +14,7 @@ namespace Calculator
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
+                //Console.WriteLine(ex.StackTrace);
             }
         }
     }

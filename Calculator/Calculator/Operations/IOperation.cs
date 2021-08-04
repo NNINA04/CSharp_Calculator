@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Calculator.Operations
+﻿namespace Calculator.Operations
 {
     /// <summary>
     /// Интерфейс для операций

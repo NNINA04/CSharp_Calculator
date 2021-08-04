@@ -1,7 +1,7 @@
 ﻿namespace Calculator.Operations
 {
     /// <summary>
-    /// Интерфейс для получения массива объектов
+    /// Интерфейс для получения принимаемых аргументов для Operation
     /// </summary>
     public interface IOperationParameters
     {

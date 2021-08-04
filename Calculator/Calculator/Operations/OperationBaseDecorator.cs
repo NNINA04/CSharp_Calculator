@@ -11,7 +11,7 @@ namespace Calculator.Operations
         /// Объект для получения результата выполнения метода Run
         /// </summary>
         protected readonly IOperation<TOperationResult> _operation;
-
+        
         /// <summary>
         /// Конструктор 
         /// </summary>
@@ -25,23 +25,13 @@ namespace Calculator.Operations
         /// Конструктор для перехвата управления над _operation
         /// </summary>
         public OperationBaseDecorator() {}
-
-        /// <summary>
-        /// Выполняет основной делегат класса и передаёт в него параметры из делегатов ввода
-        /// </summary>
-        /// <param name="inputHandlers">Делегат</param>
-        /// <returns>Результат выполнения операции</returns>
-        public virtual TOperationResult Run(params Delegate[] inputHandlers)
-        {
-            return _operation.Run(inputHandlers);
-        }
-
+       
         /// <summary>
         /// Выполняет основной делегат класса и передаёт в него параметры
         /// </summary>
         /// <param name="values">Принимаемые значения основного делегата</param>
         /// <returns>Результат выполнения операции</returns>
-        public TOperationResult Run(params object[] values)
+        public virtual TOperationResult Run(params object[] values)
         {
             return _operation.Run(values);
         }
@@ -50,38 +40,9 @@ namespace Calculator.Operations
         /// Запускает выполнение операции
         /// </summary>
         /// <returns>Результат выполнения операции</returns>
-        public TOperationResult Run()
+        public virtual TOperationResult Run()
         {
             return _operation.Run();
-        }
-
-        /// <summary>
-        /// Выполняет основной делегат класса и передаёт в него параметры
-        /// </summary>
-        /// <param name="values">Принимаемые значения основного делегата</param>
-        /// <returns>Результат выполнения операции</returns>
-        object IOperation.Run(params object[] values)
-        {
-            return Run(values);
-        }
-
-        /// <summary>
-        /// Запускает выполнение операции
-        /// </summary>
-        /// <returns>Результат выполнения операции</returns>
-        object IOperation.Run()
-        {
-            return Run();
-        }
-
-        /// <summary>
-        /// Запускает выполнение операции
-        /// </summary>
-        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
-        /// <returns>Результат выполнения операции</returns>
-        object IOperation.Run(IOperationParameters operationParameters)
-        {
-            return Run(operationParameters);
         }
 
         /// <summary>
@@ -91,7 +52,36 @@ namespace Calculator.Operations
         /// <returns>Результат выполнения операции</returns>
         TOperationResult IOperation<TOperationResult>.Run(IOperationParameters operationParameters)
         {
-            return Run(operationParameters);
+            return _operation.Run(operationParameters);
+        }
+
+        /// <summary>
+        /// Выполняет основной делегат класса и передаёт в него параметры
+        /// </summary>
+        /// <param name="values">Принимаемые значения основного делегата</param>
+        /// <returns>Результат выполнения операции</returns>
+        object IOperation.Run(params object[] values)
+        {
+            return _operation.Run(values);
+        }
+
+        /// <summary>
+        /// Запускает выполнение операции
+        /// </summary>
+        /// <returns>Результат выполнения операции</returns>
+        object IOperation.Run()
+        {
+            return _operation.Run();
+        }
+
+        /// <summary>
+        /// Запускает выполнение операции
+        /// </summary>
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
+        /// <returns>Результат выполнения операции</returns>
+        object IOperation.Run(IOperationParameters operationParameters)
+        {
+            return _operation.Run(operationParameters);
         }
     }
 }
