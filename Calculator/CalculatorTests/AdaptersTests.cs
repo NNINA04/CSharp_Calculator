@@ -5,12 +5,12 @@ namespace CalculatorTests
 {
     public class AdaptersTests
     {
-        private FactorialProcessAdapter _factorialProcessAdapter;
+        private FactorialOperationAdapter _factorialProcessAdapter;
 
         [SetUp]
         public void Setup()
         {
-            _factorialProcessAdapter = new FactorialProcessAdapter(new Calculator.Calculator());
+            _factorialProcessAdapter = new FactorialOperationAdapter(new Calculator.Calculator());
         }
 
         [Test]

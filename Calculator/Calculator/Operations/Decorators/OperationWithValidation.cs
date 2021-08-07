@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Calculator.Operations.Validators;
+using System;
 
-namespace Calculator.Operations
+namespace Calculator.Operations.Decorators
 {
     /// <summary>
     /// Выполняет валидацию значения
@@ -16,10 +17,10 @@ namespace Calculator.Operations
         /// <summary>
         /// Конструктор
         /// </summary>
-        /// <param name="Operation">Операция</param>
+        /// <param name="operation">Операция</param>
         /// <param name="validator">Валидатор</param>
         /// <exception cref="ArgumentNullException">Если validator является null</exception>
-        public OperationWithValidation(IOperation<TCurrentOperationResult> Operation, IValidator<TCurrentOperationResult> validator) : base(Operation)
+        public OperationWithValidation(IOperation<TCurrentOperationResult> operation, IValidator<TCurrentOperationResult> validator) : base(operation)
         {
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
@@ -43,7 +44,9 @@ namespace Calculator.Operations
         /// <returns>Результат выполнения базового метода Run</returns>
         public override TCurrentOperationResult Run()
         {
-            return Run(null);
+            var value = base.Run();
+            var (isCorrect, errorMessage) = _validator.Validate(value);
+            return isCorrect ? value : throw new ValidationException(errorMessage);
         }
     }
 }

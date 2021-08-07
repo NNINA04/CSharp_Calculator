@@ -6,7 +6,7 @@
     public interface IHexCalculator
     {
         /// <summary>
-        /// Конвертирует число в шестнадцатиричном вид
+        /// Конвертирует число в шестнадцатиричный вид
         /// </summary>
         /// <param name="x">Число</param>
         /// <returns>Число в шестнадцатиричном виде</returns>

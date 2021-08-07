@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calculator.Operations.Parameters;
+using System;
 using System.Reflection;
 
 namespace Calculator.Operations
@@ -12,12 +13,12 @@ namespace Calculator.Operations
         /// <summary>
         /// Основной делегат
         /// </summary>
-        private Delegate _handler;
+        private readonly Delegate _handler;
 
         /// <summary>
         /// Параметры основного делегата
         /// </summary>
-        private object[] _handlerParams;
+        private readonly object[] _handlerParams;
 
         /// <summary>
         /// Конструктор
@@ -25,6 +26,7 @@ namespace Calculator.Operations
         /// <param name="handler">Основной делегат</param>
         public Operation(Delegate handler)
         {
+            _handlerParams = Array.Empty<object>();
             _handler = handler ?? throw new ArgumentNullException($"{nameof(handler)}");
 
             var handlerReturnType = handler.GetType().GetMethod("Invoke").ReturnType;
@@ -65,6 +67,8 @@ namespace Calculator.Operations
         /// <returns>Результат выполнения</returns>
         public virtual OperationResult Run(IOperationParameters operationParameters)
         {
+            if (operationParameters == null)
+                throw new ArgumentNullException(nameof(operationParameters));
             return Run(operationParameters.GetArguments());
         }
 
@@ -75,7 +79,7 @@ namespace Calculator.Operations
         /// <returns>Результат выполнения</returns>
         public virtual OperationResult Run(params object[] handlerParams)
         {
-            if (handlerParams == null && _handler.GetMethodInfo().GetParameters().Length > 0)
+            if (handlerParams == null)
                 throw new ArgumentNullException(nameof(handlerParams));
 
             CheckValues(_handler, handlerParams);
@@ -127,7 +131,11 @@ namespace Calculator.Operations
         /// <param name="handlerParams">Принимаемые параметры основного делегата</param>
         static void CheckValues(Delegate handler, object[] handlerParams)
         {
-            // Если массив входных параметров для основного делегата равняется null, то создаётся пустой массив
+            // Проверяет основной делегат на null
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
+
+            // Проверяет массив входных параметров для основного делегата на null
             if (handlerParams == null)
                 handlerParams = Array.Empty<object>();
 

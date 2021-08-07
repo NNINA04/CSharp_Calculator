@@ -1,4 +1,4 @@
-﻿namespace Calculator
+﻿namespace Calculator.Operations.Formatters
 {
     /// <summary>
     /// Интерфейс форматирования

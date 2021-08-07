@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Calculator.Operations.Formatters;
+using System;
 
-namespace Calculator.Operations
+namespace Calculator.Operations.Decorators
 {
     /// <summary>
     /// Выполняет форматирование значения
     /// </summary>
     /// <typeparam name="TPrevOperaionResult">Тип возвращаемого значения предыдущей операции</typeparam>
     /// <typeparam name="TCurrentOperationResult">Тип возвращаемого значения данной операции</typeparam>
-    class OperationWithFormatter<TPrevOperaionResult, TCurrentOperationResult> : OperationBaseDecorator<TCurrentOperationResult>
+    public class OperationWithFormatter<TPrevOperaionResult, TCurrentOperationResult> : OperationBaseDecorator<TCurrentOperationResult>
     {
         /// <summary>
         /// Предыдущая операция
@@ -40,6 +41,17 @@ namespace Calculator.Operations
         public override TCurrentOperationResult Run()
         {
             var value = _prevOperation.Run();
+            return _formatter.Format(value);
+        }
+
+        /// <summary>
+        /// Получает значение из предыдущей операции и форматирует его с помощью форматера
+        /// </summary>
+        /// <param name="values">Принимаемые значения основного делегата</param>
+        /// <returns>Отформатированное значение</returns>
+        public override TCurrentOperationResult Run(params object[] values)
+        {
+            var value = _prevOperation.Run(values);
             return _formatter.Format(value);
         }
     }

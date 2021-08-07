@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Calculator.Operations.Formatters;
+using Calculator.Operations.Validators;
+using System;
 using System.Collections.Generic;
 
 namespace Calculator
@@ -24,8 +26,7 @@ namespace Calculator
         public UI()
         {
             Calculator calc = new();
-
-            FactorialProcessAdapter fa = new(calc);
+            FactorialOperationAdapter factorialAdapter = new(calc);
             DoubleValidator doubleValidator = new();
             FactorialFormatter factorialFormatter = new();
             BitConverterHexCalculator bitConverterHexCalculator = new();
@@ -38,16 +39,16 @@ namespace Calculator
             };
             MenuItems = new Dictionary<int, (string, Action)>
             {
-                //{1, ("Exit" , () => Environment.Exit(0))},
-                //{2, ("Sum", () => ProcessOperation(calc.Sum, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
-                //{3, ("Substract", () => ProcessOperation(calc.Substract, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
-                //{4, ("Multiplicate", () => ProcessOperation(calc.Multiplicate, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
-                //{5, ("Divide", () => ProcessOperation(calc.Divide, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: ", doubleValidator))},
-                //{6, ("Sqrt", () => ProcessOperation(calc.Sqrt, InputValueAndValidate<double>))},
-                //{7, ("Cbrt", () => ProcessOperation(calc.Cbrt, InputValueAndValidate<double>))},
-                //{8, ("Exp", () => ProcessOperation(calc.Exp, InputValueAndValidate<double>))},
-                //{9, ("Fact", () => ProcessOperation(fa.Factorial, InputValueAndValidate<int>, formatter:factorialFormatter))},
-                //{10, ("Hex", () =>  SelectAction(HexMenu))}
+                {1, ("Exit" , () => Environment.Exit(0))},
+                {2, ("Sum", () => ProcessOperation(calc.Sum, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
+                {3, ("Substract", () => ProcessOperation(calc.Substract, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
+                {4, ("Multiplicate", () => ProcessOperation(calc.Multiplicate, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: "))},
+                {5, ("Divide", () => ProcessOperation(calc.Divide, InputValueAndValidate<double>, InputValueAndValidate<double>, "Enter two values: ", doubleValidator))},
+                {6, ("Sqrt", () => ProcessOperation(calc.Sqrt, InputValueAndValidate<double>))},
+                {7, ("Cbrt", () => ProcessOperation(calc.Cbrt, InputValueAndValidate<double>))},
+                {8, ("Exp", () => ProcessOperation(calc.Exp, InputValueAndValidate<double>))},
+                {9, ("Fact", () => ProcessOperation(factorialAdapter.Factorial, InputValueAndValidate<int>, formatter:factorialFormatter))},
+                {10, ("Hex", () =>  SelectAction(HexMenu))}
             };
         }
 

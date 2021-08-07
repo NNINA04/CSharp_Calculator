@@ -3,7 +3,7 @@
     /// <summary>
     /// Адаптер формата возвращаемого значения при расчёте факториала
     /// </summary>
-    public class FactorialProcessAdapter
+    public class FactorialOperationAdapter
     {
         /// <summary>
         /// Интерфейс класса Calculator
@@ -14,7 +14,7 @@
         /// Конструктор
         /// </summary>
         /// <param name="calculator">Объект класса который реализует <see cref="ICalculatorLogic"/></param>
-        public FactorialProcessAdapter(ICalculatorLogic calculator)
+        public FactorialOperationAdapter(ICalculatorLogic calculator)
         {
             _calculator = calculator;
         }

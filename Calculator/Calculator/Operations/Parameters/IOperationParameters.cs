@@ -1,4 +1,4 @@
-﻿namespace Calculator.Operations
+﻿namespace Calculator.Operations.Parameters
 {
     /// <summary>
     /// Интерфейс для получения принимаемых аргументов для Operation

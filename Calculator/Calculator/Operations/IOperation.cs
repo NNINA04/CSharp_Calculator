@@ -1,4 +1,6 @@
-﻿namespace Calculator.Operations
+﻿using Calculator.Operations.Parameters;
+
+namespace Calculator.Operations
 {
     /// <summary>
     /// Интерфейс для операций

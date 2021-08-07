@@ -1,4 +1,4 @@
-﻿namespace Calculator
+﻿namespace Calculator.Operations.Validators
 {
     /// <summary>
     /// Интерфейс валидатора переменных

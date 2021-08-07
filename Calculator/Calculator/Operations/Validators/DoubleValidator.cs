@@ -1,4 +1,4 @@
-﻿namespace Calculator
+﻿namespace Calculator.Operations.Validators
 {
     /// <summary>
     /// Валидатор значений типа <see cref="double"/>> 
@@ -12,7 +12,7 @@
         /// <returns>Результат проверки</returns>
         public (bool isCorrect, string errorMessage) Validate(double value)
         {
-            string errorMessage = string.Empty;
+            string errorMessage = default;
 
             if (double.IsInfinity(value))
                 errorMessage = "Result is infinity";
