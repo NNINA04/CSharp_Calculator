@@ -1,7 +1,6 @@
 ﻿using Calculator.Operations.Decorators;
 using Calculator.Operations.Formatters;
 using Calculator.Operations.Validators;
-using System;
 
 namespace Calculator.Operations
 {
@@ -13,7 +12,7 @@ namespace Calculator.Operations
         /// <summary>
         /// Добавляет в процесс получения результата стадию валидации
         /// </summary>
-        /// <typeparam name="TOperationResult"></typeparam>
+        /// <typeparam name="TOperationResult">Возвращаемый тип операции</typeparam>
         /// <param name="operation">Операция</param>
         /// <param name="validator">Валидатор</param>
         /// <returns>Декорированный объект</returns>
@@ -26,7 +25,19 @@ namespace Calculator.Operations
         /// <summary>
         /// Добавляет в процесс получения результата стадию валидации
         /// </summary>
-        /// <typeparam name="TOperationResult"></typeparam>
+        /// <typeparam name="TValidator">Создаваемый тип валидатора</typeparam>
+        /// <param name="operation">Операция</param>
+        /// <returns>Декорированный объект</returns>
+        static public IOperation AddValidator<TValidator>
+        (this IOperation operation) where TValidator : IValidator, new()
+        {
+            return new OperationWithValidation<object>(operation, new TValidator());
+        }
+
+        /// <summary>
+        /// Добавляет в процесс получения результата стадию валидации
+        /// </summary>
+        /// <typeparam name="TOperationResult">Возвращаемый тип операции</typeparam>
         /// <param name="operation">Операция</param>
         /// <param name="validator">Валидатор</param>
         /// <returns>Декорированный объект</returns>
@@ -35,11 +46,11 @@ namespace Calculator.Operations
         {
             return new OperationWithValidation<TOperationResult>(operation, new CustomValidatorWithFunc<TOperationResult>(validator));
         }
-
+        
         /// <summary>
         /// Добавляет в процесс получения результата стадию валидации
         /// </summary>
-        /// <typeparam name="TOperationResult"></typeparam>
+        /// <typeparam name="TOperationResult">Возвращаемый тип операции</typeparam>
         /// <param name="operation">Операция</param>
         /// <param name="validator">Валидатор</param>
         /// <returns>Декорированный объект</returns>
@@ -47,6 +58,19 @@ namespace Calculator.Operations
         (this IOperation<TOperationResult> operation, Func<TOperationResult, bool> validator)
         {
             return new OperationWithValidation<TOperationResult>(operation, new ModifiedCustomValidator<TOperationResult>(validator));
+        }
+        
+        /// <summary>
+        /// Добавляет в процесс получения результата стадию форматированния
+        /// </summary>
+        /// <typeparam name="TFormatter">Создаваемый тип форматера</typeparam>
+        /// <param name="operation">Операция</param>
+        /// <returns>Декорированный объект</returns>
+        static public IOperation AddFormatter<TFormatter>
+        (this IOperation operation) where TFormatter : IFormatter, new()
+        {
+            var formatter = new TFormatter();
+            return new OperationWithFormatter<object, object>(operation, formatter);
         }
 
         /// <summary>
@@ -77,6 +101,5 @@ namespace Calculator.Operations
             return new OperationWithFormatter<TOperationResult, TFormatterResult>(operation,
             new CustomFormatter<TOperationResult, TFormatterResult>(formatter));
         }
-        
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Calculator.Operations.Validators;
-using System;
 
 namespace Calculator.Operations.Decorators
 {
@@ -12,7 +11,7 @@ namespace Calculator.Operations.Decorators
         /// <summary>
         /// Объект хранящий в себе реализацию валидации
         /// </summary>
-        private readonly IValidator<TCurrentOperationResult> _validator;
+        private readonly IValidator _validator;
 
         /// <summary>
         /// Конструктор
@@ -20,7 +19,7 @@ namespace Calculator.Operations.Decorators
         /// <param name="operation">Операция</param>
         /// <param name="validator">Валидатор</param>
         /// <exception cref="ArgumentNullException">Если validator является null</exception>
-        public OperationWithValidation(IOperation<TCurrentOperationResult> operation, IValidator<TCurrentOperationResult> validator) : base(operation)
+        public OperationWithValidation(IOperation operation, IValidator validator) : base(operation)
         {
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
@@ -28,7 +27,7 @@ namespace Calculator.Operations.Decorators
         /// <summary>
         /// Получает значение из базового метода Run и проводит валидацию над ним
         /// </summary>
-        /// <param name="values"></param>
+        /// <param name="values">Параметры основного делегата</param>
         /// <returns>Результат выполнения базового метода Run</returns>
         /// <exception cref="ValidationException">Если isCorrect является false</exception>
         public override TCurrentOperationResult Run(params object[] values)

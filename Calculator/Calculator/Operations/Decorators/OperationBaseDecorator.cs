@@ -1,5 +1,4 @@
 ﻿using Calculator.Operations.Parameters;
-using System;
 
 namespace Calculator.Operations.Decorators
 {
@@ -12,13 +11,13 @@ namespace Calculator.Operations.Decorators
         /// <summary>
         /// Объект для получения результата выполнения метода Run
         /// </summary>
-        protected readonly IOperation<TOperationResult> _operation;
+        protected readonly IOperation _operation;
         
         /// <summary>
         /// Конструктор 
         /// </summary>
         /// <param name="operation">Операция</param>
-        public OperationBaseDecorator(IOperation<TOperationResult> operation)
+        public OperationBaseDecorator(IOperation operation)
         {
             _operation = operation ?? throw new ArgumentNullException(nameof(operation));
         }
@@ -35,7 +34,7 @@ namespace Calculator.Operations.Decorators
         /// <returns>Результат выполнения операции</returns>
         public virtual TOperationResult Run(params object[] values)
         { 
-            return _operation.Run(values);
+            return (TOperationResult)_operation.Run(values);
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace Calculator.Operations.Decorators
         /// <returns>Результат выполнения операции</returns>
         public virtual TOperationResult Run()
         {
-            return _operation.Run();
+            return (TOperationResult)_operation.Run();
         }
 
         /// <summary>
@@ -52,9 +51,9 @@ namespace Calculator.Operations.Decorators
         /// </summary>
         /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Результат выполнения операции</returns>
-        TOperationResult IOperation<TOperationResult>.Run(IOperationParameters operationParameters)
+        public virtual TOperationResult Run(IOperationParameters operationParameters)
         {
-            return _operation.Run(operationParameters);
+            return (TOperationResult)_operation.Run(operationParameters);
         }
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace Calculator.Operations.Decorators
         /// <returns>Результат выполнения операции</returns>
         object IOperation.Run(params object[] values)
         {
-            return _operation.Run(values);
+            return Run(values);
         }
 
         /// <summary>
@@ -73,7 +72,7 @@ namespace Calculator.Operations.Decorators
         /// <returns>Результат выполнения операции</returns>
         object IOperation.Run()
         {
-            return _operation.Run();
+            return Run();
         }
 
         /// <summary>
@@ -83,7 +82,7 @@ namespace Calculator.Operations.Decorators
         /// <returns>Результат выполнения операции</returns>
         object IOperation.Run(IOperationParameters operationParameters)
         {
-            return _operation.Run(operationParameters);
+            return Run(operationParameters);
         }
     }
 }

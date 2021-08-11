@@ -1,5 +1,5 @@
 ﻿using Calculator.Operations.Formatters;
-using System;
+using Calculator.Operations.Parameters;
 
 namespace Calculator.Operations.Decorators
 {
@@ -13,12 +13,12 @@ namespace Calculator.Operations.Decorators
         /// <summary>
         /// Предыдущая операция
         /// </summary>
-        private readonly IOperation<TPrevOperaionResult> _prevOperation;
+        private readonly IOperation _prevOperation;
 
         /// <summary>
         /// Объект хранящий в себе реализацию форматирования
         /// </summary>
-        private readonly IFormatter<TPrevOperaionResult, TCurrentOperationResult> _formatter;
+        private readonly IFormatter _formatter;
 
         /// <summary>
         /// Конструктор
@@ -27,8 +27,7 @@ namespace Calculator.Operations.Decorators
         /// <param name="formatter">Форматер</param>
         /// <exception cref="ArgumentNullException">Если operation является null</exception>
         /// <exception cref="ArgumentNullException">Если formatter является null</exception>
-        public OperationWithFormatter(IOperation<TPrevOperaionResult> operation,
-        IFormatter<TPrevOperaionResult, TCurrentOperationResult> formatter) : base()
+        public OperationWithFormatter(IOperation operation, IFormatter formatter) : base()
         {
             _prevOperation = operation ?? throw new ArgumentNullException(nameof(operation));
             _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
@@ -41,7 +40,7 @@ namespace Calculator.Operations.Decorators
         public override TCurrentOperationResult Run()
         {
             var value = _prevOperation.Run();
-            return _formatter.Format(value);
+            return (TCurrentOperationResult)_formatter.Format(value);
         }
 
         /// <summary>
@@ -52,7 +51,18 @@ namespace Calculator.Operations.Decorators
         public override TCurrentOperationResult Run(params object[] values)
         {
             var value = _prevOperation.Run(values);
-            return _formatter.Format(value);
+            return (TCurrentOperationResult)_formatter.Format(value);
+        }
+
+        /// <summary>
+        /// Получает значение из предыдущей операции и форматирует его с помощью форматера
+        /// </summary>
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
+        /// <returns>Отформатированное значение</returns>
+        public override TCurrentOperationResult Run(IOperationParameters operationParameters)
+        {
+            var value = _prevOperation.Run(operationParameters);
+            return (TCurrentOperationResult)_formatter.Format(value);
         }
     }
 }

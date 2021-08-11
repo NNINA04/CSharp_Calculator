@@ -1,4 +1,7 @@
 ﻿using Calculator.Operations;
+using Calculator.Operations.Decorators;
+using Calculator.Operations.Formatters;
+using Calculator.Operations.Validators;
 using System;
 
 namespace Calculator
@@ -10,16 +13,8 @@ namespace Calculator
         {
             try
             {
-                FactorialOperationAdapter fact = new(new Calculator());
-
-                var op = new Operation<(int srcValue, int result)>(fact.Factorial).AddFormatter((x) => $"{x.srcValue}! = {x.result}").Run(6); // РЕШИТЬ!
-                Console.WriteLine(op);
-
-                var op2 = new Operation<int>(() => 2).AddValidator(x => x < 1 ? (false, "Error!") : (true, default)).Run();
-                Console.WriteLine(op2);
-
-                var op3 = new Operation<int>(() => -1).AddValidator(x => x<0?throw new Exception("TEST"):true).Run();
-                Console.WriteLine(op3);
+                //Assert.IsAssignableFrom<IValidator<double>>(new Operation<double>(() => 0d).AddValidator((double x) => (true, string.Empty)));
+                var t = new Operation<double>(() => 0d).AddValidator((double x) => (true, string.Empty));
             }
             catch (Exception ex)
             {

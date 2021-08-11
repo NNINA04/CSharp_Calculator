@@ -21,5 +21,10 @@
 
             return (string.IsNullOrEmpty(errorMessage), errorMessage);
         }
+
+        (bool isCorrect, string errorMessage) IValidator.Validate(object value)
+        {
+            return Validate((double)value);
+        }
     }
 }

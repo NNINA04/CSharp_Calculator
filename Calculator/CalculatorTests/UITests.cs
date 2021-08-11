@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 
 namespace CalculatorTests
 {
@@ -12,7 +10,7 @@ namespace CalculatorTests
         [SetUp]
         public void Setup()
         {
-            _ui = new Calculator.UI();
+            //_ui = new Calculator.UI();
         }
 
         /// <summary>

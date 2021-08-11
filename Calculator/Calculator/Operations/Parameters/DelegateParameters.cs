@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Calculator.Operations.Parameters
+﻿namespace Calculator.Operations.Parameters
 {
     /// <summary>
     /// Класс хранящий в себе параметры для Operation. Используя делегаты для получения значения
