@@ -36,10 +36,11 @@ namespace Calculator.Operations.Decorators
         /// <summary>
         /// Получает значение из предыдущей операции и форматирует его с помощью форматера
         /// </summary>
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Отформатированное значение</returns>
-        public override TCurrentOperationResult Run()
+        public override TCurrentOperationResult Run(IOperationParameters operationParameters)
         {
-            var value = _prevOperation.Run();
+            var value = _prevOperation.Run(operationParameters);
             return (TCurrentOperationResult)_formatter.Format(value);
         }
 
@@ -57,11 +58,10 @@ namespace Calculator.Operations.Decorators
         /// <summary>
         /// Получает значение из предыдущей операции и форматирует его с помощью форматера
         /// </summary>
-        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Отформатированное значение</returns>
-        public override TCurrentOperationResult Run(IOperationParameters operationParameters)
+        public override TCurrentOperationResult Run()
         {
-            var value = _prevOperation.Run(operationParameters);
+            var value = _prevOperation.Run();
             return (TCurrentOperationResult)_formatter.Format(value);
         }
     }

@@ -25,8 +25,18 @@ namespace Calculator.Operations.Decorators
         /// <summary>
         /// Конструктор для перехвата управления над _operation
         /// </summary>
-        public OperationBaseDecorator() {}
-       
+        protected OperationBaseDecorator() {}
+
+        /// <summary>
+        /// Запускает выполнение операции
+        /// </summary>
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
+        /// <returns>Результат выполнения операции</returns>
+        public virtual TOperationResult Run(IOperationParameters operationParameters)
+        {
+            return (TOperationResult)_operation.Run(operationParameters);
+        }
+
         /// <summary>
         /// Выполняет основной делегат класса и передаёт в него параметры
         /// </summary>
@@ -51,9 +61,9 @@ namespace Calculator.Operations.Decorators
         /// </summary>
         /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Результат выполнения операции</returns>
-        public virtual TOperationResult Run(IOperationParameters operationParameters)
+        object IOperation.Run(IOperationParameters operationParameters)
         {
-            return (TOperationResult)_operation.Run(operationParameters);
+            return Run(operationParameters);
         }
 
         /// <summary>
@@ -73,16 +83,6 @@ namespace Calculator.Operations.Decorators
         object IOperation.Run()
         {
             return Run();
-        }
-
-        /// <summary>
-        /// Запускает выполнение операции
-        /// </summary>
-        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
-        /// <returns>Результат выполнения операции</returns>
-        object IOperation.Run(IOperationParameters operationParameters)
-        {
-            return Run(operationParameters);
         }
     }
 }

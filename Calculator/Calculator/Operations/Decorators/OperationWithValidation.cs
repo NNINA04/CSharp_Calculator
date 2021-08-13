@@ -6,7 +6,7 @@ namespace Calculator.Operations.Decorators
     /// Выполняет валидацию значения
     /// </summary>
     /// <typeparam name="TCurrentOperationResult">Тип возвращаемого значения данной операции</typeparam>
-    class OperationWithValidation<TCurrentOperationResult> : OperationBaseDecorator<TCurrentOperationResult>
+    public class OperationWithValidation<TCurrentOperationResult> : OperationBaseDecorator<TCurrentOperationResult>
     {
         /// <summary>
         /// Объект хранящий в себе реализацию валидации

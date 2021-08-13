@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Calculator
+﻿namespace Calculator
 {
     /// <summary>
     /// Это исключение вызывется когда проверенные данные с помощью класса который реализует интерфейса IValidator оказались не валидными

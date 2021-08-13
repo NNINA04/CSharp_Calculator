@@ -9,7 +9,7 @@ namespace CalculatorTests.OperationTests.ValidatorsTests
         string _errorMessage = "Value cannot be null. (Parameter '{0}')";
 
         [Test]
-        public void Constructor_ValidCreation()
+        public void Constructor_ValidCreation_ReturnsInstance()
         {
             Mock<IOperation<double>> operation = new();
             Assert.IsInstanceOf<IOperation<double>>(operation.Object.AddValidator((double x) => (true, string.Empty)));

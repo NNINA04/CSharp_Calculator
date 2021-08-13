@@ -8,12 +8,12 @@ namespace Calculator
 {
     class Program
     {
-
         static void Main()
         {
+            var sdfgsfdg = new Calculator();
             try
             {
-                //Assert.IsAssignableFrom<IValidator<double>>(new Operation<double>(() => 0d).AddValidator((double x) => (true, string.Empty)));
+                // Assert.IsAssignableFrom<IValidator<double>>(new Operation<double>(() => 0d).AddValidator((double x) => (true, string.Empty)));
                 var t = new Operation<double>(() => 0d).AddValidator((double x) => (true, string.Empty));
             }
             catch (Exception ex)

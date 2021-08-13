@@ -8,7 +8,7 @@ namespace CalculatorTests.OperationTests.Parameters.Tests
         string _errorMessage = "Value cannot be null. (Parameter '{0}')";
 
         [Test]
-        public void Constructor_ValidCreation()
+        public void Constructor_ValidCreation_ReturnsInstance()
         {
             Assert.IsAssignableFrom<DelegateParameters>(new DelegateParameters(() => 0));
         }

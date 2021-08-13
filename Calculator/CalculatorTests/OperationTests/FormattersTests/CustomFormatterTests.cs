@@ -10,7 +10,7 @@ namespace CalculatorTests.OperationTests.FormattersTests
         string _errorMessage = "Value cannot be null. (Parameter '{0}')";
 
         [Test]
-        public void Constructor_ValidCreation()
+        public void Constructor_ValidCreation_ReturnsInstance()
         {
             Mock<IOperation<double>> operation = new();
             Assert.IsInstanceOf<IOperation<int>>(operation.Object.AddFormatter((double x) => 0));
