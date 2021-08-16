@@ -6,7 +6,7 @@
     public class OperationParameters : IOperationParameters
     {
         private readonly object[] _values;
-
+        
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -23,6 +23,20 @@
         public object[] GetArguments()
         {
             return _values;
+        }
+
+        /// <summary>
+        /// Метод получения типов принимаемых параметров для Operation
+        /// </summary>
+        /// <returns>Типы принимаемых параметров для Operation</returns>
+        public Type[] GetArgumentsTypes()
+        {
+            Type[] types = new Type[_values.Length];
+
+            for (int i = 0; i < _values.Length; i++)
+                types[i] = _values[i]?.GetType()??null;
+
+            return types;
         }
     }
 }

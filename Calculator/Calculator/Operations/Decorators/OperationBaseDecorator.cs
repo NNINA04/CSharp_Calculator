@@ -9,10 +9,15 @@ namespace Calculator.Operations.Decorators
     public abstract class OperationBaseDecorator<TOperationResult> : IOperation<TOperationResult>
     {
         /// <summary>
+        /// Возвращает ли операция значение
+        /// </summary>
+        public bool IsVoid => _operation.IsVoid;
+
+        /// <summary>
         /// Объект для получения результата выполнения метода Run
         /// </summary>
         protected readonly IOperation _operation;
-        
+
         /// <summary>
         /// Конструктор 
         /// </summary>
@@ -21,11 +26,6 @@ namespace Calculator.Operations.Decorators
         {
             _operation = operation ?? throw new ArgumentNullException(nameof(operation));
         }
-
-        /// <summary>
-        /// Конструктор для перехвата управления над _operation
-        /// </summary>
-        protected OperationBaseDecorator() {}
 
         /// <summary>
         /// Запускает выполнение операции
@@ -43,7 +43,7 @@ namespace Calculator.Operations.Decorators
         /// <param name="values">Принимаемые значения основного делегата</param>
         /// <returns>Результат выполнения операции</returns>
         public virtual TOperationResult Run(params object[] values)
-        { 
+        {
             return (TOperationResult)_operation.Run(values);
         }
 
@@ -54,6 +54,32 @@ namespace Calculator.Operations.Decorators
         public virtual TOperationResult Run()
         {
             return (TOperationResult)_operation.Run();
+        }
+
+        /// <summary>
+        /// Выполняет делегат класса передавая в него параметры
+        /// </summary>
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
+        public void RunWithoutReturnValue(IOperationParameters operationParameters)
+        {
+            Run(operationParameters);
+        }
+
+        /// <summary>
+        /// Выполняет делегат класса передавая в него параметры
+        /// </summary>
+        /// <param name="handlerParams">Параметры основного делегата</param>
+        public void RunWithoutReturnValue(params object[] handlerParams)
+        {
+            Run(handlerParams);
+        }
+
+        /// <summary>
+        /// Выполняет делегат класса передавая в него параметры
+        /// </summary>
+        public void RunWithoutReturnValue()
+        {
+            Run();
         }
 
         /// <summary>

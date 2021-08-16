@@ -24,5 +24,19 @@
         {
             return _inputHandlers.Select(x => x.DynamicInvoke()).ToArray();
         }
+
+        /// <summary>
+        /// Метод получения типов принимаемых параметров для Operation
+        /// </summary>
+        /// <returns>Типы принимаемых параметров для Operation</returns>
+        public Type[] GetArgumentsTypes()
+        {
+            Type[] types = new Type[_inputHandlers.Length];
+            
+            for (int i = 0; i < _inputHandlers.Length; i++)
+                types[i] = _inputHandlers[i]?.GetType()??null;
+
+            return types;
+        }
     }
 }

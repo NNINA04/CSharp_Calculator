@@ -35,6 +35,11 @@ namespace Calculator.Operations
     public interface IOperation
     {
         /// <summary>
+        /// Возвращает ли операция значение
+        /// </summary>
+        public bool IsVoid { get; }
+
+        /// <summary>
         /// Запускает выполнение операции
         /// </summary>
         /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
@@ -53,5 +58,22 @@ namespace Calculator.Operations
         /// </summary>
         /// <returns>Результат выполнения операции</returns>
         object Run();
+
+        /// <summary>
+        /// Запускает выполнение операции
+        /// </summary>
+        /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
+        void RunWithoutReturnValue(IOperationParameters operationParameters);
+
+        /// <summary>
+        /// Запускает выполнение операции
+        /// </summary>
+        /// <param name="handlerParams">Принимаемые параметры операции</param>
+        void RunWithoutReturnValue(params object[] handlerParams);
+
+        /// <summary>
+        /// Запускает выполнение операции
+        /// </summary>
+        void RunWithoutReturnValue();
     }
 }

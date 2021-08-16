@@ -1,13 +1,12 @@
 ﻿using Calculator.Operations.Parameters;
-using System;
 
 namespace Calculator.Operations
 {
     /// <summary>
     /// Выполняет делегат передав в него параметры
     /// </summary>
-    /// <typeparam name="OperationResult">Возвращаемый тип основного хендлера</typeparam>
-    public class Operation<OperationResult> : Operation, IOperation<OperationResult>
+    /// <typeparam name="TOperationResult">Возвращаемый тип основного хендлера</typeparam>
+    public class Operation<TOperationResult> : Operation, IOperation<TOperationResult>
     {
         /// <summary>
         /// Конструктор
@@ -18,7 +17,7 @@ namespace Calculator.Operations
         {
             CheckTypeCompatibility(handler);
         }
-
+        
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -43,9 +42,12 @@ namespace Calculator.Operations
         /// </summary>
         /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Результат выполнения</returns>
-        public new virtual OperationResult Run(IOperationParameters operationParameters)
+        public new virtual TOperationResult Run(IOperationParameters operationParameters)
         {
-            return Run(operationParameters?.GetArguments() ?? throw new ArgumentNullException(nameof(operationParameters)));
+            if (operationParameters == null)
+                throw new ArgumentNullException(nameof(operationParameters));
+
+            return (TOperationResult)base.Run(operationParameters);
         }
 
         /// <summary>
@@ -53,23 +55,20 @@ namespace Calculator.Operations
         /// </summary>
         /// <param name="handlerParams">Параметры основного делегата</param>
         /// <returns>Результат выполнения</returns>
-        public new virtual OperationResult Run(params object[] handlerParams)
+        public new virtual TOperationResult Run(params object[] handlerParams)
         {
-            if (handlerParams == null)
-                throw new ArgumentNullException(nameof(handlerParams));
-
-            return (OperationResult)base.Run(handlerParams);
+            return (TOperationResult)base.Run(new OperationParameters(handlerParams));
         }
-
+        
         /// <summary>
         /// Выполняет основной делегат класса передавая в него параметры
         /// </summary>
         /// <returns>Результат выполнения</returns>
-        public new virtual OperationResult Run()
+        public new virtual TOperationResult Run()
         {
-            return (OperationResult)base.Run();
+            return (TOperationResult)base.Run();
         }
-
+        
         /// <summary>
         /// Проверяет совместимость типов
         /// </summary>
@@ -79,10 +78,10 @@ namespace Calculator.Operations
             var handlerReturnType = handler.GetType().GetMethod("Invoke").ReturnType;
 
             // Является ли возвращаемый тип handler, типом THandlerResult
-            if (handlerReturnType != typeof(OperationResult))
+            if (handlerReturnType != typeof(TOperationResult))
                 throw new ArgumentException($"Возвращаемый тип {handlerReturnType} делегата {nameof(handler)} " +
-                                            $"не соответстует типу {typeof(OperationResult)} " +
-                                            $"принимаемого параметра {nameof(OperationResult)} данного метода");
+                                            $"не соответстует типу {typeof(TOperationResult)} " +
+                                            $"принимаемого параметра {nameof(TOperationResult)} данного метода");
         }
     }
 }

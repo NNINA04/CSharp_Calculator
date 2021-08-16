@@ -1,8 +1,7 @@
 ﻿using Calculator.Operations;
 using Calculator.Operations.Formatters;
+using Calculator.Operations.Parameters;
 using Calculator.Operations.Validators;
-using System;
-using System.Collections.Generic;
 
 namespace Calculator
 {
@@ -35,22 +34,21 @@ namespace Calculator
 
             HexMenu = new Dictionary<int, (string description, IOperation operation)>
             {
-                {1, ("BitConverterCalculation", new Operation<int>(calc.ToHex,  InputValueAndValidate<int>())) }, // (), => bitConverterHexCalculator,  InputValueAndValidate<int>, "Enter a value: "
-                {2, ("DictionaryConverter", new Operation<int>(calc.ToHex,  InputValueAndValidate<int>())) } // , () => matchingTypeToHex,  InputValueAndValidate<int>, "Enter a value: "))
+                {1, ("BitConverterCalculation", new Operation<string>(calc.ToHex,  new DelegateParameters(()=>bitConverterHexCalculator, InputValueAndValidate<int>))) },
+                {2, ("DictionaryConverter", new Operation<string>(calc.ToHex,  new DelegateParameters(()=>matchingTypeToHex,InputValueAndValidate<int>))) }
             };
-
             MenuItems = new Dictionary<int, (string description, IOperation operation)>
             {
-                {1, ("Exit" , new Operation(()=>Environment.Exit(0)))}, 
-                {2, ("Sum", new Operation<double>(calc.Sum,  InputValueAndValidate<double>(), InputValueAndValidate<double>()))},
-                {3, ("Substract",  new Operation<double>(calc.Substract, InputValueAndValidate<double>(), InputValueAndValidate<double>()))},
-                {4, ("Multiplicate", new Operation<double>(calc.Multiplicate,InputValueAndValidate<double>(),InputValueAndValidate<double>()))},
-                {5, ("Divide",  new Operation<double>(calc.Divide, InputValueAndValidate<double>(),InputValueAndValidate<double>()))},
-                {6, ("Sqrt", new Operation<double>(calc.Sqrt, InputValueAndValidate<double>()))},
-                {7, ("Cbrt", new Operation<double>(calc.Cbrt, InputValueAndValidate<double>()))},
-                {8, ("Exp", new Operation<double>(calc.Exp, InputValueAndValidate<double>()))},
-                {9, ("Fact", new Operation<int>(factorialAdapter.Factorial, InputValueAndValidate<double>()))}, // .AddFormatter(factorialFormatter)
-                {10, ("Hex", new Operation(()=>SelectAction(HexMenu)))}  // Позже добавить не тепизированный класс который будет принимать Action
+                {1, ("Exit" , new Operation(()=>Environment.Exit(0)))},
+                {2, ("Sum", new Operation<double>(calc.Sum, new DelegateParameters(InputValueAndValidate<double>, InputValueAndValidate<double>)))},
+                {3, ("Substract",  new Operation<double>(calc.Substract, new DelegateParameters(InputValueAndValidate<double>, InputValueAndValidate<double>)))},
+                {4, ("Multiplicate", new Operation<double>(calc.Multiplicate,new DelegateParameters(InputValueAndValidate<double>,InputValueAndValidate<double>)))},
+                {5, ("Divide",  new Operation<double>(calc.Divide, new DelegateParameters(InputValueAndValidate<double>,InputValueAndValidate<double>)))},
+                {6, ("Sqrt", new Operation<double>(calc.Sqrt, new DelegateParameters(InputValueAndValidate<double>)))},
+                {7, ("Cbrt", new Operation<double>(calc.Cbrt, new DelegateParameters(InputValueAndValidate<double>)))},
+                {8, ("Exp", new Operation<string>(calc.Exp, new DelegateParameters(InputValueAndValidate<double>)))},
+                {9, ("Fact", new Operation<(int,int)>(factorialAdapter.Factorial, new DelegateParameters(InputValueAndValidate<int>)).AddFormatter(factorialFormatter))}, // .AddFormatter(factorialFormatter)
+                {10,("Hex", new Operation(SelectAction, new OperationParameters(HexMenu, true)))}
             };
         }
 
@@ -74,7 +72,7 @@ namespace Calculator
             {
                 ShowMenu(menu);
                 menu.TryGetValue(InputValueAndValidate<int>(), out var item);
-                Console.WriteLine(item.operation.Run());
+                ShowValue(item.operation.Run());
             }
             catch (Exception ex)
             {
@@ -87,6 +85,14 @@ namespace Calculator
             }
         }
 
+        private static void ShowValue(object value)
+        {
+            string printValue = value.ToString();
+           /* if (formatter != null)
+                printValue = formatter.Format(value);*/
+            Console.WriteLine($"Result: {printValue}");
+        }
+
         /// <summary>
         /// Выводит меню
         /// </summary>
@@ -96,7 +102,6 @@ namespace Calculator
             Console.WriteLine("Select an action:");
             foreach (var action in menu)
                 Console.WriteLine($"{action.Key}: {action.Value.description}");
-            Console.Write("..:");
         }
 
         /// <summary>
@@ -116,6 +121,7 @@ namespace Calculator
                 throw new ArgumentException($"Тип {typeof(TRequiredType)} не разрешён!");
             try
             {
+                Console.Write($"Enter a value: ");
                 return (TRequiredType)Convert.ChangeType(Console.ReadLine(), typeof(TRequiredType));
             }
             catch (FormatException ex)

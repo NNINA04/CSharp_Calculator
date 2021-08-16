@@ -12,6 +12,8 @@ namespace CalculatorTests.OperationTests.ValidatorsTests
             _value = value;
         }
 
+        public bool IsVoid => throw new NotImplementedException();
+
         public virtual T Run(IOperationParameters operationParameters)
         {
             return _value;
@@ -25,6 +27,21 @@ namespace CalculatorTests.OperationTests.ValidatorsTests
         public virtual T Run()
         {
             return _value;
+        }
+
+        public void RunWithoutReturnValue(IOperationParameters operationParameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RunWithoutReturnValue(params object[] handlerParams)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RunWithoutReturnValue()
+        {
+            throw new NotImplementedException();
         }
 
         object IOperation.Run(IOperationParameters operationParameters)

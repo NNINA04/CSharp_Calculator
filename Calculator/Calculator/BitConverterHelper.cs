@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Calculator
+﻿namespace Calculator
 {
     /// <summary>
     /// Класс хелпер для <see cref="BitConverter"/>

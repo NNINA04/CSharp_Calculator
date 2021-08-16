@@ -9,6 +9,12 @@
         /// Метод получения принимаемых параметров для Operation
         /// </summary>
         /// <returns>Принимаемые параметры для Operation</returns>
-        object[] GetArguments(); 
+        object[] GetArguments();
+
+        /// <summary>
+        /// Метод получения типов принимаемых параметров для Operation
+        /// </summary>
+        /// <returns>Типы принимаемых параметров для Operation</returns>
+        Type[] GetArgumentsTypes();
     }
 }

@@ -21,7 +21,12 @@
 
             return (string.IsNullOrEmpty(errorMessage), errorMessage);
         }
-
+        
+        /// <summary>
+        /// Проверка переменной
+        /// </summary>
+        /// <param name="value">Переменная над которым будет проводить валидация</param>
+        /// <returns>Результат проверки</returns>
         (bool isCorrect, string errorMessage) IValidator.Validate(object value)
         {
             return Validate((double)value);

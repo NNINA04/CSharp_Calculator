@@ -2,11 +2,9 @@
 using Calculator.Operations;
 using Moq;
 using NUnit.Framework;
-using System;
 
 namespace CalculatorTests.OperationTests
 {
-
     class TypedOperationTests
     {
         Func<int, int> _mainHandler = (int x) => x;
@@ -33,8 +31,12 @@ namespace CalculatorTests.OperationTests
         [Test]
         public void Operation_Constructor_PassingDelegateAndOperationParameters()
         {
+            var value = new object[] { 1 };
             var operationParameters = new Mock<IOperationParameters>();
-            operationParameters.Setup(x => x.GetArguments()).Returns(new object[] { 1 });
+
+            operationParameters.Setup(x => x.GetArguments()).Returns(value);
+            operationParameters.Setup(x => x.GetArgumentsTypes()).Returns(new Type[] { value.GetType() });
+
             Assert.IsAssignableFrom<Operation<int>>(new Operation<int>(_mainHandler, operationParameters.Object));
         }
 
@@ -60,8 +62,7 @@ namespace CalculatorTests.OperationTests
         public void Operation_Run_CheckNullParameters()
         {
             object[] handlerParameters = null;
-            Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo(string.Format(_errorMessage, "handlerParams")),
-                          () => new Operation<int>(_mainHandler).Run(handlerParameters));
+            Assert.Throws<ArgumentNullException>(() => new Operation<int>(_mainHandler).Run(handlerParameters), string.Format(_errorMessage, "inputValues"));
         }
 
         [Test]
