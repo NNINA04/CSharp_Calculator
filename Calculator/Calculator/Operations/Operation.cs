@@ -13,7 +13,7 @@ namespace Calculator.Operations
         /// Возвращает ли операция значение
         /// </summary>
         public bool IsVoid { get => IsReturnTypeVoid(); }
-        
+
         /// <summary>
         /// Основной делегат
         /// </summary>
@@ -125,9 +125,9 @@ namespace Calculator.Operations
         /// Проверяет является ли возвращаемый тип хендлена <see cref="void"/>
         /// </summary>
         /// <returns>Результат проверки</returns>
-        private bool IsReturnTypeVoid() 
+        private bool IsReturnTypeVoid()
         {
-            return _handler.GetType().GetMethod("Invoke").ReturnType == typeof(void); 
+            return _handler.GetType().GetMethod("Invoke").ReturnType == typeof(void);
         }
 
         /// <summary>
@@ -136,16 +136,23 @@ namespace Calculator.Operations
         /// <param name="handler">Основной делегат</param>ы
         /// <param name="operationParameters">Параметры основного делегата</param>
         /// <returns>Результат выполнения</returns>
-        private static object ExecuteMainHandler(Delegate handler, IOperationParameters operationParameters) 
+        private static object ExecuteMainHandler(Delegate handler, IOperationParameters operationParameters)
         {
             CheckValues(handler, operationParameters);
-            var handlerParams = operationParameters.GetArguments() ?? Array.Empty<object>();
-            
-            return handler.DynamicInvoke(handlerParams);
+
+            object[] handlerParams = operationParameters.GetArguments();
+            var mainHandlerRequiredParameters = handler.GetMethodInfo().GetParameters();
+
+            object[] newHandlerParams = mainHandlerRequiredParameters.Select((x, i) =>
+                        x.IsOptional && i >= handlerParams.Length ? x.DefaultValue : handlerParams[i]).ToArray();
+
+            CheckTypeMatching(handler, newHandlerParams);
+
+            return handler.DynamicInvoke(newHandlerParams);
         }
 
         /// <summary>
-        /// Проверяет совместимость основного хендлера с принимаемыми параметрами
+        /// Проверять совместимость принимаемых параметров хендлеров
         /// </summary>
         /// <param name="handler">Основной хендлер</param>
         /// <param name="operationParameters">Объект содержащий параметры для основного хендлера</param>
@@ -155,45 +162,82 @@ namespace Calculator.Operations
             if (operationParameters == null)
                 throw new ArgumentNullException(nameof(operationParameters));
 
-            Type[] argumentsTypes = operationParameters.GetArgumentsTypes();
+            Type[] typesOfArguments = operationParameters.GetArgumentsTypes();
 
             // Проверяет основной делегат на null
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            var handlerArguments = handler.GetMethodInfo().GetParameters();
-            int handlerArgumentsLength = handlerArguments.Length;
-            int handlerParamsLength = argumentsTypes.Length;
+            var mainHandlerRequiredParameters = handler.GetMethodInfo().GetParameters();
+            int mainHandlerArgumentsLength = mainHandlerRequiredParameters.Length;
 
-            // Проверяет количество
-            if (handlerParamsLength != handlerArgumentsLength)
-                throw new ArgumentException($"Количество введённых параметров не соответствует количесту аргументов вызываемого метода");
-                
-            // Проверяет совместимости типов
-            for (int index = 0; index < handlerParamsLength; index++)
+            int ParametersCount = typesOfArguments.Length;
+
+            try
             {
+                // Решает проблему с неверным количеством аргументов
+                int newLength = mainHandlerRequiredParameters.Select((x, i) => x.IsOptional && i
+                >= typesOfArguments.Length ? x.DefaultValue : typesOfArguments[i]).ToArray().Length;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new ArgumentException($"Количество введённых параметров не соответствует количесту аргументов вызываемого метода");
+            }
+
+            // Проверяет совместимости типов
+            for (int index = 0; index < ParametersCount; index++)
+            {
+
                 // Является ли тип принимаемого параметра handler ссылочным || Является ли тип принимаемого параметра handler Nullable && Является ли объект handlerParams null
-                if ((!handlerArguments[index].ParameterType.IsValueType || handlerArguments[index].ParameterType.IsNullable()) && argumentsTypes[index] == null)
+                if ((!mainHandlerRequiredParameters[index].ParameterType.IsValueType || mainHandlerRequiredParameters[index].ParameterType.IsNullable()) && typesOfArguments[index] == null)
                     continue;
                 try
                 {
                     // Является ли тип принимаемого параметра handler значимым && Является ли тип принимаемого параметра handler не Nullable && Является ли объект handlerParams null
-                    if (handlerArguments[index].ParameterType.IsValueType && !handlerArguments[index].ParameterType.IsNullable() && argumentsTypes[index] == null)
-                        throw new ArgumentException($"Значение аргумента под индексом {index} не может быть равным null, так как ожидался тип {handlerArguments[index].ParameterType}");
+                    if (mainHandlerRequiredParameters[index].ParameterType.IsValueType && !mainHandlerRequiredParameters[index].ParameterType.IsNullable() && typesOfArguments[index] == null)
+                        throw new ArgumentException($"Значение аргумента под индексом {index} не может быть равным null, так как ожидался тип {mainHandlerRequiredParameters[index].ParameterType}");
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException(ex.Message);
+                }
+            }
+        }
 
+        /// <summary>
+        /// Проверять совместимость принимаемых параметров хендлеров
+        /// </summary>
+        /// <param name="handler">Основной хендлер</param>
+        /// <param name="operationParameters">Принимаемые параметры хендлера</param>
+        private static void CheckTypeMatching(Delegate handler, object[] operationParameters)
+        {
+            // Проверяет основной делегат на null
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
+
+            // Проверяет объект содержащий массив входных параметров на null
+            if (operationParameters == null)
+                throw new ArgumentNullException(nameof(operationParameters));
+
+            var mainHandlerRequiredParameters = handler.GetMethodInfo().GetParameters();
+            int ParametersCount = operationParameters.Length;
+
+            // Проверяет совместимости типов
+            for (int index = 0; index < ParametersCount; index++)
+            {
+                if ((!mainHandlerRequiredParameters[index].ParameterType.IsValueType || mainHandlerRequiredParameters[index].ParameterType.IsNullable()) && operationParameters[index] == null)
+                    continue;
+                try
+                {
                     // Если объект handlerParams не равняется null && Тип объекта handlerParams является типом string
-                    if (argumentsTypes[index] != null && argumentsTypes[index].GetType() == typeof(string))
+                    if (operationParameters[index] != null && operationParameters[index].GetType() == typeof(string))
                         throw new Exception("Ошибка соответствия типов");
 
-                    //Convert.ChangeType(argumentsTypes[index], handlerArguments[index].ParameterType);
-                }
-                catch (ArgumentException)
-                {
-                    throw;
+                    Convert.ChangeType(operationParameters[index], mainHandlerRequiredParameters[index].ParameterType);
                 }
                 catch (Exception ex)
                 {
-                    throw new ArgumentException($"Параметр типа {argumentsTypes[index].GetType()} под индексом {index} не соответствует ожидаемому типу {handlerArguments[index].ParameterType}", ex);
+                    throw new Exception(ex.Message);
                 }
             }
         }

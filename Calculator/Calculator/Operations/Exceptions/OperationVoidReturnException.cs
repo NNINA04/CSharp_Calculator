@@ -1,6 +1,9 @@
 ﻿namespace Calculator.Operations.Exceptions
 {
-    internal class OperationVoidReturnException : Exception 
+    /// <summary>
+    /// Это исключение вызывется когда handler ничего не возвращает и используется Run
+    /// </summary>
+    public class OperationVoidReturnException : Exception
     {
         /// <summary>
         /// Конструктор

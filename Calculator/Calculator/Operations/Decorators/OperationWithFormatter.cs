@@ -11,11 +11,6 @@ namespace Calculator.Operations.Decorators
     public class OperationWithFormatter<TPrevOperaionResult, TCurrentOperationResult> : OperationBaseDecorator<TCurrentOperationResult>
     {
         /// <summary>
-        /// Предыдущая операция
-        /// </summary>
-        //private readonly IOperation _prevOperation;
-
-        /// <summary>
         /// Объект хранящий в себе реализацию форматирования
         /// </summary>
         private readonly IFormatter _formatter;

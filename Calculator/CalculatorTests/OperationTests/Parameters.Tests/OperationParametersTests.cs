@@ -1,11 +1,13 @@
 ﻿using Calculator.Operations.Parameters;
 using NUnit.Framework;
+using System.Reflection.Metadata;
 
 namespace CalculatorTests.OperationTests.Parameters.Tests
 {
     class OperationParametersTests
     {
         string _errorMessage = "Value cannot be null. (Parameter '{0}')";
+        int _value = 0;
 
         [Test]
         public void Constructor_ValidCreation_ReturnsInstance()
@@ -22,7 +24,19 @@ namespace CalculatorTests.OperationTests.Parameters.Tests
         [Test]
         public void GetArguments_ReturnsObjectArray()
         {
-            Assert.AreEqual(new object[] { 0 }, new OperationParameters(0).GetArguments());
+            Assert.AreEqual(new object[] { _value }, new OperationParameters(_value).GetArguments());
+        }
+
+        [Test]
+        public void GetArgumentsTypes_ReturnsArrOfTypes()
+        {
+        Assert.AreEqual(new Type[] { _value.GetType() }, new OperationParameters(_value).GetArgumentsTypes());
+        }
+
+        [Test]
+        public void GetArgumentsTypes_ReturnsArrWithNull()
+        {
+            Assert.AreEqual(new Type[] { null }, new OperationParameters(new Delegate[] { null }).GetArgumentsTypes());
         }
     }
 }

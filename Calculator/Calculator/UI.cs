@@ -1,5 +1,4 @@
 ﻿using Calculator.Operations;
-using Calculator.Operations.Formatters;
 using Calculator.Operations.Parameters;
 using Calculator.Operations.Validators;
 
@@ -43,12 +42,12 @@ namespace Calculator
                 {2, ("Sum", new Operation<double>(calc.Sum, new DelegateParameters(InputValueAndValidate<double>, InputValueAndValidate<double>)))},
                 {3, ("Substract",  new Operation<double>(calc.Substract, new DelegateParameters(InputValueAndValidate<double>, InputValueAndValidate<double>)))},
                 {4, ("Multiplicate", new Operation<double>(calc.Multiplicate,new DelegateParameters(InputValueAndValidate<double>,InputValueAndValidate<double>)))},
-                {5, ("Divide",  new Operation<double>(calc.Divide, new DelegateParameters(InputValueAndValidate<double>,InputValueAndValidate<double>)))},
+                {5, ("Divide",  new Operation<double>(calc.Divide, new DelegateParameters(InputValueAndValidate<double>,InputValueAndValidate<double>)).AddValidator(doubleValidator))},
                 {6, ("Sqrt", new Operation<double>(calc.Sqrt, new DelegateParameters(InputValueAndValidate<double>)))},
                 {7, ("Cbrt", new Operation<double>(calc.Cbrt, new DelegateParameters(InputValueAndValidate<double>)))},
                 {8, ("Exp", new Operation<string>(calc.Exp, new DelegateParameters(InputValueAndValidate<double>)))},
                 {9, ("Fact", new Operation<(int,int)>(factorialAdapter.Factorial, new DelegateParameters(InputValueAndValidate<int>)).AddFormatter(factorialFormatter))}, // .AddFormatter(factorialFormatter)
-                {10,("Hex", new Operation(SelectAction, new OperationParameters(HexMenu, true)))}
+                {10,("Hex", new Operation(SelectAction, HexMenu))}
             };
         }
 
@@ -71,8 +70,12 @@ namespace Calculator
             try
             {
                 ShowMenu(menu);
-                menu.TryGetValue(InputValueAndValidate<int>(), out var item);
-                ShowValue(item.operation.Run());
+                int inputvalue = InputValueAndValidate<int>();
+                menu.TryGetValue(inputvalue, out var item);
+                if (inputvalue == 10)
+                    item.operation.RunWithoutReturnValue();
+                else
+                    ShowValue(item.operation.Run());
             }
             catch (Exception ex)
             {
@@ -85,11 +88,13 @@ namespace Calculator
             }
         }
 
+        /// <summary>
+        /// Отображает результат выполнения операции
+        /// </summary>
+        /// <param name="value"></param>
         private static void ShowValue(object value)
         {
             string printValue = value.ToString();
-           /* if (formatter != null)
-                printValue = formatter.Format(value);*/
             Console.WriteLine($"Result: {printValue}");
         }
 
@@ -126,7 +131,7 @@ namespace Calculator
             }
             catch (FormatException ex)
             {
-                throw new FormatException("You entered a wrong value !", ex);
+               throw new FormatException("You entered a wrong value !", ex);
             }
         }
     }
