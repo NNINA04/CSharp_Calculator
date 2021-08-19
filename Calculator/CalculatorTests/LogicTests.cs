@@ -2,7 +2,6 @@ using Calculator;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using System;
 
 namespace CalculatorTests
 {

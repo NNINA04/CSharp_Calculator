@@ -1,22 +1,26 @@
 ﻿using Calculator;
+using Calculator.Operations.Formatters;
 using NUnit.Framework;
 
 namespace CalculatorTests
 {
     public class FormattersTests
     {
-        private FactorialFormatter _factorialFormatter;
+        private static FactorialFormatter factorialFormatter = new();
 
-        [SetUp]
-        public void Setup()
+        private int inputValue = 6;
+        private int outputValue = 720;
+
+        [Test]
+        public void Format_ReturnsString()
         {
-            _factorialFormatter = new FactorialFormatter();
+            Assert.AreEqual("6! = 720", factorialFormatter.Format((inputValue, outputValue)));
         }
 
         [Test]
-        public void TestFactorialFormatter()
+        public void Format_ReturnsStringUsingTypeCasting()
         {
-            Assert.AreEqual("6! = 720", _factorialFormatter.Format((6, 720)));
+            Assert.AreEqual("6! = 720", ((IFormatter)factorialFormatter).Format((inputValue, outputValue)));
         }
     }
 }

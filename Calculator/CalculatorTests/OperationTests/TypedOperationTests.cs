@@ -11,25 +11,25 @@ namespace CalculatorTests.OperationTests
         string _errorMessage = "Value cannot be null. (Parameter '{0}')";
 
         [Test]
-        public void Operation_Constructor_CheckReturnType()
+        public void Constructor_CheckReturnType()
         {
             Assert.Throws<ArgumentException>(() => new Operation<int>(() => string.Empty), "Возвращаемый тип System.String делегата handler не соответстует типу System.Int32 принимаемого параметра OperationResult данного метода");
         }
 
         [Test]
-        public void Operation_Constructor_PassingDelegate()
+        public void Constructor_PassingDelegate()
         {
             Assert.IsAssignableFrom<Operation<int>>(new Operation<int>(_mainHandler));
         }
 
         [Test]
-        public void Operation_Constructor_PassingDelegateAndObject()
+        public void Constructor_PassingDelegateAndObject()
         {
             Assert.IsAssignableFrom<Operation<int>>(new Operation<int>(_mainHandler, 0));
         }
 
         [Test]
-        public void Operation_Constructor_PassingDelegateAndOperationParameters()
+        public void OperationConstructor_PassingDelegateAndOperationParameters()
         {
             var value = new object[] { 1 };
             var operationParameters = new Mock<IOperationParameters>();
@@ -41,32 +41,32 @@ namespace CalculatorTests.OperationTests
         }
 
         [Test]
-        public void Operation_Run_WithoutAcceptedParameters()
+        public void Run_WithoutAcceptedParameters()
         {
             Assert.AreEqual(0, new Operation<int>(_mainHandler, 0).Run());
         }
 
         [Test]
-        public void Operation_Run_PassingObject()
+        public void Run_PassingObject()
         {
             Assert.AreEqual(0, new Operation<int>(_mainHandler).Run(0));
         }
 
         [Test]
-        public void Operation_Run_PassingOperationParameters()
+        public void Run_PassingOperationParameters()
         {
             Assert.AreEqual(0, new Operation<int>(_mainHandler).Run(new OperationParameters(0)));
         }
 
         [Test]
-        public void Operation_Run_CheckNullParameters()
+        public void Run_CheckNullParameters()
         {
             object[] handlerParameters = null;
             Assert.Throws<ArgumentNullException>(() => new Operation<int>(_mainHandler).Run(handlerParameters), string.Format(_errorMessage, "inputValues"));
         }
 
         [Test]
-        public void Operation_Run_CheckNullOperationParameters()
+        public void Run_CheckNullOperationParameters()
         {
             IOperationParameters handlerParameters = null;
             Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo(string.Format(_errorMessage, "operationParameters")),

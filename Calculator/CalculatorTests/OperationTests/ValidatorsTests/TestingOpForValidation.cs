@@ -3,16 +3,20 @@ using Calculator.Operations;
 
 namespace CalculatorTests.OperationTests.ValidatorsTests
 {
+    /// <summary>
+    /// Класс для юнит тестов
+    /// </summary>
+    /// <typeparam name="T">Тип возвращаемого значения операции</typeparam>
     internal class TestingOpForValidation<T> : IOperation<T>
     {
         private T _value;
+
+        public bool IsVoid => throw new NotImplementedException();
 
         public TestingOpForValidation(T value)
         {
             _value = value;
         }
-
-        public bool IsVoid => throw new NotImplementedException();
 
         public virtual T Run(IOperationParameters operationParameters)
         {

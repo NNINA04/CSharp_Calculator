@@ -12,18 +12,18 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         object[] _transmittedValue = new object[] { 0 };
 
         [Test]
-        public void Constructor_CheckNullExceptionCheckingOperation_ThrowsArgumentNullException()
-        {
-            var operation = new Mock<IOperation>();
-            Assert.Throws<ArgumentNullException>(() => new OperationWithValidation<int>(operation.Object, null), string.Format(_errorMessage, "operation"));
-        }
-
-        [Test]
         public void Constructor_ValidCreationWithoutParameter_ReturnsInstance()
         {
             var operation = new Mock<IOperation>().Object;
             var validator = new Mock<IValidator>().Object;
             Assert.IsAssignableFrom<OperationWithValidation<int>>(new OperationWithValidation<int>(operation, validator));
+        }
+
+        [Test]
+        public void Constructor_CheckNullExceptionCheckingOperation_ThrowsArgumentNullException()
+        {
+            var operation = new Mock<IOperation>();
+            Assert.Throws<ArgumentNullException>(() => new OperationWithValidation<int>(operation.Object, null), string.Format(_errorMessage, "operation"));
         }
 
         [Test]
@@ -39,18 +39,6 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         }
 
         [Test]
-        public void Run_CheckNullExceptionPassingArrObjects_ReturnsValidationException()
-        {
-            var operation = new Mock<IOperation>();
-            operation.Setup(x => x.Run(_transmittedValue)).Returns(0);
-
-            var validator = new Mock<IValidator>();
-            validator.Setup(x => x.Validate(0)).Returns((false, "Value is undefined"));
-
-            Assert.Throws<Calculator.ValidationException>(() => new OperationWithValidation<int>(operation.Object, validator.Object).Run(_transmittedValue), string.Format(_errorMessage, "errorMessage"));
-        }
-
-        [Test]
         public void Run_WithoutPassingParameters_ReturnsOperationResult()
         {
             var operation = new Mock<IOperation>();
@@ -63,6 +51,18 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         }
 
         [Test]
+        public void Run_CheckNullExceptionPassingParameters_ReturnsValidationException()
+        {
+            var operation = new Mock<IOperation>();
+            operation.Setup(x => x.Run(_transmittedValue)).Returns(0);
+
+            var validator = new Mock<IValidator>();
+            validator.Setup(x => x.Validate(0)).Returns((false, "Value is undefined"));
+
+            Assert.Throws<Calculator.ValidationException>(() => new OperationWithValidation<int>(operation.Object, validator.Object).Run(_transmittedValue), string.Format(_errorMessage, "errorMessage"));
+        }
+        
+        [Test]
         public void Run_CheckNullExceptionWithoutPassingParameters_ReturnsValidationException()
         {
             var operation = new Mock<IOperation>();
@@ -73,6 +73,5 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
 
             Assert.Throws<Calculator.ValidationException>(() => new OperationWithValidation<double>(operation.Object, validator.Object).Run(), string.Format(_errorMessage, "errorMessage"));
         }
-
     }
 }

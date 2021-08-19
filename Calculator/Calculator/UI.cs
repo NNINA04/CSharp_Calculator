@@ -46,7 +46,7 @@ namespace Calculator
                 {6, ("Sqrt", new Operation<double>(calc.Sqrt, new DelegateParameters(InputValueAndValidate<double>)))},
                 {7, ("Cbrt", new Operation<double>(calc.Cbrt, new DelegateParameters(InputValueAndValidate<double>)))},
                 {8, ("Exp", new Operation<string>(calc.Exp, new DelegateParameters(InputValueAndValidate<double>)))},
-                {9, ("Fact", new Operation<(int,int)>(factorialAdapter.Factorial, new DelegateParameters(InputValueAndValidate<int>)).AddFormatter(factorialFormatter))}, // .AddFormatter(factorialFormatter)
+                {9, ("Fact", new Operation<(int,int)>(factorialAdapter.Factorial, new DelegateParameters(InputValueAndValidate<int>)).AddFormatter(factorialFormatter))},
                 {10,("Hex", new Operation(SelectAction, HexMenu))}
             };
         }
@@ -79,7 +79,7 @@ namespace Calculator
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.InnerException.Message);
             }
             finally
             {
@@ -119,7 +119,7 @@ namespace Calculator
         /// <returns>Значение</returns>
         /// <exception cref="ArgumentException">Неверный тип возвращаемого значения</exception>
         /// <exception cref="FormatException">Неверное введённое значение</exception>
-        static private TRequiredType InputValueAndValidate<TRequiredType>()
+        private static TRequiredType InputValueAndValidate<TRequiredType>()
         {
             // Проверка на запрещённые типы
             if (typeof(TRequiredType) != typeof(int) && typeof(TRequiredType) != typeof(double) && typeof(TRequiredType) != typeof(string))

@@ -15,6 +15,24 @@ namespace CalculatorTests
         // Типизированный объект валидации
         Mock<IValidator<int>> _typedMockValidator = new();
 
+        class Validator : IValidator
+        {
+            public (bool isCorrect, string errorMessage) Validate(object value)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        [Test]
+        public void OperationExtensions_AddValidator_UsingGenericTypeClass()
+        {
+            // Не типизированный объект Operation
+            Mock<IOperation> mockOperation = new();
+
+            // Проверка с использованием типа Validator
+            var opWithValidation = mockOperation.Object.AddValidator<Validator>();
+            Assert.IsTrue(opWithValidation is IOperation);
+        }
+
         [Test]
         public void OperationExtensions_AddValidator_Typed()
         {
@@ -39,22 +57,22 @@ namespace CalculatorTests
             Assert.IsTrue(typedOpWithModifiedFunc is IOperation<int>);
         }
 
-        class Validator : IValidator
+        class Formatter : IFormatter
         {
-            public (bool isCorrect, string errorMessage) Validate(object value)
+            public object Format(object values)
             {
                 throw new NotImplementedException();
             }
         }
         [Test]
-        public void OperationExtensions_AddValidator_UsingGenericTypeClass()
+        public void OperationExtensions_Addformatter_UsingGenericTypeClass()
         {
             // Не типизированный объект Operation
-            Mock<IOperation> mockOperation = new();
+            var mockOperation = new Mock<IOperation>();
 
-            // Проверка с использованием типа Validator
-            var opWithValidation = mockOperation.Object.AddValidator<Validator>();
-            Assert.IsTrue(opWithValidation is IOperation);
+            // Проверка с использованием типа Formatter
+            var opWithFormatter = mockOperation.Object.AddFormatter<Formatter>();
+            Assert.IsTrue(opWithFormatter is IOperation);
         }
 
         [Test]
@@ -74,24 +92,6 @@ namespace CalculatorTests
             // Проверка с передачей функции
             var typedOpWithFunc = _typedMockOperation.Object.AddFormatter((int x) => x);
             Assert.IsTrue(typedOpWithFunc is IOperation);
-        }
-
-        class Formatter : IFormatter
-        {
-            public object Format(object values)
-            {
-                throw new NotImplementedException();
-            }
-        }
-        [Test]
-        public void OperationExtensions_Addformatter_UsingGenericTypeClass()
-        {
-            // Не типизированный объект Operation
-            var mockOperation = new Mock<IOperation>();
-
-            // Проверка с использованием типа Formatter
-            var opWithFormatter = mockOperation.Object.AddFormatter<Formatter>();
-            Assert.IsTrue(opWithFormatter is IOperation);
         }
     }
 }

@@ -122,15 +122,6 @@ namespace Calculator.Operations
         }
 
         /// <summary>
-        /// Проверяет является ли возвращаемый тип хендлена <see cref="void"/>
-        /// </summary>
-        /// <returns>Результат проверки</returns>
-        private bool IsReturnTypeVoid()
-        {
-            return _handler.GetType().GetMethod("Invoke").ReturnType == typeof(void);
-        }
-
-        /// <summary>
         /// Выполняет делегат класса передавая в него параметры
         /// </summary>
         /// <param name="handler">Основной делегат</param>ы
@@ -231,15 +222,22 @@ namespace Calculator.Operations
                 {
                     // Если объект handlerParams не равняется null && Тип объекта handlerParams является типом string
                     if (operationParameters[index] != null && operationParameters[index].GetType() == typeof(string))
-                        throw new Exception("Ошибка соответствия типов");
-
-                    Convert.ChangeType(operationParameters[index], mainHandlerRequiredParameters[index].ParameterType);
+                        throw new TypeMatchingException("Ошибка соответствия типов"); // <<<<<<<
                 }
                 catch (Exception ex)
                 {
                     throw new Exception(ex.Message);
                 }
             }
+        }
+
+        /// <summary>
+        /// Проверяет является ли возвращаемый тип хендлена <see cref="void"/>
+        /// </summary>
+        /// <returns>Результат проверки</returns>
+        private bool IsReturnTypeVoid()
+        {
+            return _handler.GetType().GetMethod("Invoke").ReturnType == typeof(void);
         }
     }
 }

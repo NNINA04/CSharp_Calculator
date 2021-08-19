@@ -8,16 +8,16 @@ namespace CalculatorTests
         [Test]
         public void TestHexConverter()
         {
-            Tests(new BitConverterHexCalculator());
+            ToHex(new BitConverterHexCalculator());
         }
 
         [Test]
         public void TestMatchingTypeToHex()
         {
-            Tests(new MatchingTypeToHex());
+            ToHex(new MatchingTypeToHex());
         }
 
-        private void Tests(IHexCalculator hexCalculator)
+        private void ToHex(IHexCalculator hexCalculator)
         {
             Assert.AreEqual("00 00", hexCalculator.ToHex(0x0));
 

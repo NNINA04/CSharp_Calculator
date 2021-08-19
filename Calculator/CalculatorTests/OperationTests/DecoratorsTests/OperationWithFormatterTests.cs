@@ -12,6 +12,14 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         string _errorMessage = "Value cannot be null. (Parameter '{0}')";
 
         [Test]
+        public void Constructor_ValidCreation_ReturnsInstance()
+        {
+            var operation = new Mock<IOperation>().Object;
+            var formatter = new Mock<IFormatter>().Object;
+            Assert.IsAssignableFrom<OperationWithFormatter<int, int>>(new OperationWithFormatter<int, int>(operation, formatter));
+        }
+
+        [Test]
         public void Constructor_CheckNullExceptionCheckingOperation_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => new OperationWithFormatter<int, int>(null, null), string.Format(_errorMessage, "operation"));
@@ -23,17 +31,9 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
             var operation = new Mock<IOperation>().Object;
             Assert.Throws<ArgumentNullException>(() => new OperationWithFormatter<int, int>(operation, null), string.Format(_errorMessage, "formatter"));
         }
-
+        
         [Test]
-        public void Constructor_ValidCreation_ReturnsInstance()
-        {
-            var operation = new Mock<IOperation>().Object;
-            var formatter = new Mock<IFormatter>().Object;
-            Assert.IsAssignableFrom<OperationWithFormatter<int, int>>(new OperationWithFormatter<int, int>(operation, formatter));
-        }
-
-        [Test]
-        public void Run_PassingOperationParameters_ReturnsZero()
+        public void Run_PassingOperationParameters()
         {
             var operationParameters = new Mock<IOperationParameters>().Object;
 
@@ -47,7 +47,7 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         }
 
         [Test]
-        public void Run_PassingObjectArray_ReturnsZero()
+        public void Run_PassingObjects()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run(new object[] { 0 })).Returns(0);
@@ -59,7 +59,7 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         }
 
         [Test]
-        public void Run_WithoutPassingParameters_ReturnsZero()
+        public void Run_WithoutPassingParameters()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run()).Returns(0);
