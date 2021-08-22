@@ -6,18 +6,18 @@ namespace CalculatorTests
     public class HexCalculatorTests
     {
         [Test]
-        public void TestHexConverter()
+        public void ToHex_UsingBitConverterHexCalculator()
         {
-            ToHex(new BitConverterHexCalculator());
+            CheckingCorrectWorkingToHex(new BitConverterHexCalculator());
         }
 
         [Test]
-        public void TestMatchingTypeToHex()
+        public void ToHex_UsingMatchingTypeToHex()
         {
-            ToHex(new MatchingTypeToHex());
+            CheckingCorrectWorkingToHex(new MatchingTypeToHex());
         }
 
-        private void ToHex(IHexCalculator hexCalculator)
+        private static void CheckingCorrectWorkingToHex(IHexCalculator hexCalculator)
         {
             Assert.AreEqual("00 00", hexCalculator.ToHex(0x0));
 

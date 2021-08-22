@@ -16,24 +16,22 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         {
             var operation = new Mock<IOperation>().Object;
             var formatter = new Mock<IFormatter>().Object;
+
             Assert.IsAssignableFrom<OperationWithFormatter<int, int>>(new OperationWithFormatter<int, int>(operation, formatter));
         }
 
         [Test]
-        public void Constructor_CheckNullExceptionCheckingOperation_ThrowsArgumentNullException()
+        public void Constructor_CheckArgumentNullException_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new OperationWithFormatter<int, int>(null, null), string.Format(_errorMessage, "operation"));
+            var operation = new Mock<IOperation>().Object;
+
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
+                (string.Format(_errorMessage, "formatter")),
+                    () => new OperationWithFormatter<int, int>(operation, null));
         }
 
         [Test]
-        public void Constructor_CheckNullExceptionCheckingFormatter_ThrowsArgumentNullException()
-        {
-            var operation = new Mock<IOperation>().Object;
-            Assert.Throws<ArgumentNullException>(() => new OperationWithFormatter<int, int>(operation, null), string.Format(_errorMessage, "formatter"));
-        }
-        
-        [Test]
-        public void Run_PassingOperationParameters()
+        public void Run_WithOperationParametersArgument_ReturnsValue()
         {
             var operationParameters = new Mock<IOperationParameters>().Object;
 
@@ -47,7 +45,7 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         }
 
         [Test]
-        public void Run_PassingObjects()
+        public void Run_WithObjectArguments_ReturnsValue()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run(new object[] { 0 })).Returns(0);
@@ -59,7 +57,7 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         }
 
         [Test]
-        public void Run_WithoutPassingParameters()
+        public void Run_WithoutArguments_ReturnsValue()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run()).Returns(0);

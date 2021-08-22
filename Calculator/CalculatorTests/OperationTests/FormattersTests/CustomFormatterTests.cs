@@ -1,4 +1,5 @@
 ﻿using Calculator.Operations;
+using Calculator.Operations.Decorators;
 using CalculatorTests.OperationTests.ValidatorsTests;
 using Moq;
 using NUnit.Framework;
@@ -12,12 +13,12 @@ namespace CalculatorTests.OperationTests.FormattersTests
         [Test]
         public void Constructor_ValidCreation_ReturnsInstance()
         {
-            Mock<IOperation<double>> operation = new();
-            Assert.IsInstanceOf<IOperation<int>>(operation.Object.AddFormatter((double x) => 0));
+            Mock<IOperation<int>> operation = new();
+            Assert.IsInstanceOf<OperationWithFormatter<int, int>>(operation.Object.AddFormatter((int x) => 0));
         }
 
         [Test]
-        public void Constructor_CheckNullParamater_ThrowsArgumentNullException()
+        public void Constructor_CheckArgumentNullException_ThrowsArgumentNullException()
         {
             Mock<IOperation<double>> operation = new();
             Func<double, int> notInitializedFormatter = null;
@@ -26,7 +27,7 @@ namespace CalculatorTests.OperationTests.FormattersTests
         }
 
         [Test]
-        public void Format_ReturnsFormattedValue()
+        public void Run_WithoutArguments_ReturnsFormattedValue()
         {
             TestingOpForValidation<int> operation = new(0);
             Assert.AreEqual("Zero", operation.AddFormatter(x => "Zero").Run());

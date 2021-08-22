@@ -12,13 +12,13 @@ namespace CalculatorTests
         private int outputValue = 720;
 
         [Test]
-        public void Format_ReturnsString()
+        public void Format_ReturnsString_ReturnsValue()
         {
             Assert.AreEqual("6! = 720", factorialFormatter.Format((inputValue, outputValue)));
         }
 
         [Test]
-        public void Format_ReturnsStringUsingTypeCasting()
+        public void Format_ReturnsStringUsingTypeCasting_ReturnsValue()
         {
             Assert.AreEqual("6! = 720", ((IFormatter)factorialFormatter).Format((inputValue, outputValue)));
         }

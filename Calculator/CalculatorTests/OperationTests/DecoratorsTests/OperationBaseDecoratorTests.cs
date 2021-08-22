@@ -18,105 +18,130 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         }
 
         [Test]
-        public void Constructor_CheckNullException_ThrowsArgumentNullException()
+        public void Constructor_CheckArgumentNullException_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new TestingOperationBaseDecorator<double>(null), string.Format(_errorMessage, "operation"));
+
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
+                (string.Format(_errorMessage, "operation")),
+                    () => new TestingOperationBaseDecorator<double>(null));
+        }
+
+        [Test]
+        public void Run_WithOperationParametersArgument_ReturnsTypedOperationResult()
+        {
+            var operationParameters = new Mock<IOperationParameters>();
+            operationParameters.Setup(x => x.GetArguments()).Returns(new object[] { 0 });
+
+            var operation = new Mock<IOperation>();
+            operation.Setup(x => x.Run(It.IsAny<IOperationParameters>())).Returns(0);
+
+            var result = new TestingOperationBaseDecorator<int>(operation.Object).Run(operationParameters.Object);
+            Assert.IsInstanceOf<int>(result);
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
+        public void Run_WithObjectArguments_ReturnsTypedOperationResult()
+        {
+            var operation = new Mock<IOperation>();
+            operation.Setup(x => x.Run(It.IsAny<object[]>())).Returns(0);
+
+            var result = new TestingOperationBaseDecorator<int>(operation.Object).Run(new object[] { 0 });
+            Assert.IsInstanceOf<int>(result);
+            Assert.AreEqual(0, result);
         }
        
         [Test]
-        public void Run_PassingOperationParameters_ReturnsTypedOperationResult()
-        {
-            var operationParameters = new Mock<IOperationParameters>();
-            operationParameters.Setup(x => x.GetArguments()).Returns(new object[] { 0 });
-
-            var operation = new Mock<IOperation>();
-            operation.Setup(x => x.Run(It.IsAny<IOperationParameters>())).Returns(0);
-            Assert.AreEqual(0, new TestingOperationBaseDecorator<int>(operation.Object).Run(operationParameters.Object));
-        }
-
-        [Test]
-        public void Run_PassingObjects_ReturnsTypedOperationResult()
-        {
-            var operation = new Mock<IOperation>();
-            operation.Setup(x => x.Run(It.IsAny<object[]>())).Returns(0);
-            Assert.AreEqual(0, new TestingOperationBaseDecorator<int>(operation.Object).Run(new object[] { 0 }));
-        }
-
-        [Test]
-        public void Run_WithoutPassingParameters_ReturnsTypedOperationResult()
+        public void Run_WithoutArguments_ReturnsTypedOperationResult()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run()).Returns(0);
-            Assert.AreEqual(0, new TestingOperationBaseDecorator<int>(operation.Object).Run());
+
+            var result = new TestingOperationBaseDecorator<int>(operation.Object).Run();
+            Assert.IsInstanceOf<int>(result);
+            Assert.AreEqual(0, result);
         }
-        
+
         [Test]
-        public void Run_PassingOperationParameters_ReturnsNonTypedOperationResult()
+        public void Run_WithOperationParametersArgument_ReturnsNonTypedOperationResult()
         {
             var operationParameters = new Mock<IOperationParameters>();
-            operationParameters.Setup(x => x.GetArguments()).Returns(new object[] { 0 });
-
             var operation = new Mock<IOperation>();
-            operation.Setup(x => x.Run(It.IsAny<IOperationParameters>())).Returns(0);
 
+            operation.Setup(x => x.Run(It.IsAny<IOperationParameters>())).Returns(0);
             IOperation operationBaseDecorator = new TestingOperationBaseDecorator<int>(operation.Object);
-            Assert.AreEqual(0, operationBaseDecorator.Run(operationParameters.Object));
+
+            var result = operationBaseDecorator.Run(operationParameters.Object);
+            Assert.IsInstanceOf<object>(result);
+            Assert.AreEqual(0, result);
         }
-        
+
         [Test]
-        public void Run_PassingObjects_ReturnsNonTypedOperationResult()
+        public void Run_WithObjectArguments_ReturnsNonTypedOperationResult()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run(It.IsAny<object[]>())).Returns(0);
 
             IOperation operationBaseDecorator = new TestingOperationBaseDecorator<int>(operation.Object);
-            Assert.AreEqual(0, operationBaseDecorator.Run(new object[] { 0 }));
+
+            var result = operationBaseDecorator.Run(new object[] { 0 });
+            Assert.IsInstanceOf<object>(result);
+            Assert.AreEqual(0, result);
         }
 
         [Test]
-        public void Run_WithoutPassingParameters_ReturnsNonTypedOperationResult()
+        public void Run_WithoutArguments_ReturnsNonTypedOperationResult()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run()).Returns(0);
 
             IOperation operationBaseDecorator = new TestingOperationBaseDecorator<int>(operation.Object);
-            Assert.AreEqual(0, operationBaseDecorator.Run());
+
+            var result = operationBaseDecorator.Run();
+            Assert.IsInstanceOf<object>(result);
+            Assert.AreEqual(0, result);
         }
-        
+
         [Test]
-        public void RunWithoutReturnValue_PassingOperationParameters()
+        public void RunWithoutReturnValue_WithOperationParametersArgument_CorrectExecution()
         {
-            var operationParameters = new Mock<IOperationParameters>();
             var operation = new Mock<IOperation>();
+            var operationParameters = new Mock<IOperationParameters>();
 
             operation.Setup(x => x.Run(operationParameters.Object)).Returns(0);
-            new TestingOperationBaseDecorator<int>(operation.Object).RunWithoutReturnValue(operationParameters.Object);
-            operation.Verify(x => x.Run(operationParameters.Object), Times.Once);
+            Assert.DoesNotThrow(() => new TestingOperationBaseDecorator<int>(operation.Object).RunWithoutReturnValue(operationParameters.Object));
         }
 
         [Test]
-        public void RunWithoutReturnValue_PassingObject()
+        public void RunWithoutReturnValue_WithObjectArguments_CorrectExecution()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run(0)).Returns(0);
-            new TestingOperationBaseDecorator<int>(operation.Object).RunWithoutReturnValue(0);
-            operation.Verify(x => x.Run(0), Times.Once);
+            Assert.DoesNotThrow(() => new TestingOperationBaseDecorator<int>(operation.Object).RunWithoutReturnValue(0));
         }
 
         [Test]
-        public void RunWithoutReturnValue_WithoutPassingParameters()
+        public void RunWithoutReturnValue_WithoutArguments_CorrectExecution()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run()).Returns(0);
-            new TestingOperationBaseDecorator<int>(operation.Object).RunWithoutReturnValue();
-            operation.Verify(x => x.Run(), Times.Once);
+            Assert.DoesNotThrow(() => new TestingOperationBaseDecorator<int>(operation.Object).RunWithoutReturnValue());
         }
 
         [Test]
         public void IsVoid_ReturnsTrueIfHandlerReturnsVoid()
         {
             var operation = new Mock<IOperation>();
+            operation.Setup(x => x.IsVoid).Returns(false);
             Assert.AreEqual(false, new TestingOperationBaseDecorator<int>(operation.Object).IsVoid);
+        }
+
+        [Test]
+        public void IsVoid_ReturnsFalseIfHandlerNotReturnsVoid()
+        {
+            var operation = new Mock<IOperation>();
+            operation.Setup(x => x.IsVoid).Returns(true);
+            Assert.AreEqual(true, new TestingOperationBaseDecorator<int>(operation.Object).IsVoid);
         }
 
         class TestingOperationBaseDecorator<T> : OperationBaseDecorator<T>

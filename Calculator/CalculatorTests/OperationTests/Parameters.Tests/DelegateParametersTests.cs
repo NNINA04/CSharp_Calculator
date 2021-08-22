@@ -15,9 +15,11 @@ namespace CalculatorTests.OperationTests.Parameters.Tests
         }
 
         [Test]
-        public void Constructor_CheckNullParameter_ThrowsArgumentNullException()
+        public void Constructor_CheckArgumentNullException_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new DelegateParameters(null), string.Format(_errorMessage, "inputHandlers"));
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
+                (string.Format(_errorMessage, "inputHandlers")),
+                    () => new DelegateParameters(null));
         }
 
         [Test]

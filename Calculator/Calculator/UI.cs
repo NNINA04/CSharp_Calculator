@@ -30,7 +30,7 @@ namespace Calculator
             FactorialFormatter factorialFormatter = new();
             BitConverterHexCalculator bitConverterHexCalculator = new();
             MatchingTypeToHex matchingTypeToHex = new();
-
+            
             HexMenu = new Dictionary<int, (string description, IOperation operation)>
             {
                 {1, ("BitConverterCalculation", new Operation<string>(calc.ToHex,  new DelegateParameters(()=>bitConverterHexCalculator, InputValueAndValidate<int>))) },

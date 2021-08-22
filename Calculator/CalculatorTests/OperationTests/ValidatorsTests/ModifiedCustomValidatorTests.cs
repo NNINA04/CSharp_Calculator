@@ -1,5 +1,6 @@
 ﻿using Calculator;
 using Calculator.Operations;
+using Calculator.Operations.Decorators;
 using Moq;
 using NUnit.Framework;
 
@@ -13,11 +14,11 @@ namespace CalculatorTests.OperationTests.ValidatorsTests
         public void Constructor_ValidCreation_ReturnsInstance()
         {
             Mock<IOperation<double>> operation = new();
-            Assert.IsInstanceOf<IOperation<double>>(operation.Object.AddValidator((double x) => true));
+            Assert.IsInstanceOf<OperationWithValidation<double>>(operation.Object.AddValidator((double x) => true));
         }
 
         [Test]
-        public void Constructor_CheckNullParamater_ThrowsArgumentNullException()
+        public void Constructor_CheckArgumentNullException_ThrowsArgumentNullException()
         {
             Func<double, bool> notInitializedValidator = null;
 
@@ -26,23 +27,27 @@ namespace CalculatorTests.OperationTests.ValidatorsTests
         }
 
         [Test]
-        public void Validate_CheckValue_ThrowsValidationException()
+        public void Validate_CheckValidationExceptionWithDelegate_ThrowsValidationException()
         {
             TestingOpForValidation<double> operation = new(double.NaN);
-            Assert.Throws<ValidationException>(()=>operation.AddValidator(x => false).Run(), "Value is incorrect!");
+
+            Assert.Throws(Is.TypeOf<ValidationException>().And.Message.EqualTo("Value is incorrect!"),
+                () => operation.AddValidator(x => false).Run());
         } 
 
         [Test]
-        public void Validate_CheckValue_ThrowsValidationExceptionUsingThrow()
+        public void Validate_CheckValidationExceptionWithDelegateAndException_ThrowsValidationException()
         {
             string errorMessage = "Result is undefined";
-            TestingOpForValidation<double> operation = new(double.NaN);
             bool validator(double x) => throw new Exception(errorMessage);
-            Assert.Throws<ValidationException>(() => operation.AddValidator(validator).Run(), errorMessage);
+            TestingOpForValidation<double> operation = new(double.NaN);
+
+            Assert.Throws(Is.TypeOf<ValidationException>().And.Message.EqualTo(errorMessage),
+                () => operation.AddValidator(validator).Run());
         }
 
         [Test]
-        public void Validate_CorrectedValidation()
+        public void Run_CheckWorkingWithoutExceptions_ReturnsValue()
         {
             TestingOpForValidation<int> operation = new(0);
             Assert.AreEqual(0, operation.AddValidator(x => true).Run());

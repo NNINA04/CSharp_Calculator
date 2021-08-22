@@ -135,8 +135,8 @@ namespace Calculator.Operations
             var mainHandlerRequiredParameters = handler.GetMethodInfo().GetParameters();
 
             object[] newHandlerParams = mainHandlerRequiredParameters.Select((x, i) =>
-                        x.IsOptional && i >= handlerParams.Length ? x.DefaultValue : handlerParams[i]).ToArray();
-
+                x.IsOptional && i >= handlerParams.Length ? x.DefaultValue : handlerParams[i]).ToArray();
+                
             CheckTypeMatching(handler, newHandlerParams);
 
             return handler.DynamicInvoke(newHandlerParams);
@@ -222,11 +222,11 @@ namespace Calculator.Operations
                 {
                     // Если объект handlerParams не равняется null && Тип объекта handlerParams является типом string
                     if (operationParameters[index] != null && operationParameters[index].GetType() == typeof(string))
-                        throw new TypeMatchingException("Ошибка соответствия типов"); // <<<<<<<
+                        throw new TypeMatchingException("Ошибка соответствия типов");
                 }
-                catch (Exception ex)
+                catch (TypeMatchingException ex)
                 {
-                    throw new Exception(ex.Message);
+                    throw new TypeMatchingException(ex.Message);
                 }
             }
         }

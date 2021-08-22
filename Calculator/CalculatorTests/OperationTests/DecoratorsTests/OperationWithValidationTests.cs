@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Moq;
 using Calculator.Operations;
 using Calculator.Operations.Validators;
+using Calculator;
 
 namespace CalculatorTests.OperationTests.DecoratorsTests
 {
@@ -12,7 +13,7 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         object[] _transmittedValue = new object[] { 0 };
 
         [Test]
-        public void Constructor_ValidCreationWithoutParameter_ReturnsInstance()
+        public void Constructor_ValidCreation_ReturnsInstance()
         {
             var operation = new Mock<IOperation>().Object;
             var validator = new Mock<IValidator>().Object;
@@ -20,14 +21,15 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         }
 
         [Test]
-        public void Constructor_CheckNullExceptionCheckingOperation_ThrowsArgumentNullException()
+        public void Constructor_CheckArgumentNullException_ThrowsArgumentNullException()
         {
             var operation = new Mock<IOperation>();
-            Assert.Throws<ArgumentNullException>(() => new OperationWithValidation<int>(operation.Object, null), string.Format(_errorMessage, "operation"));
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo(string.Format(_errorMessage, "validator")),
+                () => new OperationWithValidation<int>(operation.Object, null));
         }
 
         [Test]
-        public void Run_PassingArrObjects_ReturnsOperationResult()
+        public void Run_WithObjectArgument_ReturnsOperationResult()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run(_transmittedValue)).Returns(0);
@@ -39,7 +41,7 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         }
 
         [Test]
-        public void Run_WithoutPassingParameters_ReturnsOperationResult()
+        public void Run_WithoutArguments_ReturnsOperationResult()
         {
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run()).Returns(0);
@@ -51,27 +53,33 @@ namespace CalculatorTests.OperationTests.DecoratorsTests
         }
 
         [Test]
-        public void Run_CheckNullExceptionPassingParameters_ReturnsValidationException()
+        public void Run_CheckValidationExceptionWithObjectArgument_ThrowsValidationException()
         {
+            const string errorMessage = "Value is undefined";
+
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run(_transmittedValue)).Returns(0);
 
             var validator = new Mock<IValidator>();
-            validator.Setup(x => x.Validate(0)).Returns((false, "Value is undefined"));
+            validator.Setup(x => x.Validate(0)).Returns((false, errorMessage));
 
-            Assert.Throws<Calculator.ValidationException>(() => new OperationWithValidation<int>(operation.Object, validator.Object).Run(_transmittedValue), string.Format(_errorMessage, "errorMessage"));
+            Assert.Throws(Is.TypeOf<ValidationException>().And.Message.EqualTo(errorMessage),
+                () => new OperationWithValidation<int>(operation.Object, validator.Object).Run(_transmittedValue));
         }
-        
+
         [Test]
-        public void Run_CheckNullExceptionWithoutPassingParameters_ReturnsValidationException()
+        public void Run_CheckValidationExceptionWithoutArguments_ThrowsValidationException()
         {
+            const string errorMessage = "Value is undefined";
+
             var operation = new Mock<IOperation>();
             operation.Setup(x => x.Run()).Returns(double.NaN);
 
             var validator = new Mock<IValidator>();
-            validator.Setup(x => x.Validate(double.NaN)).Returns((false, "Result is Undefined"));
+            validator.Setup(x => x.Validate(double.NaN)).Returns((false, errorMessage));
 
-            Assert.Throws<Calculator.ValidationException>(() => new OperationWithValidation<double>(operation.Object, validator.Object).Run(), string.Format(_errorMessage, "errorMessage"));
+            Assert.Throws(Is.TypeOf<ValidationException>().And.Message.EqualTo(errorMessage),
+                () => new OperationWithValidation<double>(operation.Object, validator.Object).Run());
         }
     }
 }

@@ -79,9 +79,11 @@ namespace Calculator.Operations
 
             // Является ли возвращаемый тип handler, типом THandlerResult
             if (handlerReturnType != typeof(TOperationResult))
-                throw new ArgumentException($"Возвращаемый тип {handlerReturnType} делегата {nameof(handler)} " +
-                                            $"не соответстует типу {typeof(TOperationResult)} " +
-                                            $"принимаемого параметра {nameof(TOperationResult)} данного метода");
+            {
+                throw new ArgumentException(string.Format("Возвращаемый тип {0} делегата {1} не соответстует типу " +
+                "{2} принимаемого параметра {3} данного метода", handlerReturnType, nameof(handler),
+                typeof(TOperationResult), nameof(TOperationResult)));
+            }
         }
     }
 }

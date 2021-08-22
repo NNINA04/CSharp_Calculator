@@ -8,13 +8,13 @@ namespace CalculatorTests
         IValidator _doubleValidator = new DoubleValidator();
 
         [Test]
-        public void DoubleValidator_Validate_CheckInfinityValue()
+        public void Validate_CheckInfinityValue_ReturnsTuple()
         {
             Assert.AreEqual((false, "Result is infinity"), _doubleValidator.Validate(double.PositiveInfinity));
         }
 
         [Test]
-        public void DoubleValidator_Validate_CheckUndeninedValue()
+        public void Validate_CheckUndeninedValue_ReturnsTuple()
         {
             Assert.AreEqual((false, "Result is undefined"), _doubleValidator.Validate(double.NaN));
         }

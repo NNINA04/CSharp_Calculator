@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Calculator
+﻿namespace Calculator
 {
     /// <summary>
     /// Класс c методами расширениями класса <see cref="Type"/>

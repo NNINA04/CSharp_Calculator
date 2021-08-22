@@ -17,7 +17,7 @@ namespace Calculator.Operations.Decorators
         /// Объект для получения результата выполнения метода Run
         /// </summary>
         protected readonly IOperation _operation;
-
+        
         /// <summary>
         /// Конструктор 
         /// </summary>
