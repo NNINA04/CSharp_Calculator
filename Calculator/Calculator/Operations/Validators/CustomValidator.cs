@@ -12,6 +12,7 @@
         /// Конструктор
         /// </summary>
         /// <param name="validator">Функция валидации</param>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="validator"/> является null</exception> 
         public CustomValidatorWithFunc(Func<TOperationResult, (bool isCorrect, string errorMessage)> validator)
         {
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));

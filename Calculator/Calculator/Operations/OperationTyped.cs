@@ -42,6 +42,7 @@ namespace Calculator.Operations
         /// </summary>
         /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Результат выполнения</returns>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="operationParameters"/> является null</exception>
         public new virtual TOperationResult Run(IOperationParameters operationParameters)
         {
             if (operationParameters == null)
@@ -59,7 +60,7 @@ namespace Calculator.Operations
         {
             return (TOperationResult)base.Run(new OperationParameters(handlerParams));
         }
-        
+
         /// <summary>
         /// Выполняет основной делегат класса передавая в него параметры
         /// </summary>
@@ -68,11 +69,12 @@ namespace Calculator.Operations
         {
             return (TOperationResult)base.Run();
         }
-        
+
         /// <summary>
         /// Проверяет совместимость типов
         /// </summary>
         /// <param name="handler">Основной хендлер</param>
+        /// <exception cref="ArgumentNullException">Возвращаемое значение <paramref name="handler"/> не является типом <typeparamref name="TOperationResult"/></exception>
         private static void CheckTypeCompatibility(Delegate handler)
         {
             var handlerReturnType = handler.GetType().GetMethod("Invoke").ReturnType;
@@ -81,8 +83,8 @@ namespace Calculator.Operations
             if (handlerReturnType != typeof(TOperationResult))
             {
                 throw new ArgumentException(string.Format("Возвращаемый тип {0} делегата {1} не соответстует типу " +
-                "{2} принимаемого параметра {3} данного метода", handlerReturnType, nameof(handler),
-                typeof(TOperationResult), nameof(TOperationResult)));
+                    "{2} принимаемого параметра {3} данного метода", handlerReturnType, nameof(handler),
+                    typeof(TOperationResult), nameof(TOperationResult)));
             }
         }
     }

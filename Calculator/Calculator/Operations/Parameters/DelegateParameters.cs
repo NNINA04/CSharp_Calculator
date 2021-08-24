@@ -5,12 +5,16 @@
     /// </summary>
     public class DelegateParameters : IOperationParameters
     {
+        /// <summary>
+        /// Делегаты для получения аргументов для хендлера Operation
+        /// </summary>
         private readonly Delegate[] _inputHandlers;
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="inputHandlers">Принимаемые параметры для Operation</param>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="inputHandlers"/> является null</exception> 
         public DelegateParameters(params Delegate[] inputHandlers)
         {
             _inputHandlers = inputHandlers ?? throw new ArgumentNullException(nameof(inputHandlers));

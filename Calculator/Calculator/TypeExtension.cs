@@ -8,13 +8,14 @@
         /// <summary>
         /// Проверяет является ли тип <see cref="Nullable"/>
         /// </summary>
-        /// <param name="type">Проверямый тип</param>
-        /// <returns>Значение если тип является <see cref="Nullable"/></returns>
-        public static bool IsNullable(this Type type)
+        /// <param name="objectType">Проверямый тип</param>
+        /// <returns>Если тип значения является <see cref="Nullable"/></returns>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="objectType"/> является null</exception>
+        public static bool IsNullable(this Type objectType)
         {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
-            return Nullable.GetUnderlyingType(type) != null;
+            if (objectType == null)
+                throw new ArgumentNullException(nameof(objectType));
+            return Nullable.GetUnderlyingType(objectType) != null;
         }
     }
 }

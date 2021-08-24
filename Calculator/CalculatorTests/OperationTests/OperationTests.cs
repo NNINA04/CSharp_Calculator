@@ -51,7 +51,7 @@ namespace CalculatorTests.OperationTests
             IOperationParameters handlerParameters = null;
             Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
                 (string.Format(_errorMessage, "operationParameters")),
-                    () => new Operation(_mainHandler).Run(handlerParameters));
+                () => new Operation(_mainHandler).Run(handlerParameters));
         }
 
         [Test]

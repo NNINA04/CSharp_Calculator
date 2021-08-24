@@ -24,7 +24,7 @@ namespace CalculatorTests
         {
             Type type = null;
             Assert.Throws(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo
-                (string.Format(_errorMessage, "type")), () => type.IsNullable());
+                (string.Format(_errorMessage, "objectType")), () => type.IsNullable());
         }
     }
 }

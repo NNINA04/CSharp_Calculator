@@ -17,11 +17,12 @@ namespace Calculator.Operations.Decorators
         /// Объект для получения результата выполнения метода Run
         /// </summary>
         protected readonly IOperation _operation;
-        
+
         /// <summary>
         /// Конструктор 
         /// </summary>
         /// <param name="operation">Операция</param>
+        /// <exception cref="ValidationException">Аргумент <paramref name="operation"/> является null</exception>
         public OperationBaseDecorator(IOperation operation)
         {
             _operation = operation ?? throw new ArgumentNullException(nameof(operation));
@@ -31,7 +32,7 @@ namespace Calculator.Operations.Decorators
         /// Запускает выполнение операции
         /// </summary>
         /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <returns>Типизированный результат выполнения операции</returns>
         public virtual TOperationResult Run(IOperationParameters operationParameters)
         {
             return (TOperationResult)_operation.Run(operationParameters);
@@ -41,7 +42,7 @@ namespace Calculator.Operations.Decorators
         /// Выполняет основной делегат класса и передаёт в него параметры
         /// </summary>
         /// <param name="values">Принимаемые значения основного делегата</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <returns>Типизированный результат выполнения операции</returns>
         public virtual TOperationResult Run(params object[] values)
         {
             return (TOperationResult)_operation.Run(values);
@@ -50,7 +51,7 @@ namespace Calculator.Operations.Decorators
         /// <summary>
         /// Запускает выполнение операции
         /// </summary>
-        /// <returns>Результат выполнения операции</returns>
+        /// <returns>Типизированный результат выполнения операции</returns>
         public virtual TOperationResult Run()
         {
             return (TOperationResult)_operation.Run();
@@ -75,7 +76,7 @@ namespace Calculator.Operations.Decorators
         }
 
         /// <summary>
-        /// Выполняет делегат класса передавая в него параметры
+        /// Выполняет делегат класса
         /// </summary>
         public void RunWithoutReturnValue()
         {
@@ -86,7 +87,7 @@ namespace Calculator.Operations.Decorators
         /// Запускает выполнение операции
         /// </summary>
         /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <returns>Не типизированный результат выполнения операции</returns>
         object IOperation.Run(IOperationParameters operationParameters)
         {
             return Run(operationParameters);
@@ -96,7 +97,7 @@ namespace Calculator.Operations.Decorators
         /// Выполняет основной делегат класса и передаёт в него параметры
         /// </summary>
         /// <param name="values">Принимаемые значения основного делегата</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <returns>Не типизированный результат выполнения операции</returns>
         object IOperation.Run(params object[] values)
         {
             return Run(values);
@@ -105,7 +106,7 @@ namespace Calculator.Operations.Decorators
         /// <summary>
         /// Запускает выполнение операции
         /// </summary>
-        /// <returns>Результат выполнения операции</returns>
+        /// <returns>Не типизированный результат выполнения операции</returns>
         object IOperation.Run()
         {
             return Run();

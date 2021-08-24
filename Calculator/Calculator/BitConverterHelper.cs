@@ -26,7 +26,7 @@
         /// <remarcs>Этот метод актуален, если в массиве находится только одна переменная</remarcs>
         /// <param name="arr">Массив с одной переменной</param>
         /// <returns>Массив в BigEndian кодировке</returns>
-        /// <exception cref="ArgumentNullException">Если массив является null</exception>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="arr"/> является null</exception>
         public static byte[] ConvertArrayToBigEndian(this byte[] arr)
         {
             if (arr == null)

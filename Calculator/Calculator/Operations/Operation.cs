@@ -29,6 +29,7 @@ namespace Calculator.Operations
         /// </summary>
         /// <param name="handler">Основной делегат</param>ы
         /// <param name="operationParameters">Параметры основного делегата</param>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="operationParameters"/> является null</exception> 
         public Operation(Delegate handler, IOperationParameters operationParameters) : this(handler)
         {
             _operationParameters = operationParameters ?? throw new ArgumentNullException(nameof(operationParameters));
@@ -46,6 +47,7 @@ namespace Calculator.Operations
         /// Конструктор
         /// </summary>
         /// <param name="handler">Основной делегат</param>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="handler"/> является null</exception> 
         public Operation(Delegate handler)
         {
             _handler = handler ?? throw new ArgumentNullException($"{nameof(handler)}");
@@ -56,6 +58,8 @@ namespace Calculator.Operations
         /// </summary>
         /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
         /// <returns>Результат выполнения</returns>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="operationParameters"/> является null</exception> 
+        /// <exception cref="OperationVoidReturnException">Хендлер ничего не возвращает</exception> 
         public virtual object Run(IOperationParameters operationParameters)
         {
             if (operationParameters == null)
@@ -72,6 +76,7 @@ namespace Calculator.Operations
         /// </summary>
         /// <param name="handlerParams">Параметры основного делегата</param>
         /// <returns>Результат выполнения</returns>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="handlerParams"/> является null</exception> 
         public virtual object Run(params object[] handlerParams)
         {
             if (handlerParams == null)
@@ -93,6 +98,7 @@ namespace Calculator.Operations
         /// Выполняет делегат класса передавая в него параметры
         /// </summary>
         /// <param name="operationParameters">Объект содержащий принимаемые параметры операции</param>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="operationParameters"/> является null</exception> 
         public void RunWithoutReturnValue(IOperationParameters operationParameters)
         {
             if (operationParameters == null)
@@ -105,6 +111,7 @@ namespace Calculator.Operations
         /// Выполняет делегат класса передавая в него параметры
         /// </summary>
         /// <param name="handlerParams">Параметры основного делегата</param>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="handlerParams"/> является null</exception> 
         public void RunWithoutReturnValue(params object[] handlerParams)
         {
             if (handlerParams == null)
@@ -147,6 +154,11 @@ namespace Calculator.Operations
         /// </summary>
         /// <param name="handler">Основной хендлер</param>
         /// <param name="operationParameters">Объект содержащий параметры для основного хендлера</param>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="handler"/> является null</exception>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="operationParameters"/> является null</exception>
+        /// <exception cref="ArgumentException">Количество параметров полученных из <paramref name="operationParameters"/>
+        /// не соответствует количесту аргументов <paramref name="handler"/></exception> 
+        /// <exception cref="ArgumentException">Полученный параметр из <paramref name="operationParameters"/> является null</exception>
         private static void CheckValues(Delegate handler, IOperationParameters operationParameters)
         {
             // Проверяет объект содержащий массив входных параметров на null
@@ -200,6 +212,9 @@ namespace Calculator.Operations
         /// </summary>
         /// <param name="handler">Основной хендлер</param>
         /// <param name="operationParameters">Принимаемые параметры хендлера</param>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="handler"/> является null</exception>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="operationParameters"/> является null</exception>
+        /// <exception cref="TypeMatchingException">Ошибка соответствия типов</exception>
         private static void CheckTypeMatching(Delegate handler, object[] operationParameters)
         {
             // Проверяет основной делегат на null

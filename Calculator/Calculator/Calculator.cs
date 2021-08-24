@@ -110,9 +110,7 @@ namespace Calculator
         /// <param name="hexCalculator">Экземпляр класса расчёта hex значения</param>
         /// <param name="x">Число</param>
         /// <returns>Hex в строковом представлении</returns>
-        /// <exception cref="ArgumentNullException">
-        /// Объект типа <see cref="IHexCalculator"/> является null/>
-        /// </exception>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="hexCalculator"/> является null</exception>
         public string ToHex(IHexCalculator hexCalculator, int x)
         {
             if (hexCalculator == null)

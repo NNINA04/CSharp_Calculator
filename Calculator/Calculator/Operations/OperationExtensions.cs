@@ -44,9 +44,10 @@ namespace Calculator.Operations
         static public IOperation<TOperationResult> AddValidator<TOperationResult>
         (this IOperation<TOperationResult> operation, Func<TOperationResult, (bool isCorrect, string errorMessage)> validator)
         {
-            return new OperationWithValidation<TOperationResult>(operation, new CustomValidatorWithFunc<TOperationResult>(validator));
+            return new OperationWithValidation<TOperationResult>(operation,
+                new CustomValidatorWithFunc<TOperationResult>(validator));
         }
-        
+
         /// <summary>
         /// Добавляет в процесс получения результата стадию валидации
         /// </summary>
@@ -57,9 +58,10 @@ namespace Calculator.Operations
         static public IOperation<TOperationResult> AddValidator<TOperationResult>
         (this IOperation<TOperationResult> operation, Func<TOperationResult, bool> validator)
         {
-            return new OperationWithValidation<TOperationResult>(operation, new ModifiedCustomValidator<TOperationResult>(validator));
+            return new OperationWithValidation<TOperationResult>(operation,
+                new ModifiedCustomValidator<TOperationResult>(validator));
         }
-        
+
         /// <summary>
         /// Добавляет в процесс получения результата стадию форматированния
         /// </summary>
@@ -99,7 +101,7 @@ namespace Calculator.Operations
         (this IOperation<TOperationResult> operation, Func<TOperationResult, TFormatterResult> formatter)
         {
             return new OperationWithFormatter<TOperationResult, TFormatterResult>(operation,
-            new CustomFormatter<TOperationResult, TFormatterResult>(formatter));
+                new CustomFormatter<TOperationResult, TFormatterResult>(formatter));
         }
     }
 }

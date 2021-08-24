@@ -20,7 +20,6 @@ namespace Calculator.Operations.Decorators
         /// </summary>
         /// <param name="operation">Операция</param>
         /// <param name="formatter">Форматер</param>
-        /// <exception cref="ArgumentNullException">Если operation является null</exception>
         /// <exception cref="ArgumentNullException">Если formatter является null</exception>
         public OperationWithFormatter(IOperation operation, IFormatter formatter) : base(operation)
         {
