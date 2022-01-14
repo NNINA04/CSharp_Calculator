@@ -1,13 +1,10 @@
-﻿using System;
-
-
-
-namespace Calculator
+﻿namespace Calculator
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+            new UI().Run();
         }
     }
 }
