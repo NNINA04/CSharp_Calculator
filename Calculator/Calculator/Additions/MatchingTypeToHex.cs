@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Calculator.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Calculator
+namespace Calculator.Additions
 {
     /// <summary>
     /// Конвертирует число в hex используя <see cref="Dictionary{TKey, TValue}"/>

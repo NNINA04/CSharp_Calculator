@@ -1,4 +1,4 @@
-using Calculator;
+using Calculator.Interfaces;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -99,11 +99,11 @@ namespace CalculatorTests
             Assert.Throws<ArgumentNullException>(() => _calculator.ToHex(null, 0x0));
 
             var expected = "00 01";
-
+            
             var mockHexCalculator = new Mock<IHexCalculator>();
 
             mockHexCalculator.Setup(mock => mock.ToHex(It.IsAny<int>())).Returns(expected);
-
+            
             var actual = _calculator.ToHex(mockHexCalculator.Object, 0);
 
             Assert.AreEqual(expected, actual);

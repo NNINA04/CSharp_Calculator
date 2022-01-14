@@ -1,4 +1,6 @@
 ﻿using Calculator;
+using Calculator.Additions;
+using Calculator.Interfaces;
 using NUnit.Framework;
 
 namespace CalculatorTests
@@ -6,18 +8,18 @@ namespace CalculatorTests
     public class HexCalculatorTests
     {
         [Test]
-        public void TestHexConverter()
+        public void ToHex_UsingBitConverterHexCalculator()
         {
-            Tests(new BitConverterHexCalculator());
+            CheckingCorrectWorkingToHex(new BitConverterHexCalculator());
         }
 
         [Test]
-        public void TestMatchingTypeToHex()
+        public void ToHex_UsingMatchingTypeToHex()
         {
-            Tests(new MatchingTypeToHex());
+            CheckingCorrectWorkingToHex(new MatchingTypeToHex());
         }
 
-        private void Tests(IHexCalculator hexCalculator)
+        private static void CheckingCorrectWorkingToHex(IHexCalculator hexCalculator)
         {
             Assert.AreEqual("00 00", hexCalculator.ToHex(0x0));
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Calculator
+namespace Calculator.Additions
 {
     /// <summary>
     /// Класс хелпер для <see cref="BitConverter"/>
@@ -17,7 +17,7 @@ namespace Calculator
         /// Флаг показывающий проводилась ли проверка кодировки
         /// </summary>
         private static bool _isChecked;
-
+        
         /// <summary>
         /// Хранит в себе оприделение является ли кодировка LittleEndian
         /// </summary>
@@ -29,7 +29,7 @@ namespace Calculator
         /// <remarcs>Этот метод актуален, если в массиве находится только одна переменная</remarcs>
         /// <param name="arr">Массив с одной переменной</param>
         /// <returns>Массив в BigEndian кодировке</returns>
-        /// <exception cref="ArgumentNullException">Если массив является null</exception>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="arr"/> является null</exception>
         public static byte[] ConvertArrayToBigEndian(this byte[] arr)
         {
             if (arr == null)

@@ -1,4 +1,4 @@
-﻿namespace Calculator
+﻿namespace Calculator.Interfaces
 {
     /// <summary>
     /// Интерфейс логики калькулятора
@@ -64,7 +64,7 @@
         /// <param name="x">Число</param>
         /// <returns>Факториал</returns>
         int Fact(int x);
-
+        
         /// <summary>
         /// Конвертирует число в hex
         /// </summary>
@@ -72,5 +72,5 @@
         /// <param name="x">Число</param>
         /// <returns>Hex в строковом представлении</returns>
         string ToHex(IHexCalculator hexCalculator, int x);
-    }
+    }   
 }

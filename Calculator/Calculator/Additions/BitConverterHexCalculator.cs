@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Calculator.Interfaces;
+using System;
 
-namespace Calculator
+namespace Calculator.Additions
 {
     /// <summary>
     /// Класс реализующий конвертацию числа в hex с использованием <see cref="BitConverter"/>

@@ -1,4 +1,4 @@
-﻿namespace Calculator
+﻿namespace Calculator.Interfaces
 {
     /// <summary>
     /// Интерфейс реализующий конвертацию числа в hex
@@ -6,7 +6,7 @@
     public interface IHexCalculator
     {
         /// <summary>
-        /// Конвертирует число в шестнадцатиричном вид
+        /// Конвертирует число в шестнадцатиричный вид
         /// </summary>
         /// <param name="x">Число</param>
         /// <returns>Число в шестнадцатиричном виде</returns>
