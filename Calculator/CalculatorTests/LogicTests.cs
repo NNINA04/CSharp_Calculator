@@ -1,7 +1,8 @@
-using Calculator;
+using Calculator.Interfaces;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using System;
 
 namespace CalculatorTests
 {

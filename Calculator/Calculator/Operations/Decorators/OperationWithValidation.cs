@@ -1,4 +1,6 @@
 ﻿using Calculator.Operations.Validators;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Calculator.Operations.Decorators
 {
@@ -18,7 +20,7 @@ namespace Calculator.Operations.Decorators
         /// </summary>
         /// <param name="operation">Операция</param>
         /// <param name="validator">Валидатор</param>
-        /// exception cref="ArgumentNullException">Аргумент <paramref name="validator"/> является null</exception> 
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="validator"/> является null</exception> 
         public OperationWithValidation(IOperation operation, IValidator validator) : base(operation)
         {
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));

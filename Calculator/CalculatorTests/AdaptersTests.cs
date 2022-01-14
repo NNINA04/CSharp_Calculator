@@ -1,4 +1,5 @@
-﻿using Calculator;
+﻿using Calculator.Additions;
+using Calculator.Interfaces;
 using Moq;
 using NUnit.Framework;
 

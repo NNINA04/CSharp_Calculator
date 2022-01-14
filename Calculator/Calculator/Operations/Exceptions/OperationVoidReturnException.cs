@@ -1,4 +1,6 @@
-﻿namespace Calculator.Operations.Exceptions
+﻿using System;
+
+namespace Calculator.Operations.Exceptions
 {
     /// <summary>
     /// Это исключение вызывется когда handler ничего не возвращает и используется Run

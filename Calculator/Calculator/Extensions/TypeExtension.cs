@@ -1,4 +1,6 @@
-﻿namespace Calculator
+﻿using System;
+
+namespace Calculator.Extensions
 {
     /// <summary>
     /// Класс c методами расширениями класса <see cref="Type"/>

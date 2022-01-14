@@ -1,4 +1,6 @@
-﻿namespace Calculator.Operations.Validators
+﻿using System;
+
+namespace Calculator.Operations.Validators
 {
     /// <summary>
     /// Выполняет валидацию

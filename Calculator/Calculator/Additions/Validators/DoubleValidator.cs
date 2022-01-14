@@ -1,4 +1,6 @@
-﻿namespace Calculator.Operations.Validators
+﻿using Calculator.Operations.Validators;
+
+namespace Calculator.Additions.Validators
 {
     /// <summary>
     /// Валидатор значений типа <see cref="double"/>> 

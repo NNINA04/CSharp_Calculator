@@ -1,4 +1,7 @@
-﻿namespace Calculator
+﻿using System;
+using System.Linq;
+
+namespace Calculator.Additions
 {
     /// <summary>
     /// Класс хелпер для <see cref="BitConverter"/>
@@ -14,7 +17,7 @@
         /// Флаг показывающий проводилась ли проверка кодировки
         /// </summary>
         private static bool _isChecked;
-
+        
         /// <summary>
         /// Хранит в себе оприделение является ли кодировка LittleEndian
         /// </summary>

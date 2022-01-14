@@ -4,6 +4,7 @@ using Moq;
 using Calculator.Operations.Validators;
 using Calculator.Operations.Formatters;
 using Calculator.Operations.Decorators;
+using System;
 
 namespace CalculatorTests
 {

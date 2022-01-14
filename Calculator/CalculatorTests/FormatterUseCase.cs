@@ -1,4 +1,4 @@
-﻿using Calculator;
+﻿using Calculator.Additions.Formatters;
 using NUnit.Framework;
 
 namespace CalculatorTests

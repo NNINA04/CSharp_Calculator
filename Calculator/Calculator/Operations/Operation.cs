@@ -1,5 +1,9 @@
-﻿using Calculator.Operations.Exceptions;
+﻿using Calculator.Exceptions;
+using Calculator.Extensions;
+using Calculator.Operations.Exceptions;
 using Calculator.Operations.Parameters;
+using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Calculator.Operations

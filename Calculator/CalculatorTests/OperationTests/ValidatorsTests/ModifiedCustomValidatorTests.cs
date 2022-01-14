@@ -1,8 +1,10 @@
-﻿using Calculator;
+﻿using Calculator.Exceptions;
 using Calculator.Operations;
 using Calculator.Operations.Decorators;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CalculatorTests.OperationTests.ValidatorsTests
 {

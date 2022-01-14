@@ -1,4 +1,4 @@
-﻿namespace Calculator
+﻿namespace Calculator.Interfaces
 {
     /// <summary>
     /// Интерфейс реализующий конвертацию числа в hex

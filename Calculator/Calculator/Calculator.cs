@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calculator.Interfaces;
+using System;
 
 namespace Calculator
 {
@@ -8,14 +9,14 @@ namespace Calculator
     public class Calculator : ICalculatorLogic
     {
         /// <summary>
-        /// Делит первое число на второе
+        /// Сумирует 2 числа
         /// </summary>
         /// <param name="x">Первое число</param>
         /// <param name="y">Второе число</param>
-        /// <returns>Результат деления</returns>
-        public double Divide(double x, double y)
+        /// <returns>Сумма</returns>
+        public double Sum(double x, double y)
         {
-            return x / y;
+            return x + y;
         }
 
         /// <summary>
@@ -41,14 +42,14 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Сумирует 2 числа
+        /// Делит первое число на второе
         /// </summary>
         /// <param name="x">Первое число</param>
         /// <param name="y">Второе число</param>
-        /// <returns>Сумма</returns>
-        public double Sum(double x, double y)
+        /// <returns>Результат деления</returns>
+        public double Divide(double x, double y)
         {
-            return x + y;
+            return x / y;
         }
 
         /// <summary>

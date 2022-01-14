@@ -1,4 +1,5 @@
-﻿using Calculator.Operations.Validators;
+﻿using Calculator.Additions.Validators;
+using Calculator.Operations.Validators;
 using NUnit.Framework;
 
 namespace CalculatorTests

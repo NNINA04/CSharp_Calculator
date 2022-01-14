@@ -1,4 +1,5 @@
 ﻿using Calculator.Operations.Parameters;
+using System;
 
 namespace Calculator.Operations.Decorators
 {
@@ -22,7 +23,7 @@ namespace Calculator.Operations.Decorators
         /// Конструктор 
         /// </summary>
         /// <param name="operation">Операция</param>
-        /// <exception cref="ValidationException">Аргумент <paramref name="operation"/> является null</exception>
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="operation"/> является null</exception>
         public OperationBaseDecorator(IOperation operation)
         {
             _operation = operation ?? throw new ArgumentNullException(nameof(operation));

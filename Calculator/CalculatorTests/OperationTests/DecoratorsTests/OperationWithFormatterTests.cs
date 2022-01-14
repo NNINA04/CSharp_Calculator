@@ -4,6 +4,7 @@ using Calculator.Operations.Formatters;
 using Calculator.Operations.Parameters;
 using Moq;
 using NUnit.Framework;
+using System;
 
 namespace CalculatorTests.OperationTests.DecoratorsTests
 {

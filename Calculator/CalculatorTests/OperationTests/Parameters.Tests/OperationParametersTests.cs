@@ -1,5 +1,6 @@
 ﻿using Calculator.Operations.Parameters;
 using NUnit.Framework;
+using System;
 
 namespace CalculatorTests.OperationTests.Parameters.Tests
 {

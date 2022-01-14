@@ -1,4 +1,6 @@
-﻿namespace Calculator.Operations.Exceptions
+﻿using System;
+
+namespace Calculator.Exceptions
 {
     /// <summary>
     /// Это исключение вызывется когда происходит не соответствие типов

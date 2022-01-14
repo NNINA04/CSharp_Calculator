@@ -2,6 +2,8 @@
 using Calculator.Operations.Parameters;
 using NUnit.Framework;
 using Calculator.Operations.Exceptions;
+using Calculator.Exceptions;
+using System;
 
 namespace CalculatorTests.OperationTests
 {

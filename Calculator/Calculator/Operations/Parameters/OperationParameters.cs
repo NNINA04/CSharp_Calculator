@@ -1,4 +1,6 @@
-﻿namespace Calculator.Operations.Parameters
+﻿using System;
+
+namespace Calculator.Operations.Parameters
 {
     /// <summary>
     /// Класс хранящий в себе параметры для Operation

@@ -1,4 +1,6 @@
-﻿namespace Calculator.Operations.Formatters
+﻿using System;
+
+namespace Calculator.Operations.Formatters
 {
     /// <summary>
     /// Выполняет форматирование
@@ -13,7 +15,7 @@
         /// Конструктор
         /// </summary>
         /// <param name="formatter">Функция форматирования</param>
-        /// exception cref="ArgumentNullException">Аргумент <paramref name="formatter"/> является null</exception> 
+        /// <exception cref="ArgumentNullException">Аргумент <paramref name="formatter"/> является null</exception> 
         public CustomFormatter(Func<TInputType, TResultType> formatter)
         {
             _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));

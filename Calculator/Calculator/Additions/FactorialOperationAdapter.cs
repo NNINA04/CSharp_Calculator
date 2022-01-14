@@ -1,4 +1,6 @@
-﻿namespace Calculator
+﻿using Calculator.Interfaces;
+
+namespace Calculator.Additions
 {
     /// <summary>
     /// Адаптер формата возвращаемого значения при расчёте факториала

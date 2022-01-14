@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Calculator.Additions;
+using Calculator.Additions.Formatters;
+using Calculator.Additions.Validators;
 using Calculator.Operations;
 using Calculator.Operations.Parameters;
-using Calculator.Operations.Validators;
+using System;
+using System.Collections.Generic;
 
 namespace Calculator
 {
@@ -14,12 +16,12 @@ namespace Calculator
         /// <summary>
         /// Словарь содержащий элементы меню и действий
         /// </summary>
-        public Dictionary<int, (string description, IOperation operation)> MenuItems { get; private set; }
+        protected Dictionary<int, (string description, IOperation operation)> MenuItems { get; private set; }
 
         /// <summary>
         /// Словарь содержащий элементы меню и методы для работы с hex
         /// </summary>
-        public Dictionary<int, (string description, IOperation operation)> HexMenu { get; private set; }
+        protected Dictionary<int, (string description, IOperation operation)> HexMenu { get; private set; }
 
         /// <summary>
         /// Конструктор
@@ -74,14 +76,14 @@ namespace Calculator
                 ShowMenu(menu);
                 int inputvalue = InputValueAndValidate<int>();
                 menu.TryGetValue(inputvalue, out var item);
-                if (inputvalue == 10)
+                if (inputvalue == 1)
                     item.operation.RunWithoutReturnValue();
                 else
                     ShowValue(item.operation.Run());
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.InnerException.Message);
+                Console.WriteLine(ex.Message);
             }
             finally
             {

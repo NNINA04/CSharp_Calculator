@@ -1,6 +1,6 @@
 ﻿using Calculator.Operations.Formatters;
 
-namespace Calculator
+namespace Calculator.Additions.Formatters
 {
     /// <summary>
     /// Форматтер факториала

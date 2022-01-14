@@ -3,7 +3,9 @@ using NUnit.Framework;
 using Moq;
 using Calculator.Operations;
 using Calculator.Operations.Validators;
-using Calculator;
+using Calculator.Exceptions;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CalculatorTests.OperationTests.DecoratorsTests
 {
